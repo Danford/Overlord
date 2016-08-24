@@ -1,0 +1,32 @@
+<?php
+
+require_once(oe_lib.'html/element.php');
+
+require_once(oe_lib.'html/tags/link.php');
+require_once(oe_lib.'html/tags/script.php');
+
+class Head extends ElementTag
+{
+    function __construct($title)
+    {
+        parent::__construct("head");
+
+        // todo: get details such as title from options.
+        $this->AddTag("meta", array("charset" => "utf-8"));
+        $this->AddTag("meta", array("http-equiv" => "X-UA-Compatible", "content" => "IE=edge,chrome=1"));
+           
+        $this->AddTag("title")->AddContent($title);
+        
+        $this->AddTag("meta", array("name" => "description", "content" => ""));
+        $this->AddTag("meta", array("name" => "viewport", "content" => "width=device-width, initial-scale=1"));
+        
+        $this->AddElement(new Link("apple-touch-icon", "apple-touch-icon.png"));
+        
+        $this->AddElement(new Link("stylesheet", "css/normalize.min.css"));
+        
+        $this->AddElement(new Script("js/modernizr-2.8.3-respond-1.4.2.min.js"));
+        
+    }
+}
+
+?>
