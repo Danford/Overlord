@@ -75,7 +75,6 @@ if( preg_match( '/^[0-9]*$/', $uri[$pos]) != 0 ){
                         include( $pagedir.'banned_members.php' ) ;
                         die() ;
                         
-                        
                     } elseif( $uri[$pos] == "page" ) { 
                         
                         $pos++ ;
@@ -242,10 +241,12 @@ if( preg_match( '/^[0-9]*$/', $uri[$pos]) != 0 ){
             
                 if( $uri[$pos] == "create" and $group->is_moderator( $user->id )) {
             
-                        include( oe_core."event/pages/create.php" ) ;
+                        include( $oe_modules["event"]."pages/create.php" ) ;
                         die() ;                  
                     
                 }
+                
+                include( $oe_modules["event"]."lib/event_minion.php" ) ;
                 
                 $event = new event_minion( $uri[$pos] ) ;
             
@@ -255,20 +256,11 @@ if( preg_match( '/^[0-9]*$/', $uri[$pos]) != 0 ){
             
                     if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ) {
             
-                        include( oe_core."event/pages/profile.php" ) ;
+                        include( $oe_modules["event"]."pages/profile.php" ) ;
                         die() ;
                     }
-            
                 }
-            
-                
-                
             }
         }
-        
-        
-       
-        
-        
     } // end if group->access != false
 } // end numeric group id if 
