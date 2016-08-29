@@ -1,7 +1,5 @@
 <?php
 
-$post = new post_minion() ;
-
 /*
 
 	Post handler Minion
@@ -151,15 +149,19 @@ $post = new post_minion() ;
 	3.0.1 - April 11, 2009
 
 		added date_combine() 
+		
+	4.0 - August 29, 2016
+	
+	   Added a constructor method and json reply functionality.  
 
 */
 
 class post_minion
 {
 
-	function __construct( $type = 'json' ) {
+	function __construct( $type = true ) {
 	    
-	    $this->is_a_json_request = ( $type == 'json' ) ;
+	    $this->is_a_json_request = ( $type == true ) ;
 	    
 	}
 

@@ -18,14 +18,23 @@
 	 
 	// POST PROCESSING
 	
-	if( isset( $_POST['oe_module'] ) )
+	if( isset( $_POST['oe_module'] ) or isset( $_POST['oe_api'] ) )
 	{
 	    // form submissions
+	    
+	    if( isset( $_POST['oe_api'] ) ){
+	        $postmodule = $_POST['oe_api'] ;
+	    } else {
+	        $postmodule = $_POST['oe_module'] ;
+	    }
         
-	    if( isset( $oe_modules[ $_POST['oe_module'] ] ) and file_exists( $oe_modules[ $_POST['oe_module'] ]."post.php" ) ) {
+	    if( isset( $oe_modules[ $postmodule ] ) and file_exists( $oe_modules[ $postmodule ]."post.php" ) ) {
 	    
 	        include( oe_lib.'post_minion.php' ) ;
-	        include( $oe_modules[ $_POST['oe_module'] ].'post.php') ;
+	    
+	        $post = new post_minion( isset( $_POST['oe_api'] ) ) ; 
+	        
+	        include( $oe_modules[ $postmodule ].'post.php') ;
 	        die();
 	    }
 	    
