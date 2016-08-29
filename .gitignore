@@ -1,0 +1,6 @@
+/.settings
+/.buildpath
+/.project
+/tools/robot*
+/oe_images
+/oe_log
