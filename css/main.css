@@ -1,0 +1,124 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	max-width: 800px;
+	margin: auto;
+	background-color: #eee;
+}
+
+header {
+	background-color: #000;
+	color: #FFF;
+	padding: 5px;
+}
+
+footer {
+	width: 100%;
+    overflow: auto;
+    text-align: center;
+    background: #000;
+    color: #fff;
+}
+
+content header {
+	background-color: #eee;
+	color: #000;
+}
+
+/**/
+/* menu styling */
+/**/
+
+nav ul {
+  list-style: none;
+  background-color: #444;
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+nav li {
+  font-family: 'Oswald', fantasy;
+  font-size: 1.2em;
+  line-height: 40px;
+  text-align: left;
+}
+
+nav a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  padding-left: 15px;
+  border-bottom: 1px solid #888;
+  transition: .3s background-color;
+}
+
+nav a:hover {
+  background-color: #500000;
+}
+
+nav a.active {
+  background-color: #aaa;
+  color: #444;
+  cursor: default;
+}
+
+nav li li {
+  font-size: .8em;
+}
+
+/**/
+/* mobile menu styling */
+/**/
+
+@media screen and (min-width: 650px) {
+  nav li {
+    width: 130px;
+    border-bottom: none;
+    height: 50px;
+    line-height: 50px;
+    font-size: 1.4em;
+    display: inline-block;
+    margin-right: -4px;
+  }
+
+  nav a {
+    border-bottom: none;
+  }
+
+  nav > ul > li {
+    text-align: center;
+  }
+
+  nav > ul > li > a {
+    padding-left: 0;
+  }
+
+  /* Sub Menus */
+  nav li ul {
+    position: absolute;
+    display: none;
+    width: inherit;
+  }
+
+  nav li:hover ul {
+    display: block;
+  }
+
+  nav li ul li {
+    display: block;
+  }
+}
+
+/**/
+/* profile styling */
+/**/
+
+#p-img img {
+	float: left;
+	margin-right: 10px;
+}
+
+#profile-about {
+	padding-top: 10px;
+}
