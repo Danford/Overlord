@@ -187,7 +187,7 @@ class post_minion
 
 		    if( $this->is_a_json_request ){
 		        
-		        json_reply( 'ERROR', $this->form_error ) ;
+		        $this->json_reply( 'ERROR', $this->form_error ) ;
 		        
 		    }
 		    
