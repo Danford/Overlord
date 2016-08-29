@@ -157,8 +157,11 @@ $post = new post_minion() ;
 class post_minion
 {
 
-	// post_minion is a utility class and has no constructor method.
-
+	function __construct( $type = 'json' ) {
+	    
+	    $this->is_a_json_request = ( $type == 'json' ) ;
+	    
+	}
 
 	function hold()
 	{
@@ -180,6 +183,12 @@ class post_minion
 		if ( isset( $this->form_error ) )
 		{
 
+		    if( $this->is_a_json_request ){
+		        
+		        json_reply( 'ERROR', $this->form_error ) ;
+		        
+		    }
+		    
 			if ( isset( $this->hold_list ) )
 			{
 
@@ -499,7 +508,27 @@ class post_minion
 
 	} // end method set_error
 
+	function json_reply( $status, $content = null ) {
 
+	    header('Content-Type: application/json');
+
+	    $response = array() ;
+	    
+	    $response['status'] = $status ;
+	    
+	    if( ! is_array( $content ) ){
+	        $response['content'] = $content ;
+	    } elseif ( $content != null ) {
+	        $response['content'] = array() ;
+	        $response['content']['message'] = $content ;
+	    }
+	    
+	    echo( json_encode( $response ) ) ;
+	    die() ;
+	    
+	}
+	
+	
 } // end class post_handler
 
 ?>

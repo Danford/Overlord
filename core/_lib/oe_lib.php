@@ -140,19 +140,6 @@ function create_image_link( $type, $id ){
     
 }
 
-function json_reply( $content ) {
-
-    header('Content-Type: application/json');
-    
-    if( ! is_array( $content) ) {
-        echo( ['message' => $content ] ) ;
-    } else {
-        echo( json_encode( $content ) );
-    }
-    die() ;
-    
-}
-
 function process_user_supplied_html( $input ) {
 
     global $htmlawed_config ;
