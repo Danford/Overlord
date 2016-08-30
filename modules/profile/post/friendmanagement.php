@@ -130,15 +130,11 @@
                 ( `friend2`='".$user->id."' AND `friend1`='".$db->sanitize( $_POST['user'] )."' )" ) ;
  
             
-            if( $result != false ){
+            // add activity for BLOCKED user so that they will have their friend/block list updated
                 
-                // add activity for BLOCKED user so that they will have their friend/block list updated
-                
-                $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$db->sanitize( $_POST['user'] )."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
-                $user->load_friends_list() ;
-                
-            }
-            
+            $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$db->sanitize( $_POST['user'] )."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
+            $user->load_friends_list() ;
+         
             $post->json_reply( 'SUCCESS' ) ;
             
             header( 'Location: /profile/block_list' );
