@@ -265,6 +265,8 @@ class mysqli_minion {
 
             $this->log_error( $this->write_db->error ) ;
             $this->log_error( $query_string.PHP_EOL ) ;
+            
+            return false ;
         }
         
     }
