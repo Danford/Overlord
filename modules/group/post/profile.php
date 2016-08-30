@@ -55,6 +55,8 @@ switch( $_POST["oe_formid"] ) {
             $db->update("UPDATE `group_profile` SET ".$db->build_set_string_from_post( 'name','type', 'short_desc', 'detail' )." 
                 WHERE `group_id`='".$group_id."'" ) ;
         }
+        
+        $post->json_reply('SUCCESS') ;
         header( 'Location: /group/'.$group_id ) ;
         die() ;
         

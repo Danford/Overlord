@@ -32,6 +32,8 @@ switch( $_POST['oe_formid'] ){
             }            
         }
         
+        $post->json_reply('SUCCESS') ;
+        
         header( "Location: ".$_POST['oe_return'] ) ;
         die();
 
@@ -41,16 +43,26 @@ switch( $_POST['oe_formid'] ){
             verify_invitations( $_POST["invitees"] ) ;
             $db->update( "UPDATE `group_invite` SET `type`='0' WHERE `group_id`='".$group->id."' 
                 AND `user_id` IN (".render_array_as_string($_POST["invitees"]).")" ) ;
+            $post->json_reply('SUCCESS') ;
         }
+        
+        $post->json_reply( 'ERROR', 'unauthorised' ) ;
         
         header( "Location: ".$_POST['oe_return'] ) ;
         die();
         
     case 'request':
         
-        $db->insert( "INSERT INTO `group_invite` SET `group_id`='".$group->id."', `user_id`='".$user->id."',
-                    type='2', `invited_by`='".$user->id."'" ) ;
-
+        if( $group->is_member($user->id )) {
+            
+            $db->insert( "INSERT INTO `group_invite` SET `group_id`='".$group->id."', `user_id`='".$user->id."',
+                        type='2', `invited_by`='".$user->id."'" ) ;
+    
+            $post->json_reply('SUCCESS') ;
+        }
+        
+        $post->json_reply('ERROR', 'unauthorised') ;
+        
         header( "Location: /group/".$group->id ) ;
         die();
         
@@ -67,22 +79,25 @@ switch( $_POST['oe_formid'] ){
                 $db->update( "DELETE FROM `group_invite` WHERE `group_id`='".$group->id."' AND `user_id`='".$member."'") ;
                 
             }
-
+            $post->json_reply('SUCCESS') ;
             header( "Location: /group/".$group->id ) ;
             
         }
+        $post->json_reply('ERROR', 'unauthorised') ;
         die();
         
     
 }
-
+$post->json_reply('FAIL') ;
 die( 'not routed by module' ) ;
 
 
 function verify_invitations( $list ){
     
+    global $post ;
+    
     foreach( $list as $item ){
-        if( preg_match( '/^[0-9]*$/', $item ) == 0 ){ die() ; }
+        if( preg_match( '/^[0-9]*$/', $item ) == 0 ){ $post->json_reply('FAIL') ; die() ; }
     }
     
 }
