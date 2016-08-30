@@ -136,12 +136,10 @@
                 
                 $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$db->sanitize( $_POST['user'] )."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
                 $user->load_friends_list() ;
-            
-                $post->json_reply( 'SUCCESS' ) ;
                 
             }
             
-            $post->json_reply( 'FAIL' ) ;
+            $post->json_reply( 'SUCCESS' ) ;
             
             header( 'Location: /profile/block_list' );
             die() ;
