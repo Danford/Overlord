@@ -11,15 +11,12 @@
                 $db->insert( "INSERT INTO `profile_friendship_rq` SET `requestor`='".$user->id."', `requestee`='".$_POST['user']."'" ) ;
                 $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='1', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
                 
-                if( $post->is_a_json_request ){
-                    $post->json_reply( 'SUCCESS' ) ;
-                }
+                $post->json_reply( 'SUCCESS' ) ;
+
             }
             
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'FAIL' ) ;
-            }
-                
+            $post->json_reply( 'FAIL' ) ;
+              
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
@@ -36,9 +33,8 @@
 
             $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='3', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
             
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'SUCCESS' ) ;
-            }
+            $post->json_reply( 'SUCCESS' ) ;
+            
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
@@ -78,14 +74,11 @@
                 
                 $user->load_friends_list() ;
                 
-                if( $post->is_a_json_request ){
-                    $post->json_reply( 'SUCCESS' ) ;
-                }
+                $post->json_reply( 'SUCCESS' ) ;
+               
             }
             
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'FAIL' ) ;
-            }
+            $post->json_reply( 'FAIL' ) ;
             
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
@@ -95,13 +88,12 @@
             $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
                 `requestor`='".$user->id."' AND `requestee`='".$_POST['user']."'" ) ;
             
-            if( $post->is_a_json_request ){
-                if( $result == false ){
-                    $post->json_reply( 'FAIL' ) ;
-                }
-                
-                $post->json_reply( 'SUCCESS' ) ;
+            if( $result == false ){
+                $post->json_reply( 'FAIL' ) ;
             }
+            
+            $post->json_reply( 'SUCCESS' ) ;
+            
             
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
@@ -110,13 +102,13 @@
             
             $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
                 `requestee`='".$user->id."' AND `requestor`='".$_POST['user']."'" ) ;
-            if( $post->is_a_json_request ){
-                if( $result == false ){
-                    $post->json_reply( 'FAIL' ) ;
-                }
             
-                $post->json_reply( 'SUCCESS' ) ;
+            if( $result == false ){
+                $post->json_reply( 'FAIL' ) ;
             }
+        
+            $post->json_reply( 'SUCCESS' ) ;
+            
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
@@ -141,14 +133,12 @@
                 $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
                 $user->load_friends_list() ;
             
-                if( $post->is_a_json_request ){
-                    $post->json_reply( 'SUCCESS' ) ;
-                }
+                $post->json_reply( 'SUCCESS' ) ;
+                
             }
             
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'FAIL' ) ;
-            }
+            $post->json_reply( 'FAIL' ) ;
+            
             header( 'Location: /profile/block_list' );
             die() ;
         

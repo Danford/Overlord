@@ -114,9 +114,7 @@ switch( $_POST['oe_formid'] ){
     
         log_activity( $type, $photoid ) ;
     
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'SUCCESS' ) ;
-        }
+        $post->json_reply( 'SUCCESS' ) ;
         
         header( "Location: ".$baseurl.$user->id."/photo/".$photoid ) ;
         die() ;
@@ -227,9 +225,7 @@ switch( $_POST['oe_formid'] ){
         $db->update( "UPDATE `profile_photo` SET ".$db->build_set_string_from_post( 'title', 'description', 'private', 'album' )."
                         WHERE `photo_id` = '".$_POST['photo_id']."'" );
         
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'SUCCESS' ) ;
-        }
+        $post->json_reply( 'SUCCESS' ) ;
         
         header( 'Location: '.$baseurl.$user->id.'/photo/'.$_POST['photo_id'] ) ;
         die();
@@ -263,9 +259,8 @@ switch( $_POST['oe_formid'] ){
         
         decrement_profile_item_count('photo', ( $detail['private'] == 1 ) ) ;
         
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'SUCCESS' ) ;
-        }
+        $post->json_reply( 'SUCCESS' ) ;
+
         header( "Location: ".$baseurl.$user->id."/photos" );
         die() ;
 }

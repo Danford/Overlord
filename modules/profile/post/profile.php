@@ -18,9 +18,7 @@ $s = $db->build_set_string_from_post( 'birthdate', 'gender', 'show_age', 'email_
 
 $db->update( "UPDATE `user_profile` SET ".$s." WHERE `user_id`='".$user->id."'" ) ;
 
-if( $post->is_a_json_request ){
-    $post->json_reply( 'SUCCESS' ) ;
-}
+$post->json_reply( 'SUCCESS' ) ;
 
 header( "Location: ".$baseurl.$user->id ) ;
 die() ;

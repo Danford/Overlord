@@ -10,10 +10,7 @@ switch( $_POST["oe_formid"] ) {
                 or 
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
             
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'FAIL' ) ;
-            }
-            
+            $post->json_reply( 'FAIL' ) ;
             die() ;
         }
         
@@ -35,16 +32,15 @@ switch( $_POST["oe_formid"] ) {
                             WHERE `".$_POST['type']."_id`='".$a['id']."'" );
 
 
-           
+            $post->json_reply( 'SUCCESS' ) ;   
             
             $origin = explode( '#', $_POST['oe_return'] ) ;
             header( 'Location: '.$origin[0] ) ;
             
         }
         
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'ERROR', 'unauthorised' ) ;
-        }
+        $post->json_reply( 'ERROR', 'unauthorised' ) ;
+        
         die() ;
         
     case 'addcomment':
@@ -57,9 +53,7 @@ switch( $_POST["oe_formid"] ) {
                 or 
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
             
-                if( $post->is_a_json_request ){
                 $post->json_reply( 'FAIL' ) ;
-                }
                 die() ;
         }
         
@@ -68,9 +62,7 @@ switch( $_POST["oe_formid"] ) {
         $owner = $db->get_field( $q ) ;
 
         if( $user->is_blocked( $owner ) ){
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'ERROR', 'unauthorised' ) ;
-            }
+            $post->json_reply( 'ERROR', 'unauthorised' ) ;
             die() ;
         }
         
@@ -95,9 +87,7 @@ switch( $_POST["oe_formid"] ) {
         notify_user( $owner, $notify[$_POST['type']], $id ) ;
         log_activity( $activity[$_POST['type']], $id ) ;
         
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'SUCCESS' ) ;
-        }
+        $post->json_reply( 'SUCCESS' ) ;
         
         $origin = explode( '#', $_POST['oe_return'] ) ;
         
@@ -110,9 +100,8 @@ switch( $_POST["oe_formid"] ) {
             or
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
                 
-                if( $post->is_a_json_request ){
-                    $post->json_reply( 'FAIL' ) ;
-                }
+                
+                $post->json_reply( 'FAIL' ) ;
                 die() ;
         }
         
@@ -121,9 +110,7 @@ switch( $_POST["oe_formid"] ) {
         $owner = $db->get_field( $q ) ;
         
         if( $user->is_blocked( $owner ) ){
-            if( $post->is_a_json_request ){
-                $post->json_reply( 'ERROR', 'unauthorised' ) ;
-            }
+            $post->json_reply( 'ERROR', 'unauthorised' ) ;
             die() ;
         }        
         
@@ -144,10 +131,8 @@ switch( $_POST["oe_formid"] ) {
         notify_user( $owner, $notify[$_POST['type']], $id ) ;
         log_activity( $activity[$_POST['type']], $id ) ;
         
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'SUCCESS' ) ;
-        }
-        
+        $post->json_reply( 'SUCCESS' ) ;
+                
         header( "Location: ".$_POST['oe_return'] ) ;
         die() ;
         
@@ -157,9 +142,7 @@ switch( $_POST["oe_formid"] ) {
             or
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
                 
-                if( $post->is_a_json_request ){
-                    $post->json_reply( 'FAIL' ) ;
-                }
+                $post->json_reply( 'FAIL' ) ;
                 die() ;
         }
         
@@ -176,9 +159,8 @@ switch( $_POST["oe_formid"] ) {
             }
         }
 
-        if( $post->is_a_json_request ){
-            $post->json_reply( 'ERROR', 'not found' ) ;
-        }
+        $post->json_reply( 'ERROR', 'not found' ) ;
+        
         header( "Location: ".$_POST['oe_return'] ) ;
         die() ;
 }
