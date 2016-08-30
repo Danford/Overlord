@@ -13,6 +13,7 @@ if( isset( $_POST['group'] ) ){
     $group = new group_minion($_POST['group'] ) ;
     
     if( ! $group->is_moderator( $_POST['group'] ) ){ 
+        $post->json_reply('ERROR', 'unauthorised') ;
         die() ;
     }
     
@@ -23,6 +24,7 @@ if( isset( $_POST['group'] ) ){
 }
 
 if( ! is_numeric( $_POST['type'] ) or ($_POST['type'] < 1) or ($_POST['type'] > 3) ) {
+    $post->json_reply('FAIL') ;
     die('12') ;
 }
 
@@ -32,7 +34,7 @@ if( $_POST['oe_formid'] == 'edit' ) {
     
     $before = $db->get_assoc( "SELECT `organiser`, `type` FROM `event_profile` WHERE `event_id`='".$_POST['event_id']."'" );
     
-    if( $before['organiser'] != $user->id ){ die( $before['organiser']."-".$user->id ) ; }
+    if( $before['organiser'] != $user->id ){ $post->json_reply('ERROR', 'unauthorised' ) ; die( $before['organiser']."-".$user->id ) ; }
     
 }
 
@@ -77,6 +79,8 @@ if( $_POST['oe_formid'] == 'edit' ) {
    
     $db->update( "UPDATE `event_profile` SET ".$set." WHERE `event_id`='".$_POST['event_id']."'" ) ;
     
+    $post->json_reply('SUCCESS') ;
+    
     header( "Location: /event/".$_POST['event_id'] ) ;
     die() ;
 }
@@ -85,12 +89,15 @@ $event = $db->insert( 'INSERT INTO `event_profile` SET '.$set ) ;
 
 if( isset( $_POST['group'] ) ){
 
+    $post->json_reply('SUCCESS') ;
+    
     header( "Location: /group/".$group->id."/event/".$event ) ;
 
     // send invitations!!!
     
 } else {
 
+    $post->json_reply('SUCCESS') ; 
     header( "Location: /event/".$event ) ;
 }
     

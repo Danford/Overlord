@@ -30,7 +30,8 @@ switch( $_POST['oe_formid'] ){
                     type='1', `invited_by`='".$user->id."'" ) ;
             }
         }
-
+        
+        $post->json_reply('SUCCESS') ;
         header( "Location: ".$_POST['oe_return'] ) ;
         die();
 
@@ -40,8 +41,10 @@ switch( $_POST['oe_formid'] ){
             verify_invitations( $_POST["invitees"] ) ;
             $db->update( "UPDATE `event_invite` SET `type`='0' WHERE `group_id`='".$group->id."'
                 AND `user_id` IN (".render_array_as_string($_POST["invitees"]).")" ) ;
+            $post->json_reply('SUCCESS') ;
         }
-
+        
+        $post->json_reply('ERROR', 'unauthorised') ;
         header( "Location: ".$_POST['oe_return'] ) ;
         die();
 
@@ -50,20 +53,21 @@ switch( $_POST['oe_formid'] ){
         $db->insert( "INSERT INTO `event_invite` SET `event_id`='".$event->id."', `user_id`='".$user->id."',
                     type='2', `invited_by`='".$user->id."'" ) ;
 
+        $post->json_reply('SUCCESS') ;
         header( "Location: /event/".$event->id ) ;
         die();
 
     case 'rsvp':
         
         $event->set_rsvp( $_POST['rsvp'] ) ;
-
+        $post->json_reply('SUCCESS') ;
         header( "Location: /event/".$event->id ) ;
         
         die() ;
         
 
 }
-
+$post->json_reply('FAIL') ;
 die( 'not routed by module' ) ;
 
 

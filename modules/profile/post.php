@@ -42,3 +42,5 @@ switch( $_POST["oe_formid"] ) {
         include( $pagedir."writing.php" ) ;
         die() ;
 }
+$post->json_reply('FAIL') ;
+die( 'FAIL' ) ;

@@ -38,5 +38,5 @@ switch( $_POST["oe_formid"] ) {
         include( $pagedir."invitations.php" ) ;
         die() ;
 }
-
+$post->json_reply('FAIL') ;
 die( 'not routed by post.php' ) ;
