@@ -185,12 +185,8 @@ class post_minion
 		if ( isset( $this->form_error ) )
 		{
 
-		    if( $this->is_a_json_request ){
-		        
-		        $this->json_reply( 'ERROR', $this->form_error ) ;
-		        
-		    }
-		    
+	        $this->json_reply( 'ERROR', $this->form_error ) ;
+
 			if ( isset( $this->hold_list ) )
 			{
 
@@ -512,22 +508,24 @@ class post_minion
 
 	function json_reply( $status, $content = null ) {
 
-	    header('Content-Type: application/json');
-
-	    $response = array() ;
+	    if( $this->is_a_json_request ){
 	    
-	    $response['status'] = $status ;
-	    
-	    if( ! is_array( $content ) ){
-	        $response['content'] = $content ;
-	    } elseif ( $content != null ) {
-	        $response['content'] = array() ;
-	        $response['content']['message'] = $content ;
-	    }
-	    
-	    echo( json_encode( $response ) ) ;
-	    die() ;
-	    
+    	    header('Content-Type: application/json');
+    
+    	    $response = array() ;
+    	    
+    	    $response['status'] = $status ;
+    	    
+    	    if( ! is_array( $content ) ){
+    	        $response['content'] = $content ;
+    	    } elseif ( $content != null ) {
+    	        $response['content'] = array() ;
+    	        $response['content']['message'] = $content ;
+    	    }
+    	    
+    	    echo( json_encode( $response ) ) ;
+    	    die() ;
+	    }	    
 	}
 	
 	
