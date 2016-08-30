@@ -5,12 +5,24 @@
         
         case 'addfriend' :
 
+            $user->load_friends_list() ;
+            
             if( ! $user->is_blocked( $uri[$pos] ) ) {
                 $db->insert( "INSERT INTO `profile_friendship_rq` SET `requestor`='".$user->id."', `requestee`='".$_POST['user']."'" ) ;
                 $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='1', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
-                header( 'Location: /profile/'.$_POST['user'] );
-                die() ;
+                
+                if( $post->is_a_json_request ){
+                    $post->json_reply( 'SUCCESS' ) ;
+                }
             }
+            
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'FAIL' ) ;
+            }
+                
+            header( 'Location: /profile/'.$_POST['user'] );
+            die() ;
+            
             
         case 'removefriend' :
             
@@ -24,6 +36,9 @@
 
             $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='3', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
             
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'SUCCESS' ) ;
+            }
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
@@ -62,7 +77,14 @@
                 $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='2', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
                 
                 $user->load_friends_list() ;
+                
+                if( $post->is_a_json_request ){
+                    $post->json_reply( 'SUCCESS' ) ;
+                }
+            }
             
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'FAIL' ) ;
             }
             
             header( 'Location: /profile/'.$_POST['user'] );
@@ -70,17 +92,31 @@
             
         case 'denyfriend' :
             
-            $db->update( "DELETE FROM `profile_friendship_rq` WHERE
+            $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
                 `requestor`='".$user->id."' AND `requestee`='".$_POST['user']."'" ) ;
+            
+            if( $post->is_a_json_request ){
+                if( $result == false ){
+                    $post->json_reply( 'FAIL' ) ;
+                }
+                
+                $post->json_reply( 'SUCCESS' ) ;
+            }
             
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
         case 'cancelfriendrq' :
             
-            $db->update( "DELETE FROM `profile_friendship_rq` WHERE
+            $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
                 `requestee`='".$user->id."' AND `requestor`='".$_POST['user']."'" ) ;
+            if( $post->is_a_json_request ){
+                if( $result == false ){
+                    $post->json_reply( 'FAIL' ) ;
+                }
             
+                $post->json_reply( 'SUCCESS' ) ;
+            }
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
@@ -92,17 +128,27 @@
             
             // remove any existing friendship
             
-            $db->update( "DELETE FROM `profile_friendship` WHERE  
+            $result = $db->update( "DELETE FROM `profile_friendship` WHERE  
                 ( `friend1`='".$user->id."' AND `friend2`='".$_POST['user']."' )
                     OR
                 ( `friend2`='".$user->id."' AND `friend1`='".$_POST['user']."' )" ) ;
  
-            // add activity for BLOCKED user so that they will have their friend/block list updated
             
-            $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
+            if( $result != false ){
+                
+                // add activity for BLOCKED user so that they will have their friend/block list updated
+                
+                $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
+                $user->load_friends_list() ;
             
-            $user->load_friends_list() ;
+                if( $post->is_a_json_request ){
+                    $post->json_reply( 'SUCCESS' ) ;
+                }
+            }
             
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'FAIL' ) ;
+            }
             header( 'Location: /profile/block_list' );
             die() ;
         

@@ -42,6 +42,10 @@ switch( $_POST['oe_formid'] ){
         
         log_activity( 9, $proseid ) ;
         
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'SUCCESS' ) ;
+        }
+        
         header( 'Location: /profile/'.$user->id.'/writing/'.$proseid ) ;
         die() ;
         
@@ -101,6 +105,10 @@ switch( $_POST['oe_formid'] ){
         $db->update( "UPDATE `profile_prose` SET ".$db->build_set_string_from_post( 'title', 'subtitle', 'content', 'album')." WHERE 
             `prose_id`='".$_POST['prose_id']."'" ) ;
         
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'SUCCESS' ) ;
+        }
+        
         header( 'Location: /profile/'.$user->id.'/writing/'.$_POST['prose_id'] ) ;
         die() ;
         
@@ -119,6 +127,10 @@ switch( $_POST['oe_formid'] ){
         }
         
         decrement_profile_item_count('prose', ( $detail['private'] == 1 ) ) ;
+        
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'SUCCESS' ) ;
+        }
         
         header( "Location: /" );
         die() ;

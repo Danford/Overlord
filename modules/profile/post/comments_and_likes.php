@@ -9,6 +9,11 @@ switch( $_POST["oe_formid"] ) {
         if( ( preg_match( '/^[0-9]*$/', $_POST['comment_id']) == 0 )
                 or 
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
+            
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'FAIL' ) ;
+            }
+            
             die() ;
         }
         
@@ -29,10 +34,16 @@ switch( $_POST["oe_formid"] ) {
             $db->update( "UPDATE `profile_".$_POST['type']."` SET `comments` = `comments` - 1 
                             WHERE `".$_POST['type']."_id`='".$a['id']."'" );
 
-            $origin = explode( '#', $_POST['oe_return'] ) ;
+
+           
             
+            $origin = explode( '#', $_POST['oe_return'] ) ;
             header( 'Location: '.$origin[0] ) ;
             
+        }
+        
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'ERROR', 'unauthorised' ) ;
         }
         die() ;
         
@@ -45,7 +56,11 @@ switch( $_POST["oe_formid"] ) {
         if( ( preg_match( '/^[0-9]*$/', $_POST['id']) == 0 )
                 or 
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
-            die() ;
+            
+                if( $post->is_a_json_request ){
+                $post->json_reply( 'FAIL' ) ;
+                }
+                die() ;
         }
         
         $q = "SELECT `owner` FROM `profile_".$_POST['type']."` WHERE `".$_POST['type']."_id`='".$_POST['id']."'" ;
@@ -53,6 +68,9 @@ switch( $_POST["oe_formid"] ) {
         $owner = $db->get_field( $q ) ;
 
         if( $user->is_blocked( $owner ) ){
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'ERROR', 'unauthorised' ) ;
+            }
             die() ;
         }
         
@@ -77,6 +95,10 @@ switch( $_POST["oe_formid"] ) {
         notify_user( $owner, $notify[$_POST['type']], $id ) ;
         log_activity( $activity[$_POST['type']], $id ) ;
         
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'SUCCESS' ) ;
+        }
+        
         $origin = explode( '#', $_POST['oe_return'] ) ;
         
         header( 'Location: '.$origin[0]."#".$id ) ;
@@ -87,6 +109,10 @@ switch( $_POST["oe_formid"] ) {
         if( ( preg_match( '/^[0-9]*$/', $_POST['id']) == 0 )
             or
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
+                
+                if( $post->is_a_json_request ){
+                    $post->json_reply( 'FAIL' ) ;
+                }
                 die() ;
         }
         
@@ -95,6 +121,9 @@ switch( $_POST["oe_formid"] ) {
         $owner = $db->get_field( $q ) ;
         
         if( $user->is_blocked( $owner ) ){
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'ERROR', 'unauthorised' ) ;
+            }
             die() ;
         }        
         
@@ -115,6 +144,10 @@ switch( $_POST["oe_formid"] ) {
         notify_user( $owner, $notify[$_POST['type']], $id ) ;
         log_activity( $activity[$_POST['type']], $id ) ;
         
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'SUCCESS' ) ;
+        }
+        
         header( "Location: ".$_POST['oe_return'] ) ;
         die() ;
         
@@ -123,6 +156,10 @@ switch( $_POST["oe_formid"] ) {
         if( ( preg_match( '/^[0-9]*$/', $_POST['id']) == 0 )
             or
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
+                
+                if( $post->is_a_json_request ){
+                    $post->json_reply( 'FAIL' ) ;
+                }
                 die() ;
         }
         
@@ -133,8 +170,15 @@ switch( $_POST["oe_formid"] ) {
             $db->update( "DELETE FROM `profile_".$_POST['type']."_like` WHERE `id`='".$ref."'" ) ;
             $db->update( "DELETE FROM `user_notifications` WHERE `ref`='".$ref."'" ) ;
             $db->update( "DELETE FROM `user_activity` WHERE `ref`='".$ref."'" ) ;
+        
+            if( $post->is_a_json_request ){
+                $post->json_reply( 'SUCCESS' ) ;
+            }
         }
 
+        if( $post->is_a_json_request ){
+            $post->json_reply( 'ERROR', 'not found' ) ;
+        }
         header( "Location: ".$_POST['oe_return'] ) ;
         die() ;
 }
