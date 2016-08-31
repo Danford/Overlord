@@ -8,6 +8,7 @@ switch( $_POST["oe_formid"] ) {
         $post->hold( 'name', 'short_desc', 'detail', 'type' ) ;
         
         if( ! is_numeric( $_POST["type"] ) or $_POST["type"] < 1 or  $_POST["type"] > 3 ){
+            $post->json_reply('FAIL') ;
             die() ;
         }
         
@@ -23,16 +24,11 @@ switch( $_POST["oe_formid"] ) {
         
         if( $_POST['oe_formid'] == 'create' ) {
             
-            $q = "SELECT COUNT(*) FROM `group_profile` WHERE `name` = '".$_POST['name']."'" ;
+            $q = "SELECT COUNT(*) FROM `group_profile` WHERE `name` = '".$db->sanitize( $_POST['name'] )."'" ;
             
             $post->require_true( $db->get_field( $q ) == 0 , 'name', 'There is already a group named "'.$_POST['name'].'"' ) ;
             
             $post->checkpoint() ;
-        }
-        
-        // no errors, continue
-        
-        if( $_POST['oe_formid'] == 'create' ) {
         
             $_POST['owner'] = $user->id ;
             
@@ -41,22 +37,33 @@ switch( $_POST["oe_formid"] ) {
             $db->insert( "INSERT INTO `group_members` SET `group_id` = '".$group_id."', `member_id`='".$user->id."', `timestamp`='".oe_time()."', ".$db->build_set_string_from_post( 'notify_thread', 'notify_message' ) );
             
             $user->load_group_membership() ;
+
+            $post->json_reply('SUCCESS', $group_id ) ;
             
         } else {
             
-            $oldtype = $db->get_field( "SELECT `type` FROM `group_profile` WHERE `group_id`='".$_POST['group_id']."'" );
+            include( $oe_modules['group']."lib/group_minion.php" ) ;
             
-            $post->require_true( $oldtype <= $_POST['type'], 'type', "You cannot make a group less private." ) ;
+            $group = new group_minion($db->sanitize( $_POST['group_id'] )) ;
+            
+            if( ! $group->is_owner() ){
+                
+                $post->json_reply( 'FAIL' ) ;
+                die() ;
+            }
+                        
+            $post->require_true( $group->type <= $_POST['type'], 'type', "You cannot make a group less private." ) ;
             
             $post->checkpoint() ;
             
-            $group_id = $_POST['group_id' ] ;
-            
             $db->update("UPDATE `group_profile` SET ".$db->build_set_string_from_post( 'name','type', 'short_desc', 'detail' )." 
-                WHERE `group_id`='".$group_id."'" ) ;
+                WHERE `group_id`='".$db->sanitize( $_POST['group_id'] )."'" ) ;
+
+            $post->json_reply('SUCCESS') ;
+            
+            $group_id = $db->sanitize( $_POST['group_id'] ) ;
         }
         
-        $post->json_reply('SUCCESS') ;
         header( 'Location: /group/'.$group_id ) ;
         die() ;
         
