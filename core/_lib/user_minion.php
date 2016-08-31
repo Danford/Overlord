@@ -34,17 +34,17 @@ class user_minion {
         
             global $db ;
             
-            if( $db->get_field( "SELECT COUNT(*) FROM `persistent_tokens` WHERE `user_id`='".$_COOKIE['id']."' AND `token`='".$_COOKIE['token']."'" ) == 1 ) {
+            if( $db->get_field( "SELECT COUNT(*) FROM `persistent_tokens` WHERE `user_id`='".$db->sanitize( $_COOKIE['id'])."' AND `token`='".$db->sanitize( $_COOKIE['token'] )."'" ) == 1 ) {
         
-                $query = "SELECT `user_id`, `screen_name`, `status`, `passhash` , `login_fails`, `last_login`, `avatar`
+                $query = "SELECT `user_id`, `status`, `passhash` , `login_fails`, `last_login`
                             FROM
-                        `user_profile`
+                        `user_account`
                             WHERE
-                        `user_id`='".$_COOKIE['id']."'" ;
+                        `user_id`='".$db->sanitize( $_COOKIE['id'])."'" ;
         
                 $a = $db->get_assoc( $query ) ;
         
-                $query = "UPDATE `user_profile` SET `login_fails`='0', `last_login`='".oe_time()."'" ;
+                $query = "UPDATE `user_account` SET `login_fails`='0', `last_login`='".oe_time()."'" ;
         
                 if( $a['status'] == 2 ){
                     $query .= ", `status`='2'" ;
@@ -55,6 +55,9 @@ class user_minion {
                 $db->update( $query ) ;
         
                 $this->id = $a['user_id'] ;
+                
+                $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
+                
                 $this->name = $a['screen_name'] ;
                 $this->avatar = $a['avatar'] ;
         
@@ -84,9 +87,9 @@ class user_minion {
         
         global $db ;
         
-        $query = "SELECT `user_id`, `screen_name`, `status`, `passhash` , `login_fails`, `last_login`, `avatar`
+        $query = "SELECT `user_id`, `status`, `passhash` , `login_fails`, `last_login`
                                 FROM
-                            `user_profile` 
+                            `user_account` 
                                 WHERE 
                             `email`='".$db->sanitize( $email )."'" ;
         
@@ -123,7 +126,7 @@ class user_minion {
                 $error="Invalid login." ;
             }
             
-            $db->update( "UPDATE `user_profile` SET `login_fails`='".( $a['login_fails'] + 1 )."' WHERE `user_id`='".$a['user_id']."'" ) ;
+            $db->update( "UPDATE `user_account` SET `login_fails`='".( $a['login_fails'] + 1 )."' WHERE `user_id`='".$a['user_id']."'" ) ;
         }
         
         if( isset( $error ) ) {
@@ -133,16 +136,20 @@ class user_minion {
         } else {
 
             $this->id = $a['user_id'] ;
-            $this->name = $a['screen_name'] ;
             $this->last_login = $a['last_login'] ;
+
+            $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
+            
+            
             $this->avatar = $a['avatar'] ;
+            $this->name = $a['screen_name'] ;
         
             $this->load_friends_list() ;
             $this->load_group_membership() ;
             
             //update last logged in and reset failed logins to zero
             
-            $db->update( "UPDATE `user_profile` SET `last_login`='".oe_time()."', `login_fails`='0'
+            $db->update( "UPDATE `user_account` SET `last_login`='".oe_time()."', `login_fails`='0'
                             WHERE `user_id`='".$this->id."'" ) ;
             
             if( $persist == "on" ) {

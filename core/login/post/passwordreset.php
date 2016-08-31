@@ -23,7 +23,7 @@ $post->checkpoint() ;
 
 // they've entered a valid password twice.  Time to rock and roll.  
 
-$a = $db->update( "UPDATE `user_profile` SET `passhash`='".hash_hmac( "sha256", $_POST['password'], oe_seed )."' 
+$a = $db->update( "UPDATE `user_account` SET `passhash`='".hash_hmac( "sha256", $_POST['password'], oe_seed )."' 
                 WHERE `user_id`='".$_SESSION['reset']['id']."'" ) ;
 
 $db->update( "DELETE FROM `confirmation_key` 

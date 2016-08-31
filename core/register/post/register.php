@@ -46,7 +46,7 @@
     
     $post->checkpoint() ;
     
-        $usercheck = "SELECT COUNT(*) FROM `user_profile` WHERE `email`='".$_POST['email']."'" ;
+        $usercheck = "SELECT COUNT(*) FROM `user_account` WHERE `email`='".$_POST['email']."'" ;
     
         $post->require_true( $db->get_field( $usercheck ) == 0 , 'email', 'There is already an account with this e-mail.' ) ;
     
@@ -78,15 +78,16 @@
     $a['status'] = '0' ;
     $a['passhash'] = hash_hmac( "sha256", $_POST['password'], oe_seed ) ;
     
-    $set1 = $db->build_set_string_from_post( 'screen_name', 'email', 'birthdate', 'show_age', 'email_notification', 'invite_notification', 'allow_contact', 'gender' ) ;
+    $set1a = $db->build_set_string_from_post( 'email', 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) ;
+    $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
-    $b['user_profile'] = $db->insert( "INSERT INTO `user_profile` SET ".$set1.", ".$set2 ) ;
+    $b['user_profile'] = $db->insert( "INSERT INTO `user_profile` SET ".$set1a.", ".$set2 ) ;
     $b['confirmation_key'] = hash_hmac( "sha256", $_POST['email'].oe_time(), oe_seed );
     $b['type'] = 0 ;
     $b['timestamp'] = oe_time() ;
     
-    
+    $db->insert( "INSERT INTO `user_profile` SET ".$set1p.", `user_id`='".$b['user_profile']."'" ) ;
     $db->insert( "INSERT INTO `confirmation_key` SET ".$db->build_set_string_from_array($b) ) ;
 
     include( oe_lib."email_minion.php" ) ;

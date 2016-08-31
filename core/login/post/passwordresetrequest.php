@@ -11,7 +11,7 @@ $post->require_true( preg_match( '/.*@.*\..*/', $_POST['email'] ) != 0, 'email',
 $post->checkpoint() ;
 
 
-$a = $db->query( "SELECT `user_id` FROM `user_profile` WHERE `email`='".$_POST['email']."'" ) ;
+$a = $db->query( "SELECT `user_id` FROM `user_account` WHERE `email`='".$_POST['email']."'" ) ;
 
 
 if( $db->num_rows() == 1 ) {
