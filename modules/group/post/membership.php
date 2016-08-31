@@ -2,7 +2,7 @@
 
 if( preg_match( '/^[0-9]*$/', $_POST['group_id'] ) != 0 ){
     $group = new group_minion( $_POST['group_id'] ) ;
-} else { die() ; }
+} else { $post->json_reply( 'FAIL') ; die() ; }
 
 switch( $_POST['oe_formid'] ) {
 
@@ -12,7 +12,7 @@ switch( $_POST['oe_formid'] ) {
             
             // you can't join a closed or secret group unless you've been invited
             
-            $db->insert( "INSERT INTO `group_members` SET `member_id`='".$user->id."', `group_id`='".$_POST['group_id']."', `timestamp`='".oe_time()."'" ) ;
+            $db->insert( "INSERT INTO `group_members` SET `member_id`='".$user->id."', `group_id`='".$db->sanitize( $_POST['group_id'] )."', `timestamp`='".oe_time()."'" ) ;
             $db->update( "DELETE FROM `group_invite` WHERE `group_id`='".$group->id."' AND `user_id`='".$user->id."'" ) ;
             
             $post->json_reply('SUCCESS') ;
@@ -20,7 +20,7 @@ switch( $_POST['oe_formid'] ) {
             
         } 
         
-        $post->json_reply('ERROR', 'unauthorised') ;
+        $post->json_reply('FAIL') ;
         
         die(); 
         
@@ -29,7 +29,7 @@ switch( $_POST['oe_formid'] ) {
         $result = $db->update( "DELETE FROM `group_members` WHERE `group_id`='".$group->id."' AND `member_id`='".$user->id."'" ) ;
             
         if( $result == false ){
-            $post->json_reply('ERROR') ;
+            $post->json_reply('FAIL') ;
         } else {
             $post->json_reply('SUCCESS') ;
         }
@@ -47,8 +47,12 @@ switch( $_POST['oe_formid'] ) {
                 die() ;
             }
         
-        $db->update( "UPDATE `group_members` SET `notify_message`='".$_POST['notify_message']."', `notify_thread`='".$_POST['notify_thread']."'
-                WHERE `group_id`='".$_POST['group_id']."' and `member_id`='".$user->id."'" );
+        $x = $db->update( "UPDATE `group_members` SET `notify_message`='".$_POST['notify_message']."', `notify_thread`='".$_POST['notify_thread']."'
+                WHERE `group_id`='".$group->id."' and `member_id`='".$user->id."'" );
+        
+        if( $x == false or $x == 0 ){
+            $post->json_reply( 'FAIL' ) ;
+        }
         
         $post->json_reply('SUCCESS') ;
         
@@ -59,33 +63,42 @@ switch( $_POST['oe_formid'] ) {
         
         if( $group->is_owner() ){
             
-            verify_number($_POST['member'] ) ;
+            if( ! verify_number($_POST['member'] ) ){
+                $post->json_reply( 'FAIL' ) ;
+                die();
+            }
             
             $db->insert( "INSERT INTO `group_moderator` SET `group_id`='".$group->id."', `mod_id`='".$_POST['member']."'" ) ;
             $post->json_reply('SUCCESS') ;
             header( 'Location: '.$_POST['oe_return'] ) ;
         }  
-        $post->json_reply('ERROR','unauthorised') ;
+        $post->json_reply('FAIL') ;
         die() ;
         
     case 'remove_moderator':
         
         if( $group->is_owner() ){
             
-            verify_number($_POST['member'] ) ;
+            if( ! verify_number($_POST['member'] ) ){
+                $post->json_reply( 'FAIL' ) ;
+                die();
+            }
             
             $db->update( "DELETE FROM `group_moderator` WHERE `group_id`='".$group->id."' AND `mod_id`='".$_POST['member']."'" ) ;
             $post->json_reply('SUCCESS') ;
             header( 'Location: '.$_POST['oe_return'] ) ;
         }
-        $post->json_reply('ERROR', 'unauthorised') ;
+        $post->json_reply('FAIL') ;
         die() ;
         
     case 'ban_member':
         
         if( $group->is_moderator() ){
             
-            verify_number($_POST['member'] ) ;
+            if( ! verify_number($_POST['member'] ) ){
+                $post->json_reply( 'FAIL' ) ;
+                die();
+            }
             
             $db->insert( "INSERT INTO `group_block` SET `group_id`='".$group->id."', `blocked_user`='".$_POST['member']."', `blocked_by`='".$user->id."'" ) ;
             
@@ -94,20 +107,23 @@ switch( $_POST['oe_formid'] ) {
             header( 'Location: '.$_POST['oe_return'] ) ;
             
         }
-        $post->json_reply('ERROR', 'unauthorised') ;
+        $post->json_reply('FAIL') ;
         die() ;
         
     case 'unban_member':
         
         if( $group->is_moderator() ){
             
-            verify_number($_POST['member'] ) ;
+            if( ! verify_number($_POST['member'] ) ){
+                $post->json_reply( 'FAIL' ) ;
+                die();
+            }
             
             $db->insert( "DELETE FROM `group_block` WHERE `group_id`='".$group->id."' AND `blocked_user`='".$_POST['member']."'" ) ;
             $post->json_reply('SUCCESS') ;
             header( 'Location: '.$_POST['oe_return'] ) ;
             
         }
-        $post->json_reply('ERROR', 'unauthorised') ;
+        $post->json_reply('FAIL') ;
         die() ;
 }
