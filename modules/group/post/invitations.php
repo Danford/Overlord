@@ -3,7 +3,7 @@
 
 if( preg_match( '/^[0-9]*$/', $_POST['group_id'] ) != 0 ){
     $group = new group_minion( $_POST['group_id'] ) ;
-} else { die( ) ; }
+} else { $post->json_reply('FAIL') ; die( ) ; }
 
 switch( $_POST['oe_formid'] ){
     
@@ -17,7 +17,7 @@ switch( $_POST['oe_formid'] ){
             
             foreach( $_POST["invitees"] as $invited ){
                 
-                $db->insert( "INSERT INTO `group_invite` SET `group_id`='".$group->id."', `user_id`='".$invited."',
+                $db->insert( "INSERT INTO `group_invite` SET `group_id`='".$group->id."', `user_id`='".$db-sanitize( $invited )."',
                     type='0', `invited_by`='".$user->id."'" ) ;                
             }
             
