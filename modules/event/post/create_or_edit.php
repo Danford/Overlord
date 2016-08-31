@@ -13,29 +13,43 @@ if( isset( $_POST['group'] ) ){
     $group = new group_minion($_POST['group'] ) ;
     
     if( ! $group->is_moderator( $_POST['group'] ) ){ 
-        $post->json_reply('ERROR', 'unauthorised') ;
+        $post->json_reply('FAIL') ;
         die() ;
     }
     
 } else {
     
     $post->hold('type');
-    
-}
 
-if( ! is_numeric( $_POST['type'] ) or ($_POST['type'] < 1) or ($_POST['type'] > 3) ) {
-    $post->json_reply('FAIL') ;
-    die('12') ;
+    if( ! is_numeric( $_POST['type'] ) or ($_POST['type'] < 1) or ($_POST['type'] > 3) ) {
+        $post->json_reply('FAIL') ;
+        die('12') ;
+    }
+    
 }
 
 if( $_POST['oe_formid'] == 'edit' ) {
 
     // verify user actually has access to edit the event
     
-    $before = $db->get_assoc( "SELECT `organiser`, `type` FROM `event_profile` WHERE `event_id`='".$_POST['event_id']."'" );
-    
-    if( $before['organiser'] != $user->id ){ $post->json_reply('ERROR', 'unauthorised' ) ; die( $before['organiser']."-".$user->id ) ; }
-    
+    $before = $db->get_assoc( "SELECT `organiser`, `type` FROM `event_profile` WHERE `event_id`='".$db->sanitize( $_POST['event_id'] )."'" );
+
+     
+    if( ! isset( $_POST['group'] ) ){
+        
+        if( $before['organiser'] != $user->id ){ $post->json_reply( 'FAIL' ) ; die( $before['organiser']."-".$user->id ) ; }
+                
+        $post->require_true( $before['type'] < $_POST['type'], 'type', 'You cannot make an event less secure.' ) ;
+        $post->checkpoint() ;
+        
+    } else {
+        
+        include( $oe_modules['group']."/lib/group_minion.php" ) ;
+        $group = new group_minion( $db->sanitize( $_POST['group'] ) ) ;
+        
+        if( ! $group->is_moderator() ){ $post->json_reply('FAIL') ; die() ; }         
+        
+    }
 }
 
 $post->require_field( 'title', 'Title cannot be blank.' ) ;
@@ -68,7 +82,7 @@ if( isset( $_POST['group'] ) ){
 }
 else {
     
-    $set .= ", `organiser`='".$user->id."'" ;
+    $set .= ", `type`='".$_POST['type']."', `organiser`='".$user->id."'" ;
     
 }
 
@@ -77,7 +91,7 @@ if( $_POST['oe_formid'] == 'edit' ) {
     $post->require_true( $before['type'] <= $_POST['type'] , 'type', 'You cannot lower the security of an already existing event.' ) ;
     $post->checkpoint() ;
    
-    $db->update( "UPDATE `event_profile` SET ".$set." WHERE `event_id`='".$_POST['event_id']."'" ) ;
+    $db->update( "UPDATE `event_profile` SET ".$set." WHERE `event_id`='".$db->sanitize( $_POST['event_id'] )."'" ) ;
     
     $post->json_reply('SUCCESS') ;
     
@@ -89,7 +103,7 @@ $event = $db->insert( 'INSERT INTO `event_profile` SET '.$set ) ;
 
 if( isset( $_POST['group'] ) ){
 
-    $post->json_reply('SUCCESS') ;
+    $post->json_reply('SUCCESS', $event ) ;
     
     header( "Location: /group/".$group->id."/event/".$event ) ;
 
@@ -97,7 +111,7 @@ if( isset( $_POST['group'] ) ){
     
 } else {
 
-    $post->json_reply('SUCCESS') ; 
+    $post->json_reply('SUCCESS', $event ) ; 
     header( "Location: /event/".$event ) ;
 }
     
