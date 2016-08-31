@@ -10,7 +10,7 @@ switch( $_POST['oe_formid'] ) {
         
         $group = new group_minion( $_POST['group_id'] ) ;
         
-        if( $group->access != 'full' ) { $post->json_reply('ERROR', 'unauthorised' ) ; die() ; }
+        if( $group->access != 'full' ) { $post->json_reply( 'FAIL' ) ; die() ; }
         
         $post->hold( 'subject', 'message' ) ;
 
@@ -37,7 +37,7 @@ switch( $_POST['oe_formid'] ) {
         
         $db->insert( "INSERT INTO `group_message` SET `thread_id`='".$thread_id."', ".$db->build_set_string_from_post('user_id', 'message', 'timestamp' ) );
         
-        $post->json_reply('SUCCESS') ;
+        $post->json_reply('SUCCESS', $thread_id ) ;
         
         header( 'Location: /group/'.$group->id.'/thread/'.$thread_id ) ;
         die() ;
@@ -51,22 +51,22 @@ switch( $_POST['oe_formid'] ) {
         $post->require_true( $_POST["message"] != '', 'message', 'Message is blank' ) ;
         $post->checkpoint ;
         
-        $g = $db->get_field( "SELECT `group_id` FROM `group_thread` WHERE `thread_id`='".$_POST['thread_id']."'" ) ;
+        $g = $db->get_field( "SELECT `group_id` FROM `group_thread` WHERE `thread_id`='".$db->sanitize( $_POST['thread_id'] )."'" ) ;
         
         if( $g == false ){
-            $post->json_reply('ERROR', 'invalid' ) ;
+            $post->json_reply('FAIL' ) ;
             die() ;
         } else {
             $group = new group_minion($g) ;
         }
         
-        if( $group->access != 'full' ) { $post->json_reply('ERROR', 'unauthorised' ) ; die(); }
+        if( $group->access != 'full' ) { $post->json_reply( 'FAIL' ) ; die(); }
         
         $_POST["timestamp"] = oe_time() ;
         $_POST['user_id'] = $user->id ;
         
         $db->insert( "INSERT INTO `group_message` SET ".$db->build_set_string_from_post( 'user_id', 'timestamp', 'message', 'thread_id' ));
-        $db->update( "UPDATE `group_thread` SET `latest_timestamp`='".$_POST['timestamp']."' WHERE `thread_id`='".$_POST['thread_id']."'") ;
+        $db->update( "UPDATE `group_thread` SET `latest_timestamp`='".$_POST['timestamp']."' WHERE `thread_id`='".$db->sanitize( $_POST['thread_id'] )."'") ;
         
         // determine to which page to send them
         
@@ -94,16 +94,16 @@ switch( $_POST['oe_formid'] ) {
     case "makesticky":
     case "makeunsticky":
         
-        $g = $db->get_field( "SELECT `group_id`, `group` FROM `group_thread` WHERE `thread_id`='".$_POST['thread_id']."'" ) ;
+        $g = $db->get_field( "SELECT `group_id`, `group` FROM `group_thread` WHERE `thread_id`='".$db->sanitize( $_POST['thread_id'] )."'" ) ;
         
         if( $g == false ){
-            $post->json_reply('ERROR', 'invalid') ;
+            $post->json_reply('FAIL') ;
             die() ;
         } else {
             $group = new group_minion($g['group_id']) ;
         }
         
-        if( ! $group->is_moderator() ) { $post->json_reply('ERROR', 'unauthorised') ; die(); }
+        if( ! $group->is_moderator() ) { $post->json_reply('FAIL') ; die(); }
         
         if( $_POST['oe_formid'] == "makesticky" ) {
             $sticky = 1 ;
@@ -111,7 +111,7 @@ switch( $_POST['oe_formid'] ) {
             $sticky = 0 ;
         }
         
-        $db->update( "UPDATE `group_thread` SET `sticky`='".$sticky."' WHERE `thread_id`='".$_POST[$thread_id]."'" ) ;
+        $db->update( "UPDATE `group_thread` SET `sticky`='".$sticky."' WHERE `thread_id`='".$db->sanitize( $_POST['thread_id'] )."'" ) ;
         
         $post->json_reply('SUCCESS') ;
         header( "Location: /group/".$g['group_id']."/threads" ) ;
@@ -121,10 +121,10 @@ switch( $_POST['oe_formid'] ) {
 
     case "deletethread":
         
-        $g = $db->get_assoc( "SELECT `group_id`, `user_id` FROM `group_thread` WHERE `thread_id`='".$_POST['thread_id']."'" ) ;
+        $g = $db->get_assoc( "SELECT `group_id`, `user_id` FROM `group_thread` WHERE `thread_id`='".$db->sanitize( $_POST['thread_id'] )."'" ) ;
         
         if( $g == false ){
-            $post->json_reply('ERROR', 'invalid' ) ;
+            $post->json_reply('FAIL') ;
             die() ;
         } else {
             $group = new group_minion($g['group_id']) ;
@@ -132,7 +132,7 @@ switch( $_POST['oe_formid'] ) {
         
         if( ! $group->is_moderator() ) { $post->json_reply('ERROR', 'unauthorised' ) ; die(); }
         
-        $db->update( "DELETE FROM `group_thread`, `group_message` WHERE `thread_id`='".$_POST['thread_id']."'" ) ;
+        $db->update( "DELETE FROM `group_thread`, `group_message` WHERE `thread_id`='".$db->sanitize( $_POST['thread_id'] )."'" ) ;
         $post->json_reply('SUCCESS') ;
         header( "Location: /group/".$g['group_id']."/threads" );
         die() ;
@@ -142,11 +142,11 @@ switch( $_POST['oe_formid'] ) {
     case "deletemessage":
     
         $g = $db->get_assoc( "SELECT `group_message`.`user_id`, `group_thread`.`group_id` FROM `group_message`, `group_thread` WHERE
-                                `group_message`.`message_id`='".$_POST['message_id']."' AND
+                                `group_message`.`message_id`='".$db->sanitize( $_POST['message_id'] )."' AND
                                 `group_message`.`thread_id` = `group_thread`.`thread_id`" );
         
         if( $g == false ){
-            $post->json_reply('ERROR','invalid') ;
+            $post->json_reply('FAIL') ;
             die() ;
         } else {
             $group = new group_minion($g['group_id']) ;
@@ -154,7 +154,7 @@ switch( $_POST['oe_formid'] ) {
         
         if( ! $group->is_moderator() ) { $post->json_reply('ERROR', 'unauthorised' ) ; die(); }
         
-        $db->update( "DELETE FROM `group_message` WHERE `message_id`='".$_POST['message_id']."'" ) ;
+        $db->update( "DELETE FROM `group_message` WHERE `message_id`='".$db->sanitize( $_POST['message_id'] )."'" ) ;
         
         $post->json_reply('SUCCESS') ;
         header( "Location: /group/".$g['group_id']."/threads" );
