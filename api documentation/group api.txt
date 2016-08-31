@@ -1,0 +1,126 @@
+oe_api		group
+
+	oe_formid
+
+		create
+		
+			requires 
+				'name', 'short_desc', 'detail', 'type' ( 1 -> public, 2-> private, 3->secret )
+				
+			replies
+				status FAIL - invalid
+				status ERROR - content = associative array of affected fields.
+				status SUCCESS - message: group_id
+
+		edit
+		
+			requires 
+				'group_id', 'name', 'short_desc', 'detail', 'type' ( 1 -> public, 2-> private, 3->secret )
+				
+			replies
+				status FAIL - no content ( invalid or unauthorised )
+				status ERROR - content = associative array of affected fields.
+				status SUCCESS - message: group_id
+				
+		newthread
+		
+			requires
+				'group_id', 'message', 'subject', 'sticky' (0 or 1)
+				
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status ERROR - content = associative array of affected fields.
+				status SUCCESS - message: thread_id			
+		
+		message
+		
+			requires
+				'thread_id', 'message'
+				
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status ERROR - content = associative array of affected fields.
+				status SUCCESS - message: page number of new entry
+				
+		make_sticky
+		make_unsticky
+			requires
+				thread_id		
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - message: page number of new entry
+		
+		deletethread
+			requires
+				thread_id		
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+		
+		deletemessage
+			requires
+				message_id		
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+		
+		
+				
+		join
+		leave
+			requires
+				group_id
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+				
+				
+		notifications
+			requires
+				group_id, notify_message ( 0 or 1 ), notify_thread( 0 or 1 )
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+				
+				
+		make_moderator
+		remove_moderator
+		ban_member
+		unban_member
+		
+			requires
+				group_id
+				member
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+				
+				
+		invite
+		
+			requires
+				group_id
+				invitees - ARRAY of invited user ids
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+				
+								
+		request
+		
+			requires
+				group_id
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
+				
+				
+		approve_request	
+		approve_invitation
+		
+			requires
+				group_id
+				invitees - ARRAY of invited user ids
+			replies
+				status FAIL - no content (invalid or unauthorised)	
+				status SUCCESS - no content
