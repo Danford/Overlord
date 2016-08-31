@@ -1,0 +1,69 @@
+oe_api event
+
+	oe_formid
+
+		create
+		
+			requires 
+				`group` OR `type` ( 1 - public, 2- private, 3-secret )
+				
+				'title', 'subtitle', 
+                'start_year', 'start_month', 'start_day', 
+                'start_hour', 'start_minute', 'start1_meridian',
+                'end_year', 'end_month', 'end_day', 
+                'end_hour', 'end_minute', 'end_meridian',
+                'address', 'cost', 'detail', 'dress'				
+
+			replies
+				status FAIL - invalid
+				status ERROR - content = associative array of affected fields.
+				status SUCCESS - message: event_id
+				
+		edit
+		
+			requires 
+				`event_id`
+				
+				`group` OR `type` ( 1 - public, 2- private, 3-secret )
+				
+				'title', 'subtitle', 
+                'start_year', 'start_month', 'start_day', 
+                'start_hour', 'start_minute', 'start1_meridian',
+                'end_year', 'end_month', 'end_day', 
+                'end_hour', 'end_minute', 'end_meridian',
+                'address', 'cost', 'detail', 'dress'				
+
+			replies
+				status FAIL - invalid
+				status ERROR - content = associative array of affected fields.
+				status SUCCESS - no content
+				
+		
+    	invite
+    	approve_invitation
+    	
+    		requires
+    			event_id
+				invitees - ARRAY of invited user ids
+    		replies
+				status FAIL - no content ( invalid or unauthorised ) ;
+				status SUCCESS - no content
+    			
+    	request
+    	
+    		requires
+    			event_id
+    		replies
+				status FAIL - no content ( invalid or unauthorised ) ;
+				status SUCCESS - no content
+				
+    	rsvp
+    	
+    		requires
+    			event_id
+    			rsvp
+    		replies
+				status FAIL - no content ( invalid or unauthorised ) ;
+				status SUCCESS - no content
+    	
+    		
