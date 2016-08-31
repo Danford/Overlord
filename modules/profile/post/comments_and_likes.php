@@ -14,22 +14,22 @@ switch( $_POST["oe_formid"] ) {
             die() ;
         }
         
-        $a = $db->get_assoc( "SELECT `profile_".$_POST['type']."_comment`.`user_id`, `profile_".$_POST['type']."`.`owner`,
-            `profile_".$_POST['type']."_comment`.`".$_POST['type']."_id` as `id`
-            FROM `profile_".$_POST['type']."_comment`, `profile_".$_POST['type']."`
-            WHERE `comment_id` = '".$_POST['comment_id']."' 
-            AND `profile_".$_POST['type']."_comment`.`".$_POST['type']."_id` = `profile_".$_POST['type']."`.`".$_POST['type']."_id`" ) ;
+        $a = $db->get_assoc( "SELECT `profile_".$db->sanitize( $_POST['type'] )."_comment`.`user_id`, `profile_".$db->sanitize( $_POST['type'] )."`.`owner`,
+            `profile_".$db->sanitize( $_POST['type'] )."_comment`.`".$db->sanitize( $_POST['type'] )."_id` as `id`
+            FROM `profile_".$db->sanitize( $_POST['type'] )."_comment`, `profile_".$db->sanitize( $_POST['type'] )."`
+            WHERE `comment_id` = '".$db->sanitize($_POST['comment_id'])."' 
+            AND `profile_".$db->sanitize( $_POST['type'] )."_comment`.`".$db->sanitize( $_POST['type'] )."_id` = `profile_".$db->sanitize( $_POST['type'] )."`.`".$db->sanitize( $_POST['type'] )."_id`" ) ;
         
         if( $user->id == $a['owner'] or $user->id == $a['user_id'] ) {
             
             // only the photo owner or the poster can delete a comment
 
-            $db->update( "DELETE FROM `profile_".$_POST['type']."_comment` WHERE `comment_id`='".$_POST['comment_id']."'" );
-            $db->update( "DELETE FROM `user_notifications` WHERE `ref`='".$_POST['comment_id']."'" );
-            $db->update( "DELETE FROM `user_activity` WHERE `ref`='".$_POST['comment_id']."'" );
+            $db->update( "DELETE FROM `profile_".$db->sanitize( $_POST['type'] )."_comment` WHERE `comment_id`='".$db->sanitize($_POST['comment_id'])."'" );
+            $db->update( "DELETE FROM `user_notifications` WHERE `ref`='".$db->sanitize($_POST['comment_id'])."'" );
+            $db->update( "DELETE FROM `user_activity` WHERE `ref`='".$db->sanitize($_POST['comment_id'])."'" );
             
-            $db->update( "UPDATE `profile_".$_POST['type']."` SET `comments` = `comments` - 1 
-                            WHERE `".$_POST['type']."_id`='".$a['id']."'" );
+            $db->update( "UPDATE `profile_".$db->sanitize( $_POST['type'] )."` SET `comments` = `comments` - 1 
+                            WHERE `".$db->sanitize( $_POST['type'] )."_id`='".$a['id']."'" );
 
 
             $post->json_reply( 'SUCCESS' ) ;   
@@ -49,7 +49,7 @@ switch( $_POST["oe_formid"] ) {
         // so there will be no errors, just death()
         
 
-        if( ( preg_match( '/^[0-9]*$/', $_POST['id']) == 0 )
+        if( ( preg_match( '/^[0-9]*$/', $db->sanitize( $_POST['id'] )) == 0 )
                 or 
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
             
@@ -57,7 +57,7 @@ switch( $_POST["oe_formid"] ) {
                 die() ;
         }
         
-        $q = "SELECT `owner` FROM `profile_".$_POST['type']."` WHERE `".$_POST['type']."_id`='".$_POST['id']."'" ;
+        $q = "SELECT `owner` FROM `profile_".$db->sanitize( $_POST['type'] )."` WHERE `".$db->sanitize( $_POST['type'] )."_id`='".$db->sanitize( $_POST['id'] )."'" ;
         
         $owner = $db->get_field( $q ) ;
 
@@ -66,13 +66,13 @@ switch( $_POST["oe_formid"] ) {
             die() ;
         }
         
-        $q = "INSERT INTO `profile_".$_POST['type']."_comment` SET `timestamp`='".oe_time()."', 
-            `".$_POST['type']."_id`='".$_POST['id']."', `user_id`='".$user->id."',
+        $q = "INSERT INTO `profile_".$db->sanitize( $_POST['type'] )."_comment` SET `timestamp`='".oe_time()."', 
+            `".$db->sanitize( $_POST['type'] )."_id`='".$db->sanitize( $_POST['id'] )."', `user_id`='".$user->id."',
             `comment`='".$db->sanitize($_POST['comment'])."'" ;
 
         $id = $db->insert( $q ) ;
         
-        $q = "update `profile_".$_POST['type']."` SET `comments` = `comments` + 1 WHERE `".$_POST['type']."_id` = '".$_POST['id']."'" ;
+        $q = "update `profile_".$db->sanitize( $_POST['type'] )."` SET `comments` = `comments` + 1 WHERE `".$db->sanitize( $_POST['type'] )."_id` = '".$db->sanitize( $_POST['id'] )."'" ;
         
         
         $db->update( $q ) ;
@@ -96,7 +96,7 @@ switch( $_POST["oe_formid"] ) {
         
     case 'like':
         
-        if( ( preg_match( '/^[0-9]*$/', $_POST['id']) == 0 )
+        if( ( preg_match( '/^[0-9]*$/', $db->sanitize( $_POST['id'] )) == 0 )
             or
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
                 
@@ -105,7 +105,7 @@ switch( $_POST["oe_formid"] ) {
                 die() ;
         }
         
-        $q = "SELECT `owner` FROM `profile_".$_POST['type']."` WHERE `".$_POST['type']."_id`='".$_POST['id']."'" ;
+        $q = "SELECT `owner` FROM `profile_".$db->sanitize( $_POST['type'] )."` WHERE `".$db->sanitize( $_POST['type'] )."_id`='".$db->sanitize( $_POST['id'] )."'" ;
         
         $owner = $db->get_field( $q ) ;
         
@@ -114,10 +114,10 @@ switch( $_POST["oe_formid"] ) {
             die() ;
         }        
         
-        $like_id = $db->insert( "INSERT INTO `profile_".$_POST['type']."_like` 
-            SET `".$_POST['type']."_id`='".$_POST['id']."', `liked_by`='".$user->id."', `timestamp`='".oe_time()."'" );
+        $like_id = $db->insert( "INSERT INTO `profile_".$db->sanitize( $_POST['type'] )."_like` 
+            SET `".$db->sanitize( $_POST['type'] )."_id`='".$db->sanitize( $_POST['id'] )."', `liked_by`='".$user->id."', `timestamp`='".oe_time()."'" );
         
-        $q = "update `profile_".$_POST['type']."` SET `likes` = `likes` + 1 WHERE `".$_POST['type']."_id` = '".$_POST['id']."'" ;
+        $q = "update `profile_".$db->sanitize( $_POST['type'] )."` SET `likes` = `likes` + 1 WHERE `".$db->sanitize( $_POST['type'] )."_id` = '".$db->sanitize( $_POST['id'] )."'" ;
 
         $db->update( $q ) ;
 
@@ -138,7 +138,7 @@ switch( $_POST["oe_formid"] ) {
         
     case 'unlike':
         
-        if( ( preg_match( '/^[0-9]*$/', $_POST['id']) == 0 )
+        if( ( preg_match( '/^[0-9]*$/', $db->sanitize( $_POST['id'] )) == 0 )
             or
             ( $_POST['type'] != 'photo' and $_POST['type'] != 'video' and $_POST['type'] != 'prose' ) ){
                 
@@ -146,11 +146,11 @@ switch( $_POST["oe_formid"] ) {
                 die() ;
         }
         
-        $ref = $db->get_field( "SELECT `id` FROM `profile_".$_POST['type']."_like` WHERE `".$_POST['type']."_id`='".$_POST['id']."' AND `liked_by`='".$user->id."'" );
+        $ref = $db->get_field( "SELECT `id` FROM `profile_".$db->sanitize( $_POST['type'] )."_like` WHERE `".$db->sanitize( $_POST['type'] )."_id`='".$db->sanitize( $_POST['id'] )."' AND `liked_by`='".$user->id."'" );
         
         if( $ref != false ){
-            $db->update( "update `profile_".$_POST['type']."` SET `likes` = `likes` - 1 WHERE `".$_POST['type']."_id` = '".$_POST['id']."'" ) ;
-            $db->update( "DELETE FROM `profile_".$_POST['type']."_like` WHERE `id`='".$ref."'" ) ;
+            $db->update( "update `profile_".$db->sanitize( $_POST['type'] )."` SET `likes` = `likes` - 1 WHERE `".$db->sanitize( $_POST['type'] )."_id` = '".$db->sanitize( $_POST['id'] )."'" ) ;
+            $db->update( "DELETE FROM `profile_".$db->sanitize( $_POST['type'] )."_like` WHERE `id`='".$ref."'" ) ;
             $db->update( "DELETE FROM `user_notifications` WHERE `ref`='".$ref."'" ) ;
             $db->update( "DELETE FROM `user_activity` WHERE `ref`='".$ref."'" ) ;
         

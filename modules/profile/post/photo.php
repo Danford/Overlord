@@ -114,7 +114,7 @@ switch( $_POST['oe_formid'] ){
     
         log_activity( $type, $photoid ) ;
     
-        $post->json_reply( 'SUCCESS' ) ;
+        $post->json_reply( 'SUCCESS', $photoid ) ;
         
         header( "Location: ".$baseurl.$user->id."/photo/".$photoid ) ;
         die() ;
@@ -137,13 +137,13 @@ switch( $_POST['oe_formid'] ){
             $post->checkpoint() ;
         }
         
-        if( ! verify_number( $_POST['photo_id'] ) ) { die(); } // invalid photo id
+        if( ! verify_number( $_POST['photo_id'] ) ) { $post->json_reply('FAIL'); die(); } // invalid photo id
         
         
         $oldinfo = $db->get_assoc( "SELECT `private`, `title`, `description`, `album`, `file_key`
                                 FROM `profile_photo` WHERE `photo_id`='".$_POST['photo_id']."' AND `owner`='".$user->id."'" ) ;
         
-         if( $oldinfo == false ){ die(); } // photo doesn't exist or isn't theirs
+         if( $oldinfo == false ){ $post->json_reply('FAIL'); die(); } // photo doesn't exist or isn't theirs
        
         if( $_POST["album"] == "None" ){ $_POST['album'] = '' ; } 
         
@@ -232,11 +232,11 @@ switch( $_POST['oe_formid'] ){
         
     case 'deletephoto':
 
-        if( ! verify_number( $_POST['photo_id'] ) ) { die(); } // invalid photo id
+        if( ! verify_number( $_POST['photo_id'] ) ) {$post->json_reply('FAIL'); die(); } // invalid photo id
         
         $detail = $db->get_assoc( "SELECT `file_key`, `album`, `private` FROM `profile_photo` WHERE `photo_id` = '".$_POST['photo_id']."' AND `owner`='".$user->id."'" ) ;
 
-        if( $detail == false ){ die() ; }
+        if( $detail == false ){ $post->json_reply('FAIL'); die() ; }
         
         unlink( ul_img_dir."user.".$user->id.".".$detail['file_key'].".png" ) ;
         unlink( ul_img_dir."user.".$user->id.".".$detail['file_key'].".thumb.png" ) ; 

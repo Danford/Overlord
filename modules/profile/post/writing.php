@@ -6,7 +6,7 @@ switch( $_POST['oe_formid'] ){
     
     case 'new_writing':
         
-        $post->hold( 'private', 'title', 'subtitle', 'content', 'setavatar', 'album', 'new_album_title', 'new_album_description' );
+        $post->hold( 'private', 'title', 'subtitle', 'content', 'album', 'new_album_title', 'new_album_description' );
 
         $post->require_true( $_POST['title'] != '' , 'title', 'Title is a required field.' ) ;
         $post->require_true( strlen( $_POST['title']) < 76 , 'title', 'Title must be 75 characters or less.' ) ;
@@ -42,7 +42,7 @@ switch( $_POST['oe_formid'] ){
         
         log_activity( 9, $proseid ) ;
         
-        $post->json_reply( 'SUCCESS' ) ;
+        $post->json_reply( 'SUCCESS', $proseid ) ;
        
         header( 'Location: /profile/'.$user->id.'/writing/'.$proseid ) ;
         die() ;
@@ -65,7 +65,7 @@ switch( $_POST['oe_formid'] ){
         }
         
         // album management        
-        if( preg_match( '/^[0-9]*$/', $_POST['prose_id']) == 0 ) { die('invalid'); } // invalid prose id
+        if( preg_match( '/^[0-9]*$/', $_POST['prose_id']) == 0 ) { $post->json_reply( 'FAIL' ); die('invalid'); } // invalid prose id
         
         
         $oldinfo = $db->get_assoc( "SELECT `private`, `album`
@@ -114,7 +114,7 @@ switch( $_POST['oe_formid'] ){
         
         $detail = $db->get_assoc( "SELECT `album`, `private` FROM `profile_prose` WHERE `prose_id`='".$_POST['prose_id']."' AND `owner`='".$user->id."'" ) ;
         
-        if( $detail == false ){ die() ; }
+        if( $detail == false ){ $post->json_reply( 'FAIL' );  die() ; }
         
         $db->update( "DELETE FROM `profile_prose` WHERE `prose_id`='".$_POST['prose_id']."'" ) ;
             
