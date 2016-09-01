@@ -1,5 +1,4 @@
 <?php
-
     $post->checkbox( 'tos_agree' ) ;
     $post->hold( 'screen_name', 'email', 'confirmemail', 'birth_month', 'birth_day', 'birth_year', 'tos_agree', 'gender', 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) ;
 
@@ -19,7 +18,7 @@
         $post->require_true( preg_match("/[0-9\\\\! '@#$%^&*\\(\\)\\[\\]\\{\\}`~\\.,\\/<>;:+=\\-_]/", $_POST['password']), 'password', 'Password does not contain a number or special character.' ) ;
       
     $post->checkpoint() ;
-    
+
         $post->require_true( $_POST['password'] == $_POST['confirmpassword'], 'password', 'Password confirmation does not match' ) ;
     
         $post->require_true( preg_match( '/.*@.*\..*/', $_POST['email'] ), 'email', 'Not a valid e-mail address' ) ;
@@ -30,14 +29,16 @@
 
     $post->checkpoint() ;
     
+        if( strlen($_POST['birth_day']) == 1 ){ $_POST['birth_day'] = "0".$_POST["birth_day"] ; }
+    
         $_POST["birthdate"] = $_POST['birth_year']."-".$_POST['birth_month']."-".$_POST['birth_day'] ;
         
         $date = new DateTime();
         $date->sub(new DateInterval('P18Y'));
     
         $post->require_true( $_POST["birthdate"] <= $date->format('Y-m-d'), "birth",  "You must be at least 18 years old to register." ) ;
-        $post->require_true( preg_match( '/\d\d\d\d-\d\d-\d\d/', $_POST['birthdate'] ) == 1, 'birth', 'There is a serious problem with your date submission.' ) ;        
-    
+        $post->require_true( preg_match( '/[0-9]{4}\-[0-9]{2}\-[0-9]{2}/', $_POST['birthdate'] ) == 1, 'birth', 'There is a serious problem with your date submission.' ) ;        
+        
     $post->checkpoint() ;
     
         $usercheck = "SELECT COUNT(*) FROM `user_profile` WHERE `screen_name`='".$_POST['screen_name']."'" ;
@@ -51,7 +52,6 @@
         $post->require_true( $db->get_field( $usercheck ) == 0 , 'email', 'There is already an account with this e-mail.' ) ;
     
     $post->checkpoint() ;
-    
         /*
          *  The following options shouldn't be a problem, actually, but these checks are to avoid
          *  sql injection smartasses bypassing the form.
@@ -82,7 +82,7 @@
     $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
-    $b['user_profile'] = $db->insert( "INSERT INTO `user_profile` SET ".$set1a.", ".$set2 ) ;
+    $b['user_profile'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;
     $b['confirmation_key'] = hash_hmac( "sha256", $_POST['email'].oe_time(), oe_seed );
     $b['type'] = 0 ;
     $b['timestamp'] = oe_time() ;

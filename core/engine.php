@@ -1,6 +1,6 @@
 <?php
     
-    include_once( oe_core.'_conf/oe_config.php' ) ;
+    include_once( oe_root.'core/_conf/oe_config.php' ) ;
 	include_once( oe_lib.'oe_lib.php' ) ;
 	include_once( oe_lib.'mysqli_minion.php' ) ;
 	include_once( $oe_modules['group'].'lib/group_minion.php' ) ;
@@ -77,7 +77,7 @@
 	if( ( $uri[$pos] == 'index.php' ) or ( ! isset( $uri[ $pos ] ) ) or ( $uri[ $pos ] == '' ) ) 
 	{
 		if( $user->is_logged_in() ){
-		    $uri[$pos] = 'dashboard' ;
+		    $uri[$pos] = './main' ;
 		} else {
 		    $uri[$pos] = './main' ;
 		}
@@ -159,9 +159,11 @@
 	
 	// if we've come all the way here, it's time to throw a 404.
 
+    
+    
 	http_404() ;
 	$oe_config['module'] = "./main" ;
-	include( oe_pages['404'] ) ;
+	include( $oe_pages['./404'] ) ;
 	die();
 	
 	?>

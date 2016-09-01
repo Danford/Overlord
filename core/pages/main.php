@@ -20,7 +20,7 @@ $page->header();
 }
 else {
 
-    print( 'Welcome to our site!
+    print( 'Welcome to our site! 
         <br /><br /> 
         <a href="/register/">Register</a> or
         <a href="/login/">Sign In</a>  or

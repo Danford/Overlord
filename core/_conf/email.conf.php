@@ -1,8 +1,6 @@
 <?php
 
 
-define( 'siteurl', 'https://www.codexfive.net/') ; 
-
 /*
  *  siteurl is used for generating links in emails.  
  *  

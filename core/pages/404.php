@@ -6,8 +6,6 @@ $p = new page_minion( "404 - Not Found" ) ;
 
 $p->header( false ) ;
 
-print( $oe_page['bodycontent'] ) ;
-
 ?>
 
 This is the 404 page.<br /><br />Ooops.

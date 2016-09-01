@@ -1,6 +1,8 @@
 <?php
 
 
+
+
 /*
  *  Overlord version 1.1
  *  
@@ -10,6 +12,8 @@
 
 define( 'httproot', '/' );
 
+define( 'siteurl', 'https://www.codexfive.net/') ;
+
 /*
  *  If this script is located at 'http://yourserver.com/' then leave this as '/'.
  *  If this script is located at 'http://yourserver.com/somesubdirectory/', set this to '/somesubdirectory/'.
@@ -17,7 +21,7 @@ define( 'httproot', '/' );
  *  httproot MUST end with the trailing slash.
  */
 
-define( 'oe_root', './' );
+define( 'oe_root', '/home/virtualfive/codexfive.net/' );
 
 /*
  * The subdirectory where the site files are kept.
@@ -31,9 +35,6 @@ define( 'oe_root', './' );
  *
  */
 
-
-define( 'oe_core', oe_root.'core/' ) ;
-
 define( 'oe_seed', 'WhipMeBeatMeMakeMeWriteBadCode' );
 
 /*
@@ -43,6 +44,23 @@ define( 'oe_seed', 'WhipMeBeatMeMakeMeWriteBadCode' );
      * to have.  And that's what this config file is for.
      */
 
- include( oe_core."engine.php" ) ;
+ 
+ //  MySQL CONFIG
+ 
+ /*
+  *  Built with the concept of multiple servers for upload and download
+  *
+  *  This section can be edited to provide a round-robin if needed
+  */
+ 
+ $sql_config[ 'insert' ]['host'] = 'db.codexfive.net' ;
+ $sql_config[ 'insert' ]['db'] = 'c5prod' ;
+ $sql_config[ 'insert' ]['user'] = 'c5prod_user' ;
+ $sql_config[ 'insert' ]['pass'] = 's3riousK!ink' ;
+ 
+ $sql_config[ 'select' ] = $sql_config[ 'insert' ] ;
+ 
+ 
+ include( oe_root."core/engine.php" ) ;
 
  ?>

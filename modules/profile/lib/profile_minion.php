@@ -31,10 +31,14 @@ class profile_minion {
         if( $user->is_blocked( $id ) ){
             $this->name = false ;
         } else {
-            $q = "SELECT `screen_name`, `gender`, `avatar`, `birthdate`, `show_age`, `detail`, `friend_count`, 
+            $q = "SELECT `screen_name`, `gender`, `avatar`, `birthdate`, `detail`, `friend_count`, 
                         `total_public_photo`, `total_public_prose`, `total_public_video`, `total_public_albums`,
-                        `total_private_photo`, `total_private_prose`, `total_private_video`, `total_private_albums`
-                        FROM `user_profile` WHERE `user_id`='".$this->id."'" ;
+                        `total_private_photo`, `total_private_prose`, `total_private_video`, `total_private_albums`, 
+                        `show_age`,`allow_contact`
+                        FROM `user_profile`, `user_account`
+                        WHERE 
+                            `user_profile`.`user_id`='".$this->id."' 
+                        AND `user_profile`.`user_id`=`user_account`.`user_id` " ;
          
             $info = $this->db->get_assoc( $q );
             

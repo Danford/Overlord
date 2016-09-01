@@ -283,6 +283,8 @@ class user_minion {
     function require_login() {
     
         if( $this->id == 0 ) {
+
+            die( "[".$_SESSION["user"]->id."]" ) ;
             include( oe_core."login/pages/requirelogin.php" ) ;
             die() ;
         }

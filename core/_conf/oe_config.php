@@ -9,6 +9,7 @@
  *  Really, though, there's no good reason to change them.
  */
 
+define( 'oe_core', oe_root.'core/' ) ;
 define( 'oe_mod', oe_root.'modules/' ) ;
 define( 'oe_lib', oe_core.'_lib/' ) ;
 define( 'oe_config', oe_core.'_conf/' ) ;
@@ -41,21 +42,6 @@ define( 'oe_log', oe_root."oe_logs/") ;
     define( 'profile_image_size', 300) ;
     define( 'profile_thumb_size', 75 ) ;
     
-//  MySQL CONFIG
-
-    /*
-     *  Built with the concept of multiple servers for upload and download
-     *  
-     *  This section can be edited to provide a round-robin if needed 
-     */
-
-    $sql_config[ 'insert' ]['host'] = 'db.codexfive.net' ;
-    $sql_config[ 'insert' ]['db'] = 'codexfive_db' ;
-    $sql_config[ 'insert' ]['user'] = 'kinkyrobot' ;
-    $sql_config[ 'insert' ]['pass'] = 'p3rv3rse!d3l1ghts' ;
-    
-    $sql_config[ 'select' ] = $sql_config[ 'insert' ] ;
-
     define( 'sql_error_log', oe_log."/sqlerrors.log" ) ;
     define( 'debug_log', oe_log."/debug.log" ) ;
     define( 'security_log', oe_log."/security.log" ) ;

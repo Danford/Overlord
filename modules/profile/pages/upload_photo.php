@@ -80,8 +80,8 @@ $form->select( "album", $albums, false, '', 'onchange="albumselect()"' ) ;
 
 New Album Title: <br />
 
-<?php  $form->text_field( "new_album_title" ) ; ?>
-    $form->if_error('new_album_title', "<br/>%%ERROR%%" ) ;
+<?php  $form->text_field( "new_album_title" ) ; 
+    $form->if_error('new_album_title', "<br/>%%ERROR%%" ) ;?>
 
 <br /><br />
 

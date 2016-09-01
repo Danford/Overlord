@@ -10,8 +10,7 @@
         $post->set_error('login', $user->error ) ;
         $post->checkpoint() ;
     }    
-    
-    
+        
     if( $user->last_login == "" ){
      
         // this is their first time logging in.  Send them to the profile editor

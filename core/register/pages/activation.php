@@ -9,7 +9,6 @@
     $keyregexp = '/^[0-9a-f]{64}$/' ;
     
     if( verify_number( $id ) == false or preg_match( $keyregexp, $key) == 0 ) {
-        
         include( $pagedir."activationfail.php" ) ;
         die() ;
         
@@ -20,7 +19,6 @@
     $q = "SELECT COUNT(*) FROM `confirmation_key` WHERE `user_profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ;
     
     if( $db->get_field( $q ) == 0 ){
-        
         include( $pagedir."activationfail.php" ) ;
         die() ;
         
@@ -30,7 +28,9 @@
 
        
     if( $db->update( "UPDATE `user_account` SET status='1', date_verified='".oe_time()."', ip_verified='".$_SERVER['REMOTE_ADDR']."' WHERE `user_id`='".$id."'" ) == 0 )
-    { include( $pagedir."activationfail.php" ) ; }
+    { 
+
+        die("yo") ;include( $pagedir."activationfail.php" ) ; }
     
     $db->update( "DELETE FROM `confirmation_key` WHERE `user_profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ) ;
     
