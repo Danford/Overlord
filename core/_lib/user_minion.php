@@ -54,13 +54,7 @@ class user_minion {
         
                 $this->id = $a['user_id'] ;
                 
-                $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
-                
-                $this->name = $a['screen_name'] ;
-                $this->avatar = $a['avatar'] ;
-        
-                $this->load_friends_list() ;
-                $this->load_group_membership() ;
+                $this->load_profile() ;
                 
             } else {
         
@@ -141,9 +135,8 @@ class user_minion {
             
             $this->avatar = $a['avatar'] ;
             $this->name = $a['screen_name'] ;
-        
-            $this->load_friends_list() ;
-            $this->load_group_membership() ;
+
+            $this->load_profile() ;
             
             //update last logged in and reset failed logins to zero
             
@@ -281,8 +274,6 @@ class user_minion {
     function require_login() {
     
         if( $this->id == 0 ) {
-
-            die( "[".$_SESSION["user"]->id."]" ) ;
             include( oe_core."login/pages/requirelogin.php" ) ;
             die() ;
         }
@@ -296,4 +287,14 @@ class user_minion {
         return ( isset( $this->blocked[$user_id] )) ;
     }
     
+    function load_profile(){
+        
+        $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
+        
+        $this->name = $a['screen_name'] ;
+        $this->avatar = $a['avatar'] ;
+
+        $this->load_friends_list() ;
+        $this->load_group_membership() ;
+    }
 }
