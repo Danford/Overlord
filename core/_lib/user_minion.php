@@ -12,8 +12,9 @@ class user_minion {
     var $name ;
     var $friends ;
     var $blocked ;
-    var $groups ;
     var $groups_in ;
+    var $groups_owned ;
+    var $groups_banned ;
     var $error ;
     var $last_login ;
     var $avatar ;
@@ -21,9 +22,6 @@ class user_minion {
     function __construct(){
         
         $this->friends = array() ;
-        $this->groups = array() ; // will hold the group objects
-
-        $this->groups = array() ;
         $this->groups_in = array() ;
         $this->groups_owned = array() ;
         $this->groups_banned = array() ;
