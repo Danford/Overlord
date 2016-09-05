@@ -514,14 +514,13 @@ class post_minion
     
     	    $response = array() ;
     	    
-    	    $response['status'] = $status ;
-    	    
-    	    if( ! is_array( $content ) ){
-    	        $response['content'] = $content ;
+    	    if( is_array( $content ) ){
+    	        $response = $content ;
     	    } elseif ( $content != null ) {
-    	        $response['content'] = array() ;
-    	        $response['content']['message'] = $content ;
+    	        $response['message'] = $content ;
     	    }
+    	    
+    	    $response['status'] = $status ;
     	    
     	    echo( json_encode( $response ) ) ;
     	    die() ;
