@@ -1,9 +1,9 @@
 <?php
     $post->checkbox( 'tos_agree' ) ;
-    $post->hold( 'screen_name', 'email', 'confirmemail', 'birth_month', 'birth_day', 'birth_year', 'tos_agree', 'gender', 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) ;
+    $post->hold( 'screen_name', 'email', 'confirmemail', 'birth_month', 'birth_day', 'birth_year', 'tos_agree', 'gender', 'show_age', 'email_notification', 'invite_notification', 'allow_contact', 'zip', 'city' ) ;
 
     
-        $post->require_set( 'screen_name', 'email', 'tos_agree' );
+        $post->require_set( 'screen_name', 'email', 'tos_agree','zip' );
         $post->require_date( 'birth', "You must enter your birthdate." );
         $post->require_checked('tos_agree', 'You must agree to the terms of service' ) ;
          
@@ -78,7 +78,7 @@
     $a['status'] = '0' ;
     $a['passhash'] = hash_hmac( "sha256", $_POST['password'], oe_seed ) ;
     
-    $set1a = $db->build_set_string_from_post( 'email', 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) ;
+    $set1a = $db->build_set_string_from_post( 'email', 'show_age', 'email_notification', 'invite_notification', 'allow_contact','city' ) ;
     $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
@@ -89,6 +89,7 @@
     
     $db->insert( "INSERT INTO `user_profile` SET ".$set1p.", `user_id`='".$b['user_profile']."'" ) ;
     $db->insert( "INSERT INTO `confirmation_key` SET ".$db->build_set_string_from_array($b) ) ;
+    $db->insert( "INSERT INTO `user_location` SET `user_id`='".$b["user_profile"]."', `zip`='".$db->sanitize($_POST['zip'])."', `primary`='1'" ) ;
 
     include( oe_lib."email_minion.php" ) ;
     include( oe_config."email.conf.php" ) ;
