@@ -114,6 +114,7 @@ define( 'oe_log', oe_root."oe_logs/") ;
 	$oe_modules[ 'groups' ] = oe_mod.'group/' ;
 	$oe_modules[ 'event' ] = oe_mod.'event/' ;
 	$oe_modules[ 'events' ] = oe_mod.'event/' ;
+	$oe_modules[ 'location' ] = oe_mod.'location/' ;
 	
 /*
  *  pages -- individual pages that exist as http://yoursite.com/whatever
