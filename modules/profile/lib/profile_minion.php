@@ -83,7 +83,7 @@ class profile_minion {
             return image_link('profilethumb', $this->avatar ) ;
     }
 
-    function get_friends( $offset = 0, $limit = 99999999 ){
+    function get_friends( $offset = 0, $limit = 99999999, $order='screen_name' ){
         
         global $user ;
         
@@ -106,7 +106,7 @@ class profile_minion {
                                 AND
                                   `user_profile`.`city_id` = `location_city`.`id`
                 
-                                ORDER BY `screen_name`
+                                ORDER BY `'.$this->db->sanitize( $order ).'`
 
                                 LIMIT ".$offset.", ".$limit ) ;
             
