@@ -58,6 +58,13 @@ switch( $_POST["oe_formid"] ) {
         
         include( $pagedir."writing.php" ) ;
         die() ;
+    
+    // API ONLY CALLS    
+    
+    case 'getFriends':
+        
+        include( $pagedir."api.php" ) ;
+        die();
 }
 $post->json_reply('FAIL') ;
 die( 'FAIL' ) ;

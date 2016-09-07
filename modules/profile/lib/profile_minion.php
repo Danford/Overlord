@@ -95,8 +95,7 @@ class profile_minion {
             
             $this->db->query( "SELECT `user_profile`.`user_id`, 
                                       `screen_name`, `avatar`,`show_age`,`allow_contact`,`birthdate`,
-                                      `friend_count`, `city_id`, `city`, `state`  
-                                      `profile_friendship`.`timestamp` 
+                                      `friend_count`, `city_id`, `city`, `state`   
                                 FROM `profile_friendship`, `user_profile`,`location_city`
                                 WHERE 
                                  ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
@@ -106,6 +105,8 @@ class profile_minion {
                                     `profile_friendship`.`friend1` =`user_profile`.`user_id` ) )
                                 AND
                                   `user_profile`.`city_id` = `location_city`.`id`
+                
+                                ORDER BY `screen_name`
 
                                 LIMIT ".$offset.", ".$limit ) ;
             
@@ -117,14 +118,17 @@ class profile_minion {
                         { $p['age'] = user_age( $p['birthdate'] ) ; } 
                     else
                         { $p['age'] = 0 ; }
-                    
-                    unset( $p['birthdate'] ); 
+
+                    unset( $p['birthdate'] );
+                    unset( $p['show_age'] ); 
                     
                     if( $user->is_friend($p['user_id']) ){
                         $p['friend'] = 1 ;
                     } else { 
                         $p['friend'] = 0 ;
                     }
+                    
+                    $p['avatar'] = image_link('userthumb', $p['avatar'] ) ;
                     
                     $friend_list[] = $p ;
                 }
