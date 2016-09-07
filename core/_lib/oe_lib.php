@@ -64,79 +64,13 @@ function security_restrict() {
     
 }
 
-
-
-function create_image_link( $type, $id ){
+function image_link( $type, $id = null ){
     
-    global $db ;
-    global $user ;
-    
-    switch( $type ){
-        
-        case 'avatar': // picture as on profile page
-            
-            if( $id == 0 or $id == null ){
-                $id = '/images/noavatar.png' ;
-            } else {
-            
-                $x = $db->get_assoc( "SELECT `owner`, `private`, `file_key` FROM `profile_photo` WHERE `photo_id`='".$id."'" ) ;
-                
-                if( $x['private'] == 0 or $user->is_friend( $x['owner'] ) or $user->id == $x['owner'] ) {
-                
-                    $_SESSION['imagekey'][$id] = 'user.'.$x['owner'].'.'.$x['file_key'].'.profile.png' ;
-                }
-                
-                $id = '/imgs/'.$id ;
-            }
-            
-        break ;
-        
-        case 'userimage':  // picture user has uploaded
-            
-            $x = $db->get_assoc( "SELECT `owner`, `private`, `file_key` FROM `profile_photo` WHERE `photo_id`='".$id."'" ) ;
-            
-            if( $x['private'] == 0 or $user->is_friend( $x['owner'] ) or $user->id == $x['owner'] ) {
-            
-                $_SESSION['imagekey'][$id] = 'user.'.$x['owner'].'.'.$x['file_key'].'.png' ;            
-            }
-                
-            $id = '/imgs/'.$id ;
-            
-        break ;
-        
-        case 'userthumb': //thumbnail picture of userimage
-            
-            $x = $db->get_assoc( "SELECT `owner`, `private`, `file_key` FROM `profile_photo` WHERE `photo_id`='".$id."'" ) ;
-            
-            if( $x['private'] == 0 or $user->is_friend( $x['owner'] ) or $user->id == $x['owner'] ) {
-            
-                $_SESSION['imagekey'][$id] = 'user.'.$x['owner'].'.'.$x['file_key'].'.thumb.png' ;
-            }
-
-            $id = '/imgs/'.$id ;
-        
-            break ;
-        
-        case 'profilethumb': //thumbnail picture of avatar
-            
-            if( $id == 0 or $id == null ){
-                $id = '/images/noavatarsmall.png' ;
-            } else {
-                $x = $db->get_assoc( "SELECT `owner`, `private`, `file_key` FROM `profile_photo` WHERE `photo_id`='".$id."'" ) ;
-                
-                if( $x['private'] == 0 or $user->is_friend( $x['owner'] or $user->id == $x['owner'] ) ) {
-                
-                    $_SESSION['imagekey'][$id] = 'user.'.$x['owner'].'.'.$x['file_key'].'.profilethumb.png' ;
-                }
-                
-                $id = '/imgs/'.$id ;
-            }
-                
-        break ;
-                
-    }
-        
-        return $id ;
+    if ( ( $type == 'avatar' or $type == 'userthumb' ) and ( $id == 0 or $id == null )) {
+            return '/images/noavatar.png' ;
+    } else {
+        return '/imgs/'.$type.'/'.$id.'.png' ;
+    }    
     
 }
 

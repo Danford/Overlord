@@ -23,7 +23,7 @@ foreach( $messages as $message ){
     ?>
     <div>
     	<div style="display:inline-block; vertical-align:top">
-    		<img src="<?php print( create_image_link( 'profilethumb', $message['avatar'])) ; ?>" /><br />
+    		<img src="<?php print( image_link( 'profilethumb', $message['avatar'])) ; ?>" /><br />
     		<a href="/profile/<?php print( $message['user_id'] ) ; ?>"><?php print( $message['name']) ; ?></a><br />
     		<?php print( $message['timestamp']) ; ?>
     	</div>

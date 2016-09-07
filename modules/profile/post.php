@@ -15,6 +15,7 @@ switch( $_POST["oe_formid"] ) {
         die() ;
 
     case 'editprofile':
+    case 'editProfile':
         include( $pagedir.'profile.php' ) ;
         die() ;
         
@@ -25,6 +26,13 @@ switch( $_POST["oe_formid"] ) {
     case 'cancelfriendrq' :
     case 'blockuser' :
         
+    case 'addFriend' :
+    case 'removeFriend' :
+    case 'confirmFriend' :
+    case 'denyFriend' :
+    case 'cancelFriendrq' :
+    case 'blockUser' :
+        
         include( $pagedir."friendmanagement.php") ;
         die();
         
@@ -33,14 +41,30 @@ switch( $_POST["oe_formid"] ) {
     case 'like' :
     case 'unlike':
         
+    case 'addComment' :
+    case 'deleteComment' :
+    case 'unLike':
+        
         include( $pagedir."comments_and_likes.php" ) ;
         die();
-        
+
     case 'new_writing':
     case 'edit_writing':
     case 'delete_writing':
+
+    case 'newWriting':
+    case 'editWriting':
+    case 'deleteWriting':
+        
         include( $pagedir."writing.php" ) ;
         die() ;
+    
+    // API ONLY CALLS    
+    
+    case 'getFriends':
+        
+        include( $pagedir."api.php" ) ;
+        die();
 }
 $post->json_reply('FAIL') ;
 die( 'FAIL' ) ;

@@ -78,8 +78,8 @@
     $a['status'] = '0' ;
     $a['passhash'] = hash_hmac( "sha256", $_POST['password'], oe_seed ) ;
     
-    $set1a = $db->build_set_string_from_post( 'email', 'show_age', 'email_notification', 'invite_notification', 'allow_contact','city' ) ;
-    $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender' ) ;
+    $set1a = $db->build_set_string_from_post( 'email', 'email_notification', 'invite_notification','city' ) ;
+    $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender', 'show_age', 'allow_contact' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
     $b['user_profile'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;

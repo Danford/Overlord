@@ -4,6 +4,7 @@ include( $oe_modules['profile']."lib/album.lib.php" ) ;
 
 switch( $_POST['oe_formid'] ){
     
+    case 'newWriting':
     case 'new_writing':
         
         $post->hold( 'private', 'title', 'subtitle', 'content', 'album', 'new_album_title', 'new_album_description' );
@@ -42,13 +43,14 @@ switch( $_POST['oe_formid'] ){
         
         log_activity( 9, $proseid ) ;
         
-        $post->json_reply( 'SUCCESS', $proseid ) ;
+        $post->json_reply( 'SUCCESS', [ 'prose_id' => $proseid ] ) ;
        
         header( 'Location: /profile/'.$user->id.'/writing/'.$proseid ) ;
         die() ;
         
     case 'edit_writing':
-
+    case 'editWriting':
+        
         $post->hold( 'private', 'title', 'subtitle', 'content', 'setavatar', 'album', 'new_album_title', 'new_album_description' );
         
         $post->require_true( $_POST['title'] != '' , '', 'Title is a required field.' ) ;
@@ -109,8 +111,9 @@ switch( $_POST['oe_formid'] ){
         die() ;
         
     case 'delete_writing':
+    case 'deleteWriting':
 
-        if( preg_match( '/^[0-9]*$/', $_POST['prose_id']) == 0 ) { die(); } // invalid prose id
+        if( preg_match( '/^[0-9]*$/', $_POST['prose_id']) == 0 ) { $post->json_reply('FAIL') ; die(); } // invalid prose id
         
         $detail = $db->get_assoc( "SELECT `album`, `private` FROM `profile_prose` WHERE `prose_id`='".$_POST['prose_id']."' AND `owner`='".$user->id."'" ) ;
         

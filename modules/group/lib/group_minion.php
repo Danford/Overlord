@@ -290,10 +290,10 @@ class group_minion {
             global $db ;
             global $user ;
             
-            $db->query( "SELECT `user_id`, `screen_name`, `show_age`, `birthdate`, `gender`, `avatar` FROM `group_members`, `user_profile`, `user_account`
+            $db->query( "SELECT `user_id`, `screen_name`, `allow_contact`, `show_age`, `birthdate`, `gender`, `avatar` 
+                                FROM `group_members`, `user_profile`
                                 WHERE `group_members`.`member_id` = `user_profile`.`user_id`
-                                AND `user_profile`.`user_id` = `user_account`.`user_id`
-                                AND `group_members`.`group_id` = '".$this->id."' 
+                                AND `group_members`.`group_id` = '".$this->id."'
                                 ORDER BY `screen_name`
                                 LIMIT ".$offset.",".$limit );
             

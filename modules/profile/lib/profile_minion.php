@@ -35,10 +35,9 @@ class profile_minion {
                         `total_public_photo`, `total_public_prose`, `total_public_video`, `total_public_albums`,
                         `total_private_photo`, `total_private_prose`, `total_private_video`, `total_private_albums`, 
                         `show_age`,`allow_contact`
-                        FROM `user_profile`, `user_account`
+                        FROM `user_profile`
                         WHERE 
-                            `user_profile`.`user_id`='".$this->id."' 
-                        AND `user_profile`.`user_id`=`user_account`.`user_id` " ;
+                            `user_profile`.`user_id`='".$this->id."'" ;
          
             $info = $this->db->get_assoc( $q );
             
@@ -77,14 +76,16 @@ class profile_minion {
     }
 
     function profile_picture(){
-            return create_image_link('avatar', $this->avatar ) ;
+            return image_link('avatar', $this->avatar ) ;
     }
     
     function profile_thumbnail(){
-            return create_image_link('profilethumb', $this->avatar ) ;
+            return image_link('profilethumb', $this->avatar ) ;
     }
 
-    function get_friends( $offset = 0, $limit = 99999999 ){
+    function get_friends( $offset = 0, $limit = 99999999, $order='screen_name' ){
+        
+        global $user ;
         
         if( $this->name == false ){
             return false ;
@@ -92,23 +93,43 @@ class profile_minion {
             
             $friend_list = array() ;
             
-            $this->db->query( "SELECT `profile_friendship`.`timestamp`, `user_profile`.`user_id`
-                                FROM `profile_friendship`, `user_profile`
+            $this->db->query( "SELECT `user_profile`.`user_id`, 
+                                      `screen_name`, `avatar`,`show_age`,`allow_contact`,`birthdate`,
+                                      `friend_count`, `city_id`, `city`, `state`   
+                                FROM `profile_friendship`, `user_profile`,`location_city`
                                 WHERE 
-                                  ( `profile_friendship`.`friend1` ='".$this->id."' AND
+                                 ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
                                     `profile_friendship`.`friend2` =`user_profile`.`user_id` )
                                     OR
                                   ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                                    `profile_friendship`.`friend1` =`user_profile`.`user_id` )
+                                    `profile_friendship`.`friend1` =`user_profile`.`user_id` ) )
+                                AND
+                                  `user_profile`.`city_id` = `location_city`.`id`
+                
+                                ORDER BY `'.$this->db->sanitize( $order ).'`
+
                                 LIMIT ".$offset.", ".$limit ) ;
             
             while( ( $p = $this->db->assoc() ) != false ){
                 
-                $friend = new profile_minion($p['user_id']) ;
-                
-                if( $friend->name != false ) {
-                    $p['profile'] = $friend ;
-                    unset( $p['user_id'] ) ;
+                if( ! $user->is_blocked( $p['user_id'] ) ) {
+                    
+                    if( $p['show_age'] != 0 )
+                        { $p['age'] = user_age( $p['birthdate'] ) ; } 
+                    else
+                        { $p['age'] = 0 ; }
+
+                    unset( $p['birthdate'] );
+                    unset( $p['show_age'] ); 
+                    
+                    if( $user->is_friend($p['user_id']) ){
+                        $p['friend'] = 1 ;
+                    } else { 
+                        $p['friend'] = 0 ;
+                    }
+                    
+                    $p['avatar'] = image_link('userthumb', $p['avatar'] ) ;
+                    
                     $friend_list[] = $p ;
                 }
             }
@@ -184,7 +205,7 @@ class profile_minion {
 
                 $a['title'] = prevent_html($a['title'] );
                 $a['description'] = process_user_supplied_html( $a['description'] );
-                $a['thumbnail'] = create_image_link('user_thumb', $a['photo_id'] ) ;
+                $a['thumbnail'] = image_link('user_thumb', $a['photo_id'] ) ;
                 
                 $list[] = $a ;
             }
@@ -241,7 +262,7 @@ class profile_minion {
 
                 $photo['title'] = prevent_html($photo['title']) ;
                 $photo['description'] = process_user_supplied_html($photo['description']) ;
-                $photo['url'] = create_image_link('userphoto', $photo['photo_id'] ) ;
+                $photo['url'] = image_link('userphoto', $photo['photo_id'] ) ;
                 
                 if( $photo['album'] != '' and $photo['album'] != null ){
                     

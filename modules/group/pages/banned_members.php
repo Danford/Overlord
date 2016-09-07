@@ -25,7 +25,7 @@ foreach( $group->get_banned( ( $page - 1 ) * ( members_columns * members_per_col
     
     print( '<div>' ) ;
     
-        print( '<div style="display: inline-block"><img src="'.create_image_link( 'profilethumb', $banned['avatar'] ).'" style="padding-right: 15px"></div>' ) ;
+        print( '<div style="display: inline-block"><img src="'.image_link( 'profilethumb', $banned['avatar'] ).'" style="padding-right: 15px"></div>' ) ;
         
         print( '<div style="display: inline-block; vertical-align: top"><a href="/profile/'.$banned['user_id'].'">'.$banned['screen_name'].'</a><br />') ;
         

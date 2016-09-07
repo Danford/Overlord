@@ -15,7 +15,7 @@ $page->js_minion->addFile("https://unpkg.com/isotope-layout@3.0/dist/isotope.pkg
     <div class="grid-item">
     
     	<a href="/profile/<?php print( $profile->id ); ?>/photo/<?php print( $photo['photo_id']) ; ?>" title="<?php  print( $photo["title"] ) ; ?>">
-    	<img src="<?php  print( create_image_link( 'userthumb', $photo['photo_id'])) ; ?>" />
+    	<img src="<?php  print( image_link( 'userthumb', $photo['photo_id'])) ; ?>" />
     	</a>
     
     <?php if( $photo['likes'] > 0 ){ print( $photo['likes']." likes<br />") ; } ?>
