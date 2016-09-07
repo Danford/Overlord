@@ -40,7 +40,8 @@ class html_minion extends Element
         $this->body = $this->html->AddElement(new Body());
         $this->header = $this->body->AddElement(new Header($sitename));
         $this->menu = $this->header->AddElement(new Menu());
-        $this->content = $this->body->AddElement(new Content($title));
+        $contentWrapper = $this->body->AddElement(new Div("content-wrapper"));
+        $this->content = $contentWrapper->AddElement(new Content($title));
         $this->footer = $this->body->AddElement(new Footer($sitename));
                 
         //$this->content->AddContent("<pre>". print_r($user->$id, true) ."</pre>");
