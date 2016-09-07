@@ -1,6 +1,6 @@
 <?php
 
-require_once(oe_lib.'html/tags/nav.php');
+require_once(oe_frontend.'html/tags/nav.php');
 
 class Menu extends Nav
 {
@@ -17,6 +17,11 @@ class Menu extends Nav
     public function AddMenuList(MenuItem $item)
     {
         return $this->menuList->AddElement($item)->AddTag("ul");
+    }
+    
+    public function AddMenuItem(MenuItem $item)
+    {
+    	return $this->menuList->AddElement($item);
     }
 }
 

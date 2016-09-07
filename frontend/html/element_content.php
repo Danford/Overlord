@@ -1,6 +1,6 @@
 <?php
 
-include_once 'element.php';
+include_once (oe_frontend. 'html/element.php');
 
 class ElementContent extends Element
 {

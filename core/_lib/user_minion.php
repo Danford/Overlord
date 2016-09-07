@@ -288,7 +288,8 @@ class user_minion {
     }
     
     function load_profile(){
-        
+    	global $db;
+    	
         $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
         
         $this->name = $a['screen_name'] ;

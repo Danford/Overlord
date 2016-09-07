@@ -1,7 +1,7 @@
 <?php
 
-require_once(oe_lib."serveable_minion.php");
-require_once(oe_lib."html/field.php");
+require_once(oe_frontend."serveable_minion.php");
+require_once(oe_frontend."html/field.php");
 
 class Element extends serveable_minion
 {

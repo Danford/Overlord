@@ -19,6 +19,8 @@ define( 'oe_js', httproot.'js/' ) ;
 define( 'ul_img_dir', oe_root.'oe_images/' ) ;
 define( 'oe_log', oe_root."oe_logs/") ;
 
+define( 'oe_frontend', oe_root.'frontend/' ) ;
+
 
 // the number of login failures before an account is locked.
 

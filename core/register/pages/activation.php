@@ -35,7 +35,7 @@
     $db->update( "DELETE FROM `confirmation_key` WHERE `user_profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ) ;
     
     
-include( oe_lib."page_minion.php" ) ;
+include( oe_frontend."page_minion.php" ) ;
 
 $page = new page_minion( "Registration" ) ;
 

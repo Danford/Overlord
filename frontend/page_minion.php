@@ -7,9 +7,9 @@
  * 
  */
 
-require_once(oe_lib . "html_minion.php") ;
-require_once(oe_lib . "css_minion.php") ;
-require_once(oe_lib . "js_minion.php") ;
+require_once(oe_frontend . "html_minion.php") ;
+require_once(oe_frontend . "css_minion.php") ;
+require_once(oe_frontend . "js_minion.php") ;
 
 class page_minion {
     var $html_minion ;
