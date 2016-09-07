@@ -1,15 +1,15 @@
 <?php
 
-require_once(oe_lib.'html/element.php');
+require_once(oe_frontend.'html/element.php');
 
-require_once(oe_lib.'html/tags/html.php');
-require_once(oe_lib.'html/tags/head.php');
-require_once(oe_lib.'html/tags/body.php');
-require_once(oe_lib.'html/tags/header.php');
-require_once(oe_lib.'html/tags/content.php');
-require_once(oe_lib.'html/tags/footer.php');
+require_once(oe_frontend.'html/tags/html.php');
+require_once(oe_frontend.'html/tags/head.php');
+require_once(oe_frontend.'html/tags/body.php');
+require_once(oe_frontend.'html/tags/header.php');
+require_once(oe_frontend.'html/tags/content.php');
+require_once(oe_frontend.'html/tags/footer.php');
 
-require_once(oe_lib.'html/modules/menu.php');
+require_once(oe_frontend.'html/modules/menu.php');
 
 class Window extends Element
 {

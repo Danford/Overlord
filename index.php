@@ -12,7 +12,7 @@
 
 define( 'httproot', '/' );
 
-define( 'siteurl', 'https://www.codexfive.net/') ;
+define( 'siteurl', 'https://lab2.codexfive.net/') ;
 
 /*
  *  If this script is located at 'http://yourserver.com/' then leave this as '/'.
@@ -21,7 +21,7 @@ define( 'siteurl', 'https://www.codexfive.net/') ;
  *  httproot MUST end with the trailing slash.
  */
 
-define( 'oe_root', '/home/virtualfive/codexfive.net/' );
+define( 'oe_root', '/home/codex_josh/lab2/' );
 
 /*
  * The subdirectory where the site files are kept.

@@ -1,7 +1,7 @@
 <?php
 
-require_once 'element.php';
-require_once 'element_tag.php';
+require_once(oe_frontend. '/html/element.php');
+require_once(oe_frontend. '/html/element_tag.php');
 
 class ElementHandler
 {

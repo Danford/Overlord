@@ -1,6 +1,6 @@
 <?php
 
-require_once( oe_lib . 'html/tags/script.php' ) ;
+require_once( oe_frontend . 'html/tags/script.php' ) ;
 
 /*
  *   js_minion() {

@@ -1,6 +1,6 @@
 <?php
 
-require_once(oe_lib. '/html/tags/alink.php');
+require_once(oe_frontend. '/html/tags/alink.php');
 
 class MenuItem extends ElementTag
 {

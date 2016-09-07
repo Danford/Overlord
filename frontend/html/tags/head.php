@@ -1,9 +1,9 @@
 <?php
 
-require_once(oe_lib.'html/element.php');
+require_once(oe_frontend.'html/element.php');
 
-require_once(oe_lib.'html/tags/link.php');
-require_once(oe_lib.'html/tags/script.php');
+require_once(oe_frontend.'html/tags/link.php');
+require_once(oe_frontend.'html/tags/script.php');
 
 class Head extends ElementTag
 {

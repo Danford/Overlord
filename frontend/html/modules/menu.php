@@ -1,6 +1,6 @@
 <?php
 
-require_once(oe_lib.'html/tags/nav.php');
+require_once(oe_frontend.'html/tags/nav.php');
 
 class Menu extends Nav
 {

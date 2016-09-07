@@ -1,6 +1,6 @@
 <?php
 
-require_once '../element_tag.php';
+require_once (oe_frontend. '/html/element_tag.php');
 /*
  * This class manages a table. To add cells use
  * AddTag, AddString, or AddElement as you would

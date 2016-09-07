@@ -1,6 +1,6 @@
 <?php
 
-require_once(oe_lib."serveable_minion.php");
+require_once(oe_frontend."serveable_minion.php");
 
 class Field extends serveable_minion
 {

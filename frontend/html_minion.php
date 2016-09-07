@@ -1,15 +1,15 @@
 <?php
-require_once (oe_lib . 'html/element.php');
+require_once (oe_frontend . 'html/element.php');
 
-require_once (oe_lib . 'html/tags/html.php');
-require_once (oe_lib . 'html/tags/head.php');
-require_once (oe_lib . 'html/tags/body.php');
-require_once (oe_lib . 'html/tags/header.php');
-require_once (oe_lib . 'html/tags/content.php');
-require_once (oe_lib . 'html/tags/footer.php');
+require_once (oe_frontend . 'html/tags/html.php');
+require_once (oe_frontend . 'html/tags/head.php');
+require_once (oe_frontend . 'html/tags/body.php');
+require_once (oe_frontend . 'html/tags/header.php');
+require_once (oe_frontend . 'html/tags/content.php');
+require_once (oe_frontend . 'html/tags/footer.php');
 
-require_once (oe_lib . 'html/modules/menu.php');
-require_once (oe_lib . 'html/modules/menu_item.php');
+require_once (oe_frontend . 'html/modules/menu.php');
+require_once (oe_frontend . 'html/modules/menu_item.php');
 
 class html_minion extends Element
 {
@@ -21,19 +21,12 @@ class html_minion extends Element
      *
      */
     public $html;
-
     public $head;
-
     public $body;
-
     public $header;
-
     public $menu;
-
     public $section;
-
     public $content;
-
     public $footer;
 
     function __construct($title)
@@ -72,11 +65,6 @@ class html_minion extends Element
         
         global $profile;
         
-        $pMenu = $this->menu->AddMenuList(new MenuItem("Profile", "/profile/". $user->id));
-        $pMenu->AddElement(new MenuItem("Edit", "/profile"));
-        $pMenu->AddElement(new MenuItem("Write", "/profile/write"));
-        $pMenu->AddElement(new MenuItem("Upload Photo", "/profile/upload_photo"));
-        $pMenu->AddElement(new MenuItem("Block List", "/profile/block_list"));
         
         /*
          * Group profiles:
