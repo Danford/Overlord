@@ -85,29 +85,47 @@ class profile_minion {
 
     function get_friends( $offset = 0, $limit = 99999999 ){
         
+        global $user ;
+        
         if( $this->name == false ){
             return false ;
         } else {
             
             $friend_list = array() ;
             
-            $this->db->query( "SELECT `profile_friendship`.`timestamp`, `user_profile`.`user_id`
-                                FROM `profile_friendship`, `user_profile`
+            $this->db->query( "SELECT `user_profile`.`user_id`, 
+                                      `screen_name`, `avatar`,`show_age`,`allow_contact`,`birthdate`,
+                                      `friend_count`, `city_id`, `city`, `state`  
+                                      `profile_friendship`.`timestamp` 
+                                FROM `profile_friendship`, `user_profile`,`location_city`
                                 WHERE 
-                                  ( `profile_friendship`.`friend1` ='".$this->id."' AND
+                                 ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
                                     `profile_friendship`.`friend2` =`user_profile`.`user_id` )
                                     OR
                                   ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                                    `profile_friendship`.`friend1` =`user_profile`.`user_id` )
+                                    `profile_friendship`.`friend1` =`user_profile`.`user_id` ) )
+                                AND
+                                  `user_profile`.`city_id` = `location_city`.`id`
+
                                 LIMIT ".$offset.", ".$limit ) ;
             
             while( ( $p = $this->db->assoc() ) != false ){
                 
-                $friend = new profile_minion($p['user_id']) ;
-                
-                if( $friend->name != false ) {
-                    $p['profile'] = $friend ;
-                    unset( $p['user_id'] ) ;
+                if( ! $user->is_blocked( $p['user_id'] ) ) {
+                    
+                    if( $p['show_age'] != 0 )
+                        { $p['age'] = user_age( $p['birthdate'] ) ; } 
+                    else
+                        { $p['age'] = 0 ; }
+                    
+                    unset( $p['birthdate'] ); 
+                    
+                    if( $user->is_friend($p['user_id']) ){
+                        $p['friend'] = 1 ;
+                    } else { 
+                        $p['friend'] = 0 ;
+                    }
+                    
                     $friend_list[] = $p ;
                 }
             }
