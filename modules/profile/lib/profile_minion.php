@@ -35,10 +35,9 @@ class profile_minion {
                         `total_public_photo`, `total_public_prose`, `total_public_video`, `total_public_albums`,
                         `total_private_photo`, `total_private_prose`, `total_private_video`, `total_private_albums`, 
                         `show_age`,`allow_contact`
-                        FROM `user_profile`, `user_account`
+                        FROM `user_profile`
                         WHERE 
-                            `user_profile`.`user_id`='".$this->id."' 
-                        AND `user_profile`.`user_id`=`user_account`.`user_id` " ;
+                            `user_profile`.`user_id`='".$this->id."'" ;
          
             $info = $this->db->get_assoc( $q );
             

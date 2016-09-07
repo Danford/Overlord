@@ -14,8 +14,8 @@ $post->require_true( preg_match( '/\d\d\d\d-\d\d-\d\d/', $_POST['birthdate'] ) =
 
 $post->checkpoint() ;
 
-$sp = $db->build_set_string_from_post( 'birthdate', 'gender', 'detail','city') ;
-$sa = $db->build_set_string_from_post( 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) ;
+$sp = $db->build_set_string_from_post( 'show_age', 'allow_contact', 'birthdate', 'gender', 'detail','city') ;
+$sa = $db->build_set_string_from_post( 'email_notification', 'invite_notification' ) ;
 
 $db->update( "UPDATE `user_profile` SET ".$sp." WHERE `user_id`='".$user->id."'" ) ;
 $db->update( "UPDATE `user_account` SET ".$sa." WHERE `user_id`='".$user->id."'" ) ;
