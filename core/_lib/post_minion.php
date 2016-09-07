@@ -510,17 +510,21 @@ class post_minion
 
 	    if( $this->is_a_json_request ){
 	    
-    	    header('Content-Type: application/json');
-    
+	        header('Content-Type: application/json');
+	        
     	    $response = array() ;
+    	    $response['api_status'] = $status ;
     	    
-    	    if( is_array( $content ) ){
-    	        $response = $content ;
-    	    } elseif ( $content != null ) {
-    	        $response['message'] = $content ;
+    	    if( $content != null ) {
+    	    
+        	    $response['response'] = array() ;
+        	    
+        	    if( is_array( $content ) ){
+        	        $response['response'] = $content ;
+        	    } elseif ( $content != null ) {
+        	        $response['response']['message'] = $content ;
+        	    }
     	    }
-    	    
-    	    $response['status'] = $status ;
     	    
     	    echo( json_encode( $response ) ) ;
     	    die() ;
