@@ -1,6 +1,6 @@
 <?php
 
-$post->hold( 'birth_month', 'birth_day', 'birth_year', 'gender', 'show_age', 'email_notification', 'invite_notification', 'allow_contact', 'detail' ) ;
+$post->hold( 'birth_month', 'birth_day', 'birth_year', 'gender', 'show_age', 'email_notification', 'invite_notification', 'allow_contact', 'detail', 'city' ) ;
 
 
 
@@ -14,7 +14,7 @@ $post->require_true( preg_match( '/\d\d\d\d-\d\d-\d\d/', $_POST['birthdate'] ) =
 
 $post->checkpoint() ;
 
-$sp = $db->build_set_string_from_post( 'birthdate', 'gender', 'detail') ;
+$sp = $db->build_set_string_from_post( 'birthdate', 'gender', 'detail','city') ;
 $sa = $db->build_set_string_from_post( 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) ;
 
 $db->update( "UPDATE `user_profile` SET ".$sp." WHERE `user_id`='".$user->id."'" ) ;
