@@ -23,7 +23,7 @@ foreach( $group->get_members( ( $page - 1 ) * ( members_columns * members_per_co
     
     print( '<div>' ) ;
     
-        print( '<div style="display: inline-block"><img src="'.create_image_link( 'profilethumb', $member['avatar'] ).'" style="padding-right: 15px"></div>' ) ;
+        print( '<div style="display: inline-block"><img src="'.image_link( 'profilethumb', $member['avatar'] ).'" style="padding-right: 15px"></div>' ) ;
         
         print( '<div style="display: inline-block; vertical-align: top"><a href="/profile/'.$member['user_id'].'">'.$member['screen_name'].'</a><br />') ;
         

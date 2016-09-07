@@ -3,8 +3,9 @@
 
 
 switch( $_POST["oe_formid"] ) {
-    
+
     case 'deletecomment':
+    case 'deleteComment':
         
         if( ( preg_match( '/^[0-9]*$/', $_POST['comment_id']) == 0 )
                 or 
@@ -44,6 +45,7 @@ switch( $_POST["oe_formid"] ) {
         die() ;
         
     case 'addcomment':
+    case 'addComment':
         
         // any failure here will be the result of mucking with the form submission
         // so there will be no errors, just death()
@@ -87,13 +89,13 @@ switch( $_POST["oe_formid"] ) {
         notify_user( $owner, $notify[$_POST['type']], $id ) ;
         log_activity( $activity[$_POST['type']], $id ) ;
         
-        $post->json_reply( 'SUCCESS' ) ;
+        $post->json_reply( 'SUCCESS', [ 'comment_id' => $id ] ) ;
         
         $origin = explode( '#', $_POST['oe_return'] ) ;
         
         header( 'Location: '.$origin[0]."#".$id ) ;
         die() ;
-        
+
     case 'like':
         
         if( ( preg_match( '/^[0-9]*$/', $db->sanitize( $_POST['id'] )) == 0 )
@@ -135,8 +137,9 @@ switch( $_POST["oe_formid"] ) {
                 
         header( "Location: ".$_POST['oe_return'] ) ;
         die() ;
-        
+
     case 'unlike':
+    case 'unLike':
         
         if( ( preg_match( '/^[0-9]*$/', $db->sanitize( $_POST['id'] )) == 0 )
             or

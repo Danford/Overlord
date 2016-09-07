@@ -14,7 +14,7 @@ foreach( $profile->get_photo_list() as $photo ){
     ?><div style="inline-block">
     
     	<a href="/profile/<?php print( $profile->id ); ?>/photo/<?php print( $photo['photo_id']) ; ?>" title="<?php  print( $photo["title"] ) ; ?>">
-    	<img src="<?php  print( create_image_link( 'userthumb', $photo['photo_id'])) ; ?>" />
+    	<img src="<?php  print( image_link( 'userthumb', $photo['photo_id'])) ; ?>" />
     	</a>
     	<br />
     <?php

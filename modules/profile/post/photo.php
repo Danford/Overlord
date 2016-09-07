@@ -3,8 +3,9 @@
 include( $oe_modules['profile']."lib/album.lib.php" ) ;
 
 switch( $_POST['oe_formid'] ){
-    
-    case "imageupload":
+
+    case "imageupload":    
+    case "imageUpload":
         
         $post->checkbox('setavatar') ;
         $post->hold( "private", "title", "description", "setavatar", "album", "new_album_title", "new_album_description" ) ;
@@ -114,12 +115,13 @@ switch( $_POST['oe_formid'] ){
     
         log_activity( $type, $photoid ) ;
     
-        $post->json_reply( 'SUCCESS', $photoid ) ;
+        $post->json_reply( 'SUCCESS', [ 'id' => $photoid ] ) ;
         
         header( "Location: ".$baseurl.$user->id."/photo/".$photoid ) ;
         die() ;
     
     case "editphoto":
+    case "editPhoto":
         
         // actually, we're just editing the info connected to the photo.  This ain't Photoshop: The Website
         

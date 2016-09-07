@@ -15,7 +15,7 @@ $page->addjs( '/js/tinymce/tinymce.min.js' ) ;
 $page->addjs( '/js/invoketinymce.js') ;
 $page->header() ;
 
-print( '<img src="'.create_image_link( 'userimage', $photo['photo_id']).'" /><br />' ) ;
+print( '<img src="'.image_link( 'userimage', $photo['photo_id']).'" /><br />' ) ;
 
 print( $photo['title'].'<br />'.$photo['description'].'<br /><br />' ) ;
 

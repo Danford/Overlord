@@ -77,11 +77,11 @@ class profile_minion {
     }
 
     function profile_picture(){
-            return create_image_link('avatar', $this->avatar ) ;
+            return image_link('avatar', $this->avatar ) ;
     }
     
     function profile_thumbnail(){
-            return create_image_link('profilethumb', $this->avatar ) ;
+            return image_link('profilethumb', $this->avatar ) ;
     }
 
     function get_friends( $offset = 0, $limit = 99999999 ){
@@ -184,7 +184,7 @@ class profile_minion {
 
                 $a['title'] = prevent_html($a['title'] );
                 $a['description'] = process_user_supplied_html( $a['description'] );
-                $a['thumbnail'] = create_image_link('user_thumb', $a['photo_id'] ) ;
+                $a['thumbnail'] = image_link('user_thumb', $a['photo_id'] ) ;
                 
                 $list[] = $a ;
             }
@@ -241,7 +241,7 @@ class profile_minion {
 
                 $photo['title'] = prevent_html($photo['title']) ;
                 $photo['description'] = process_user_supplied_html($photo['description']) ;
-                $photo['url'] = create_image_link('userphoto', $photo['photo_id'] ) ;
+                $photo['url'] = image_link('userphoto', $photo['photo_id'] ) ;
                 
                 if( $photo['album'] != '' and $photo['album'] != null ){
                     

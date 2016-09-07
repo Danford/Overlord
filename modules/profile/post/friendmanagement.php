@@ -2,8 +2,9 @@
 
 
     switch( $_POST["oe_formid"] ){
-        
+
         case 'addfriend' :
+        case 'addFriend' :
 
             $user->load_friends_list() ;
             
@@ -20,8 +21,9 @@
             header( 'Location: /profile/'.$db->sanitize( $_POST['user'] ) );
             die() ;
             
-            
+
         case 'removefriend' :
+        case 'removeFriend' :
             
             $result = $db->update( "DELETE FROM `profile_friendship` WHERE  
                 ( `friend1`='".$user->id."' AND `friend2`='".$db->sanitize( $_POST['user'] )."' )
@@ -43,6 +45,7 @@
             die() ;
             
         case 'confirmfriend' :
+        case 'confirmFriend' :
             
             // verify that there is a request
             
@@ -86,8 +89,9 @@
             
             header( 'Location: /profile/'.$db->sanitize( $_POST['user'] ) );
             die() ;
-            
+
         case 'denyfriend' :
+        case 'denyFriend' :
             
             $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
                 `requestor`='".$user->id."' AND `requestee`='".$db->sanitize( $_POST['user'] )."'" ) ;
@@ -103,6 +107,7 @@
             die() ;
             
         case 'cancelfriendrq' :
+        case 'cancelFriendrq' :
             
             $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
                 `requestee`='".$user->id."' AND `requestor`='".$db->sanitize( $_POST['user'] )."'" ) ;
@@ -117,6 +122,7 @@
             die() ;
             
         case 'blockuser' :
+        case 'blockUser' :
             
             // add block entry 
             
