@@ -2,10 +2,10 @@
 if ($profile->id != $user->id)
 	include (oe_lib . "form_minion.php");
 
-require_once (oe_lib . "page_minion.php");
-require_once (oe_lib . "/html/tags/div.php");
-require_once (oe_lib . "/html/tags/img.php");
-require_once (oe_lib . "/html/tags/alink.php");
+require_once (oe_frontend . "page_minion.php");
+require_once (oe_frontend . "/html/tags/div.php");
+require_once (oe_frontend . "/html/tags/img.php");
+require_once (oe_frontend . "/html/tags/alink.php");
 
 $page = new page_minion($profile->name . " - Profile");
 

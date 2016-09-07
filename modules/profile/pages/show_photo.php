@@ -1,7 +1,7 @@
 <?php
 
 
-include( oe_lib."page_minion.php" ) ;
+include( oe_frontend."page_minion.php" ) ;
 include( oe_lib."form_minion.php" ) ;
 
 $htmltitle = $profile->name." - Photo " ;
