@@ -63,40 +63,52 @@ class html_minion extends Element
          * /profile/{userid}/photo/{photoid}
          */
         
-        global $profile;
-        
-        
-        /*
-         * Group profiles:
-         * owner only
-         * * moderator or owner
-         *
-         *
-         * /group or /groups - main page of groups section
-         * /group/create
-         *
-         * /group/{groupid}
-         * /group/{groupid}/edit
-         * * /group/{groupid}/banned
-         * * /group/{groupid}/invite_moderation
-         * * /group/{groupid}/request_moderation
-         *
-         *
-         * /group/{groupid}/newthread
-         * /group/{groupid}/threads
-         * /group/{groupid}/thread/{threadid}
-         *
-         * /group/{groupid}/notifications
-         * /group/{groupid}/members
-         * /group/{groupid}/invite
-         */
-        
-        $gMenu = $this->menu->AddMenuList(new MenuItem("Groups", "/group"));
-        $gMenu->AddElement(new MenuItem("Create Group", "/group/create"));
-        
-        foreach ($user->groups_in as $group)
-        {
-        	$gMenu->AddElement(new MenuItem($group, "/group/". $group));
+        if ($user->is_logged_in()) {
+	        global $profile;
+	        
+	        $pMenu = $this->menu->AddMenuList(new MenuItem("Profile", "/profile/". $user->id));
+	        $pMenu->AddElement(new MenuItem("Edit", "/profile"));
+	        $pMenu->AddElement(new MenuItem("Write", "/profile/write"));
+	        $pMenu->AddElement(new MenuItem("Upload Photo", "/profile/upload_photo"));
+	        $pMenu->AddElement(new MenuItem("Block List", "/profile/block_list"));
+	        
+	        /*
+	         * Group profiles:
+	         * owner only
+	         * * moderator or owner
+	         *
+	         *
+	         * /group or /groups - main page of groups section
+	         * /group/create
+	         *
+	         * /group/{groupid}
+	         * /group/{groupid}/edit
+	         * * /group/{groupid}/banned
+	         * * /group/{groupid}/invite_moderation
+	         * * /group/{groupid}/request_moderation
+	         *
+	         *
+	         * /group/{groupid}/newthread
+	         * /group/{groupid}/threads
+	         * /group/{groupid}/thread/{threadid}
+	         *
+	         * /group/{groupid}/notifications
+	         * /group/{groupid}/members
+	         * /group/{groupid}/invite
+	         */
+	        
+	        $gMenu = $this->menu->AddMenuList(new MenuItem("Groups", "/group"));
+	        $gMenu->AddElement(new MenuItem("Create Group", "/group/create"));
+	        
+	        foreach ($user->groups_in as $group)
+	        {
+	        	$gMenu->AddElement(new MenuItem($group, "/group/". $group));
+	        }
+	        
+	        $this->menu->AddMenuItem(new MenuItem("Logout", "/logout/"));
+        } else { // user is not logged in.
+        	$this->menu->AddMenuItem(new MenuItem("Login", "/login/"));
+        	$this->menu->AddMenuItem(new MenuItem("Register", "/register/"));
         }
     }
 }

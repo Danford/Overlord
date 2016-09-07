@@ -18,6 +18,11 @@ class Menu extends Nav
     {
         return $this->menuList->AddElement($item)->AddTag("ul");
     }
+    
+    public function AddMenuItem(MenuItem $item)
+    {
+    	return $this->menuList->AddElement($item);
+    }
 }
 
 
