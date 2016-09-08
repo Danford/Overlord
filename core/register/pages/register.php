@@ -1,5 +1,4 @@
 <?php
-
     // needs to be a check here for if they're already logged in. 
 
     include( oe_lib."form_minion.php" ) ;
@@ -9,11 +8,8 @@
     
     $form = new form_minion( "start", "register" ) ;
     
-    
     $page->header() ;
-    
     $form->header() ;
-
 ?>
 
 	Screen Name: 
@@ -22,21 +18,7 @@
 <?php 
     
     $form->text_field( "screen_name", "width: 250px" ) ;
-    
     $form->if_error("screen_name", "<br />%%ERROR%%") ;
-?>
-	<br /><br />
-	
-	Birthdate:
-	
-	<br />
-	
-<?php 
-
-    $form->date_input( "birth", 1900, ( date("Y") - 18 ) ) ;
-    
-    $form->if_error( "birth", '<br />%%ERROR%%' ) ;
-
 ?>
 	<br /><br />
 	
@@ -44,63 +26,42 @@
 	not required to select a transgender option; if they so choose they may simply select their gender.
 	
 	<br /><br />
+	Birthdate: <?php $form->date_input("birth", 1900, (date("Y") - 18)); $form->if_error("birth", '<br />%%ERROR%%'); ?>
 	
-	Gender
-	<br />
-<?php 
-
+	Gender: 
+<?php
     $option["0"] = "Not Disclosed" ;
     
     for( $i = 1 ; $i < count($gender) ; $i++ ) {
-        
         $option[ $i ] = $gender[$i]["label"] ;
     }
     
     $form->select("gender", $option ) ;
-    
     $form->if_error( "gender", '<br />%%ERROR%%' ) ;
-
 ?>
 
 	<br /><br />
 
-	E-mail: 
-	<br />
-	
-<?php $form->text_field( "email", "width: 400px" ) ; ?>
+	E-mail: <?php $form->text_field("email", "width: 400px"); ?>
 
 	<br />
-	Confirm E-mail: 
-	<br />
-
-<?php 
-    
-    $form->text_field( "confirmemail", "width: 400px" ) ;
-    
-    $form->if_error("email", "<br />%%ERROR%%") ;
-?>
+	Confirm E-mail: <?php $form->text_field("confirmemail", "width: 400px"); $form->if_error("email", "<br />%%ERROR%%"); ?>
 	<br /><br />	
 	
 	Passwords must be at least 8 characters long and contain at least one capital letter, one lowercase letter, and one number or special character.
 	
 	<br /><br />	
 	
-	Password: 
+	Password: <?php $form->pass_field( "password", "width: 400px" ) ; ?>
+
 	<br />
+	Confirm Password: <?php $form->pass_field("confirmpassword", "width: 400px"); $form->if_error("password", "<br />%%ERROR%%"); ?>
+
+	<br /><br />
 	
-<?php $form->pass_field( "password", "width: 400px" ) ; ?>
-
-	<br />
-	Confirm Password: 
-	<br />
-
-<?php 
+	Zip: <?php $form->text_field( "zip", "width: 100px"); $form->if_error("zip", "<br />%%ERROR%%"); ?>
+    City (Optional): <?php $form->text_field( "city", "width: 300px"); $form->if_error("city", "<br />%%ERROR%%"); ?>
     
-    $form->pass_field( "confirmpassword", "width: 400px" ) ;
-    
-    $form->if_error("password", "<br />%%ERROR%%") ;
-?>
-
 	<br /><br />
 	
 	Show Age in Profile? 

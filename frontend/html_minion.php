@@ -64,6 +64,8 @@ class html_minion extends Element
          * /profile/{userid}/photo/{photoid}
          */
         
+        $this->menu->AddMenuItem(new MenuItem("Home", "/"));
+        
         if ($user->is_logged_in()) {
 	        global $profile;
 	        
