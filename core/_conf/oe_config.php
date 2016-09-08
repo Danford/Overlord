@@ -9,7 +9,6 @@
  *  Really, though, there's no good reason to change them.
  */
 
-define( 'oe_core', oe_root.'core/' ) ;
 define( 'oe_mod', oe_root.'modules/' ) ;
 define( 'oe_lib', oe_core.'_lib/' ) ;
 define( 'oe_config', oe_core.'_conf/' ) ;

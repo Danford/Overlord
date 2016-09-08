@@ -6,9 +6,9 @@ function getCityFromZip( $zip ) {
     
     $zip = $db->sanitize( $zip ) ;
     
-    $db->query( "SELECT `city_id`, `city`, `state` FROM `location_zip`, `location_city
+    $db->query( "SELECT `city_id`, `city`, `state` FROM `location_zip`, `location_city`
                     WHERE `location_zip`.`zip` = '".$zip."'
-                      AND `location_zip`.`zip` = `location_city`.`zip`
+                      AND `location_zip`.`city_id` = `location_city`.`id`
                     LIMIT 1" ) ;
     
     if( $db->count() == 0 ){
