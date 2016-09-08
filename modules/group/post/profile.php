@@ -5,7 +5,7 @@ switch( $_POST["oe_formid"] ) {
     case 'create':
     case 'edit':
         
-        $post->hold( 'name', 'short_desc', 'detail', 'type' ) ;
+        $post->hold( 'name', 'short_desc', 'detail', 'privacy' ) ;
         
         if( ! is_numeric( $_POST["type"] ) or $_POST["type"] < 1 or  $_POST["type"] > 3 ){
             $post->json_reply('FAIL') ;
@@ -52,7 +52,7 @@ switch( $_POST["oe_formid"] ) {
                 die() ;
             }
                         
-            $post->require_true( $group->type <= $_POST['type'], 'type', "You cannot make a group less private." ) ;
+            $post->require_true( $group->privacy <= $_POST['privacy'], 'privacy', "You cannot make a group less private." ) ;
             
             $post->checkpoint() ;
             

@@ -56,7 +56,7 @@ $privacy['1'] = "Public" ;
 $privacy['2'] = "Private" ;
 $privacy['3'] = "Secret" ;
 
-$form->select('type', $privacy ) ;
+$form->select('privacy', $privacy ) ;
 ?>
 
 <br/><br />

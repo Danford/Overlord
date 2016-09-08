@@ -9,7 +9,6 @@
  *  Really, though, there's no good reason to change them.
  */
 
-define( 'oe_core', oe_root.'core/' ) ;
 define( 'oe_mod', oe_root.'modules/' ) ;
 define( 'oe_lib', oe_core.'_lib/' ) ;
 define( 'oe_config', oe_core.'_conf/' ) ;
@@ -21,6 +20,10 @@ define( 'oe_log', oe_root."oe_logs/") ;
 
 define( 'oe_frontend', oe_root.'frontend/' ) ;
 
+
+// the number of login failures before an account is locked.
+
+    define( 'max_login_fails', 5 ) ;
 
 // the number of login failures before an account is locked.
 
@@ -48,7 +51,10 @@ define( 'oe_frontend', oe_root.'frontend/' ) ;
     define( 'debug_log', oe_log."/debug.log" ) ;
     define( 'security_log', oe_log."/security.log" ) ;
 
+// how long the site will wait for an update verification without barfing.
 
+    define( 'verify_interval', .25 );
+    define( 'verify_timeout', 10 );
 	
 // SITE DEFAULTS
 

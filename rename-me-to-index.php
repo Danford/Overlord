@@ -28,6 +28,7 @@ define( 'siteurl', '#####CHANGE ME#####/') ;
 
 // eg "/public_html/somesite.com/"
 define( 'oe_root', '#####CHANGE ME#####' );
+define( 'oe_core', oe_root.'core/' ) ;
 
 /*
  * The subdirectory where the site files are kept.
@@ -67,6 +68,6 @@ define( 'oe_seed', '#####CHANGE ME#####' );
  $sql_config[ 'select' ] = $sql_config[ 'insert' ] ;
  
  
- include( oe_root."core/engine.php" ) ;
+ include( oe_core."engine.php" ) ;
 
  ?>

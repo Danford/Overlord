@@ -49,7 +49,7 @@ if( $group->access == 'full' ){
     
 } else {
     
-    switch( $group->type ){
+    switch( $group->privacy ){
         
         case 1: // public group
 
@@ -73,7 +73,7 @@ if( $group->access == 'full' ){
                 $form->footer() ;
                 
                 
-            } elseif( $group->type == 2 ) { // you can't apply to a secret group
+            } elseif( $group->privacy == 2 ) { // you can't apply to a secret group
             
                 $check = $db->get_field( "SELECT COUNT(*) FROM `group_invite` WHERE `group_id`='".$group->id."'
                     AND `user_id`='".$user->id."' AND `type`='2'" ) != 0 ;

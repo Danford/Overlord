@@ -1,6 +1,6 @@
 <?php
     
-    include_once( oe_root.'core/_conf/oe_config.php' ) ;
+    include_once( oe_core.'_conf/oe_config.php' ) ;
 	include_once( oe_lib.'oe_lib.php' ) ;
 	include_once( oe_lib.'mysqli_minion.php' ) ;
 	include_once( $oe_modules['group'].'lib/group_minion.php' ) ;
