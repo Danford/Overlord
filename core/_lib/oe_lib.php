@@ -212,3 +212,25 @@ function user_likes_item( $type, $item ){
     $db->free() ;
     return $c ;
 }
+
+
+function verify_update( $table, $id, $columm='id' ) {
+    
+    global $db ;
+    
+    $timer = 0 ;
+    
+    do {
+      
+        $a = $db->get_field( "SELECT COUNT(*) FROM `".$table."` WHERE `".$column."`='".$id."'" ) ;
+        
+        if( $a == 0 )
+        {
+            sleep( verify_interval ) ;
+            $timer += verify_interval ;
+        }
+    }
+    while( $a == 0 and $timer < verify_timeout ) ;
+
+    return ( $a == 1 ) ;
+}

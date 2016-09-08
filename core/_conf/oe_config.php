@@ -25,6 +25,10 @@ define( 'oe_frontend', oe_root.'frontend/' ) ;
 
     define( 'max_login_fails', 5 ) ;
 
+// the number of login failures before an account is locked.
+
+    define( 'max_login_fails', 5 ) ;
+
 // the number of "keep me logged in" tokens that are out there
 
     define( 'max_login_tokens', 2 ) ;
@@ -47,7 +51,10 @@ define( 'oe_frontend', oe_root.'frontend/' ) ;
     define( 'debug_log', oe_log."/debug.log" ) ;
     define( 'security_log', oe_log."/security.log" ) ;
 
+// how long the site will wait for an update verification without barfing.
 
+    define( 'verify_interval', .25 );
+    define( 'verify_timeout', 10 );
 	
 // SITE DEFAULTS
 
