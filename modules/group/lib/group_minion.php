@@ -15,7 +15,7 @@ class group_minion {
     var $name ;
     var $short_desc ;
     var $detail ;
-    var $type ;
+    var $privacy ;
     var $owner_id ;
     var $owner_name ;
     var $owner_avatar ;
@@ -34,7 +34,7 @@ class group_minion {
         global $db ;
         global $user ;
         
-        $query = "SELECT `name`, `type`, `short_desc`, `group_profile`.`detail`,
+        $query = "SELECT `name`, `privacy`, `short_desc`, `group_profile`.`detail`,
                             `user_profile`.`user_id` as `owner_id`,
                             `user_profile`.`screen_name` as `owner_name`,
                             `user_profile`.`avatar` as `owner_avatar`
@@ -68,7 +68,7 @@ class group_minion {
                 
                 $check = $db->get_field( "SELECT COUNT(*) FROM `group_members` WHERE `group_id`='".$group_id."' AND `member_id`='".$user->id."'" ) != 0 ;
                     
-                if( $profile['type'] == '1' ){
+                if( $profile['privacy'] == '1' ){
                  
                     // public group-- anyone can read, but members can post
                     
@@ -78,7 +78,7 @@ class group_minion {
                         $this->access = 'full' ;
                     }
                     
-                } elseif( $profile['type'] == '2' ){
+                } elseif( $profile['privacy'] == '2' ){
                     
                     // closed group, can only see the profile if not a member
                     
