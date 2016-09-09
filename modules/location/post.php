@@ -14,9 +14,9 @@
             
             $post->json_reply( "SUCCESS", $result ) ;
             
-        case "getCityFromName":
+        case "getCityByName":
 
-            $result = getCityFromName( $_POST['city'] ) ;
+            $result = getCityByName( $_POST['city'] ) ;
             
             if( $result == false ){
                 $post->json_reply( "ERROR" ) ;

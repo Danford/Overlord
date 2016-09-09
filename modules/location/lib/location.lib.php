@@ -31,11 +31,11 @@ function getCityByName( $city, $limit = 5 ){
     
     if( count( $city ) == 1 ){
         
-        $db->query( "SELECT `city_id`, `city`, `state` FROM `location_city` WHERE `city` LIKE '%'.$city[0].'%' LIMIT ".$limit ) ;
+        $db->query( "SELECT `id`, `city`, `state` FROM `location_city` WHERE `city` LIKE '%".$city[0]."%' LIMIT ".$limit ) ;
         
     } else {
         
-        $db->query( "SELECT `city_id`, `city`, `state` FROM `location_city` WHERE `city` LIKE '%'.$city[0].'%' AND `state` LIKE '".$city[1]."%' LIMIT ".$limit ) ;
+        $db->query( "SELECT `id`, `city`, `state` FROM `location_city` WHERE `city` LIKE '%".$city[0]."%' AND `state` LIKE '".$city[1]."%' LIMIT ".$limit ) ;
         
     }
 
