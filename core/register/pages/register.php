@@ -20,23 +20,22 @@
     $page->header() ;
     $form->header() ;
 ?>
-
+<div>
 	<div>
 		Screen Name: 
 		<?php $form->text_field("screen_name", "width: 250px"); $form->if_error("screen_name", "<br />%%ERROR%%"); ?>
 	</div>
 	<div>
-		Note: Gender identification is completely optional.  Additionally, transgender individuals are
-		not required to select a transgender option; if they so choose they may simply select their gender.
-		Gender: 
-		<?php $form->select("gender", $option); $form->if_error("gender", '<br />%%ERROR%%'); ?>
+		<p>Note: Gender identification is completely optional.  Additionally, transgender individuals are
+		not required to select a transgender option; if they so choose they may simply select their gender.</p>
+		<p>Gender: <?php $form->select("gender", $option); $form->if_error("gender", '<br />%%ERROR%%'); ?></p>
 	</div>
 	<div>
 		Birthdate: <?php $form->date_input("birth", 1900, (date("Y") - 18)); $form->if_error("birth", '<br />%%ERROR%%'); ?>
 	</div>
 	<div>
 		<p>E-mail: <?php $form->text_field("email", "width: 400px"); ?></p>
-		<p>Confirm E-mail: <?php $form->text_field("confirmemail", "width: 400px"); $form->if_error("email", "<br />%%ERROR%%"); ?></
+		<p>Confirm E-mail: <?php $form->text_field("confirmemail", "width: 400px"); $form->if_error("email", "<br />%%ERROR%%"); ?></p>
 	</div>
 	<div>
 		<p>Passwords must be at least 8 characters long and contain at least one capital letter, one lowercase letter, and one number or special character.</p>
@@ -57,24 +56,24 @@
 	    </div>
 	</div>
 	<div>	
-		<p>Show Age in Profile?</p> 
-		<?php $form->select("show_age", $bit_options); ?>
+		<p>Show Age in Profile?
+		<?php $form->select("show_age", $bit_options); ?></p>
 	</div>
 	<div>
-		<p>Allow messages from users not in your friends list?</p> 
-		<?php $form->select("allow_contact", $bit_options); ?>
+		<p>Allow messages from users not in your friends list?
+		<?php $form->select("allow_contact", $bit_options); ?></p>
 	</div>
 	<div>
-		<p>Receive e-mail notification of new messages?</p> 
-		<?php $form->select("email_notification", $bit_options ); ?>
-		<p>Receive e-mail notification of new event invitations?</p> 
-		<?php $form->select("invite_notification", $bit_options); ?>
+		<p>Receive e-mail notification of new messages?
+		<?php $form->select("email_notification", $bit_options ); ?></p>
+		<p>Receive e-mail notification of new event invitations?
+		<?php $form->select("invite_notification", $bit_options); ?></p>
 	
-		<p>Agree to TOS</p>
-		<?php $form->checkbox( "tos_agree" ); $form->if_error("tos_agree", '<br />%%ERROR%%'); ?>
+		<p>Agree to TOS
+		<?php $form->checkbox( "tos_agree" ); $form->if_error("tos_agree", '<br />%%ERROR%%'); ?></p>
 	</div>
 	
 	<?php $form->plain_button('Submit', 'x', '', 'onclick="validate()"'); ?>
-	<?php $form->footer(); ?>	
-	<?php $page->footer(); ?>
+</div>
+	<?php $form->footer(); ?>
 	
