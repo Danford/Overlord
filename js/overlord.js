@@ -46,7 +46,8 @@ function SetLocationFromZip(zipCode) {
 }
 
 function SetLocation(response) {
-	$('input#city').val(response.city + ', ' + response.state);
+	$('input#city-input').val(response.city + ', ' + response.state);
+	$('input#city').val(response.city_id);
 }
 
 function AutocompleteLocationName(name) {
@@ -56,14 +57,17 @@ function AutocompleteLocationName(name) {
 }
 
 function DisplayAutocompleteLocationOptions(response) {
-	if (!$('.city-autocomplete'))
-		$('input#city').insertAfter('<div id="city-autocomplete"></div>');
+	$('#city-autocomplete').empty();
 	
-	$('.city-autocomplete').innerHTML = "";
+	$.each(response.matches, function (key, value) {
+		$('#city-autocomplete').append('<div id="city-data" data-cityid="' + value.id + '">' + value.city + ', ' + value.state + '</div>');
+	});
+	$('#city-autocomplete').show();
 	
-	console.log(response);
-	$.each(response, function (cityId, city, state) {
-		$('.city-autocomplete').append('<div id="city-data" cityid="' + cityId + '">' + city + ', ' + state + '</div>');
+	$('#city-autocomplete div').click(function() {
+		$('input#city-input').val($(this).html());
+		$('input#city').val($(this).data("cityid"));
+		$(this).parent().hide();
 	});
 }
 
@@ -72,8 +76,16 @@ $(document).ready(function() {
 		SetLocationFromZip($(this).val());
 	});
 	
-	$('input#city').on( "keyup", function() {
-		AutocompleteLocationName($(this).val());
+	$('input#city-input').on("keyup", function() {
+		if ($(this).is(":focus")) {
+			AutocompleteLocationName($(this).val());
+		}
+	});
+	
+	$('input#city-input').on("focusout", function() {
+		setTimeout(function() {
+			$('#city-autocomplete').hide();
+		}, 150);
 	});
 		/*var predDropDown = $('<div class="zip-autocomplete"></div>').insertAfter($(this));
 		
