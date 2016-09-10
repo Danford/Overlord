@@ -1,10 +1,7 @@
 <?php
 
 $privacylevel = 1 ;
-$privacyoptions = [ 1 => 'All registered Users', 2 => 'Friends Only' ] ;
-
-
-
+$privacyoptions = [ 1 => 'All Registered Users', 2 => 'Friends Only' ] ;
 
 // nothing below this line should be edited
 
@@ -94,7 +91,8 @@ if( isset( $oe_plugin[$uri[$pos] ] ) ){
     
     if( in_array($uri[$pos], $plugins[0] )){
             
-        $pos++;    
+        $pos++; 
+        $tier++ ;
         
         include( $oe_plugin[$uri[$pos]]."plugin.php" ) ;
         
