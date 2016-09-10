@@ -25,7 +25,7 @@ $eAbout->AddTag("p")->AddContent($profile->name);
 // print( $profile->name ) ;
 
 $eAbout->AddTag("p")->AddContent($profile->detail);
-if ($profile->age != 0)
+if ($profile->age != '')
 	$eAbout->AddTag("p")->AddContent($profile->age);
 	// if( $profile->age != 0 ) { print( " ".$profile->age ) ; }
 
@@ -33,15 +33,17 @@ if ($profile->gender != 0)
 	$eAbout->AddTag("p")->AddContent($gender[$profile->gender]['label']);
 	// if( $profile->gender != 0 ) { print( " ".$gender[ $profile->gender]['label'] ) ; }
 
-if ($profile->friend_count > 0)
+$c = $profile->get_friends_count() ;	
+	
+if ($c > 0)
 {
 	$eFriends = $eProfile->AddElement(new Div("p-friends"));
 	$eFriends->AddContent("Friends");
 	// print( 'Friends: '.$profile->friend_count.'<br /><br />' ) ;
 	
-	if ($profile->friend_count > 5)
+	if ($c > 5)
 	{
-		$offset = $profile->friend_count - 5;
+		$offset = $c - 5;
 	}
 	else
 	{
@@ -59,70 +61,7 @@ if ($profile->friend_count > 0)
 	}
 }
 
-if ($profile->photo_count > 0)
-{
-	$ePhotos = $eProfile->AddElement(new Div("p-photos"));
-	//print('<a href="/profile/' . $profile->id . '/photos">Photo');
-	
-	$secName = "Photo";
-	if ($profile->photo_count > 1)
-		$secName .= "s";
-		//print('s');
-	
-	$secName .= ': ' . $profile->photo_count;
-	$ePhoto = $ePhotos->AddElement(new Div("p-photo"));
-	$ePhoto->AddElement(new ALink($secName, "/profile/". $profile->id ."/photos"));
-	//print(': ' . $profile->photo_count . '</a><br /><br />');
-}
 
-if ($profile->video_count > 0)
-{
-	$eVideos = $eProfile->AddElement(new Div("p-videos"));
-	//print('<a href="/profile/' . $profile->id . '/videos">Video');
-	
-	$secName = "Video";
-	if ($profile->video_count > 1)
-		$secName .= "s";
-		//print('s');
-	
-	$secName .= ': ' . $profile->video_count;
-	$eVideo = $eVideos->AddElement(new Div("p-video"));
-	$eVideo->AddElement(new ALink($secName, "/profile/". $profile->id ."/videos"));
-	//print(': ' . $profile->video_count . '</a><br /><br />');
-}
-
-if ($profile->prose_count > 0)
-{
-	$eProses = $eProfile->AddElement(new Div("p-proses"));
-	//print('<a href="/profile/' . $profile->id . '/writing">Writing');
-	
-	$secName = "Writing";
-	if ($profile->prose_count > 1)
-		$secName .= "s";
-		//print('s');
-	
-	$secName .= ': ' . $profile->prose_count;
-	$eProse = $eProses->AddElement(new Div("p-prose"));
-	$eProse->AddElement(new ALink($secName, "/profile/". $profile->id ."/writing"));
-	//print(': ' . $profile->prose_count . '</a><br /><br />');
-}
-
-if ($profile->album_count > 0)
-{
-	$eAlbums = $eProfile->AddElement(new Div("p-albums"));
-	//print('<a href="/profile/' . $profile->id . '/albums">Album');
-	
-	$secName = "Album";
-	if ($profile->album_count > 1)
-		$secName .= "s";
-		//print('s');
-	
-	
-	$secName .= ': ' . $profile->album_count;
-	$eAlbum = $eAlbums->AddElement(new Div("p-album"));
-	$eAlbum->AddElement(new ALink($secName, "/profile/". $profile->id ."/albums"));
-	//print(': ' . $profile->album_count . '</a><br /><br />');
-}
 
 switch ($profile->friend_request_status())
 {
@@ -133,7 +72,7 @@ switch ($profile->friend_request_status())
 	
 	case 'friend' :
 		$eProfile->OpenBuffer();
-		$form = new form_minion("removefriend", "profile");
+		$form = new form_minion("removeFriend", "profile");
 		$form->header();
 		$form->hidden("user", $profile->id);
 		$form->submit_button("Remove Friend");
@@ -143,13 +82,13 @@ switch ($profile->friend_request_status())
 	
 	case 'incoming' :
 		$eProfile->OpenBuffer();
-		$form = new form_minion("confirmfriend", "profile");
+		$form = new form_minion("confirmFriend", "profile");
 		$form->header();
 		$form->hidden("user", $profile->id);
 		$form->submit_button("Confirm Friend Request");
 		$form->footer();
 		
-		$form = new form_minion("denyfriend", "profile");
+		$form = new form_minion("denyFriend", "profile");
 		$form->header();
 		$form->hidden("user", $profile->id);
 		$form->submit_button("Deny Friend Request");
@@ -159,7 +98,7 @@ switch ($profile->friend_request_status())
 	
 	case 'outgoing' :
 		$eProfile->OpenBuffer();
-		$form = new form_minion("cancelfriendrq", "profile");
+		$form = new form_minion("cancelFriendrq", "profile");
 		$form->header();
 		$form->hidden("user", $profile->id);
 		$form->submit_button("Cancel Friend Request");
@@ -169,7 +108,7 @@ switch ($profile->friend_request_status())
 	
 	case 'none' :
 		$eProfile->OpenBuffer();
-		$form = new form_minion("addfriend", "profile");
+		$form = new form_minion("addFriend", "profile");
 		$form->header();
 		$form->hidden("user", $profile->id);
 		$form->submit_button("Add Friend");
