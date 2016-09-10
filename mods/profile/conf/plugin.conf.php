@@ -8,9 +8,9 @@ $pluginconf[0]['admin'] = ( $profile->id == $user->id ) ;
 
         // only the user can upload/edit content via plugins on the profile
 
-$pluginconf[0]['photo']['useAlbums'] = true ;
-$pluginconf[0]['photo']['view'] = 'photo_profile' ;
-$pluginconf[0]['photo']['folder'] = ul_img_dir ;
+$pluginconf[0]['photo']['useAlbums'] = false ;
+//$pluginconf[0]['photo']['view'] = 'photo' ;
+//$pluginconf[0]['photo']['folder'] = ul_img_dir ;
 
 $pluginconf[0]['writing']['use_albums'] = true ;
 $pluginconf[0]['writing']['view'] = 'writing_profile' ;
