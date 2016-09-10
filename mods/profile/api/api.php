@@ -21,7 +21,7 @@ switch( $_POST['oe_formid'] ) {
         
         if( ! isset( $_POST['order'] ) ) { $_POST['order'] == 'screen_name' ; }
         
-        $friends = $profile->get_friends( $_POST['offset'], $_POST['limit'], $_POST['order'] ) ;
+        $friends = $profile->get_friends_as_array( $_POST['offset'], $_POST['limit'], $_POST['order'] ) ;
         
         if( $friends == false ){ $post->json_reply("FAIL") ; }
         
