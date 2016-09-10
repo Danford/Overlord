@@ -150,8 +150,8 @@ class form_minion
 
 		print( $this->check_css( $this->css ) );
 		
-		print( '>'.PHP_EOL.'<input type="hidden" name="oe_formid" value="'.$this->oe_form_id.'" />'.PHP_EOL ) ;
-    	print( '<input type="hidden" name="oe_module" value="'.$this->module.'" />'.PHP_EOL ) ;
+		print( '>'.PHP_EOL.'<input type="hidden" name="oe_call" value="'.$this->oe_form_id.'" />'.PHP_EOL ) ;
+    	print( '<input type="hidden" name="oe_post_api" value="'.$this->module.'" />'.PHP_EOL ) ;
     	print( '<input type="hidden" name="oe_return" value="'.$_SERVER["REQUEST_URI"].'" />'.PHP_EOL ) ; 
     
 	} // end header()

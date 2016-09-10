@@ -214,7 +214,7 @@ function user_likes_item( $type, $item ){
 }
 
 
-function verify_update( $table, $id, $columm='id' ) {
+function verify_update( $table, $id, $column='id' ) {
     
     global $db ;
     

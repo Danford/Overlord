@@ -298,4 +298,74 @@ class user_minion {
         $this->load_friends_list() ;
         $this->load_group_membership() ;
     }
+    
+    function get_friends_as_array( $offset = 0, $limit = 99999999, $order='screen_name' ){
+    
+        // conspicuously similar to the function of the same name in the profile minion.
+        // almost as if I copied and pasted the thing in, and removed friend and block check
+        // since hey, we know they're friends.
+    
+        global $user ;
+        global $db ;
+    
+        if( $this->name == false ){
+            return false ;
+        } else {
+    
+            $friend_list = array() ;
+    
+            $db->query( "SELECT `user_profile`.`user_id`,
+                                      `screen_name`, `avatar`,`show_age`, `birthdate`,
+                                      `city_id`, `city`, `state`
+                                FROM `profile_friendship`, `user_profile`,`location_city`
+                                WHERE
+                                 ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
+                                    `profile_friendship`.`friend2` =`user_profile`.`user_id` )
+                                    OR
+                                  ( `profile_friendship`.`friend2` ='".$this->id."' AND
+                `profile_friendship`.`friend1` =`user_profile`.`user_id` ) )
+                AND
+                `user_profile`.`city_id` = `location_city`.`id`
+    
+                ORDER BY `'.$db->sanitize( $order ).'`
+    
+                LIMIT ".$offset.", ".$limit ) ;
+    
+            while( ( $p = $db->assoc() ) != false ){
+    
+                if( $p['show_age'] != 0 )
+                { $p['age'] = user_age( $p['birthdate'] ) ; }
+                else
+                { $p['age'] = 0 ; }
+
+                unset( $p['birthdate'] ) ;
+                unset( $p['show_age'] ) ;
+                
+                $p['avatar'] = image_link('userthumb', $p['avatar'] ) ;
+
+                $friend_list[] = $p ;
+            
+            }
+            return $friend_list ;
+        }
+    }
+    
+    function get_blocked_as_array(){
+        
+        // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.  
+        
+        $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `user_profile`
+                        WHERE `blocker` ='".$this->id."' and `blockee`=`user_profile`.`id` " ) ;
+        
+        if( $db->count() == 0 ){
+            return false ;
+        } else {
+            
+            while (( $p = $db->assoc() ) != false ){
+                $blocked[] = $p ;
+            }
+            
+            return $blocked ;
+        }
+    }
 }
