@@ -1,9 +1,10 @@
 <?php
-    
+
     include_once( oe_core.'_conf/oe_config.php' ) ;
+    include_once( oe_core.'_conf/modules.php' ) ;
 	include_once( oe_lib.'oe_lib.php' ) ;
 	include_once( oe_lib.'mysqli_minion.php' ) ;
-	include_once( $oe_modules['group'].'lib/group_minion.php' ) ;
+	include_once( $oe_modules['group'].'lib/group_minion.php' ) ; // TODO remember why this is here.  Probably an event thing.
 	include_once( oe_lib.'user_minion.php' ) ;
 	
 	session_start() ;
@@ -18,23 +19,33 @@
 	 
 	// POST PROCESSING
 	
-	if( isset( $_POST['oe_module'] ) or isset( $_POST['oe_api'] ) )
+	if( isset( $_POST['oe_api'] ) )
 	{
 	    // form submissions
 	    
 	    if( isset( $_POST['oe_api'] ) ){
 	        $postmodule = $_POST['oe_api'] ;
 	    } else {
-	        $postmodule = $_POST['oe_module'] ;
+	        $postmodule = $_POST['oe_post_api'] ;
 	    }
         
-	    if( isset( $oe_modules[ $postmodule ] ) and file_exists( $oe_modules[ $postmodule ]."post.php" ) ) {
+	    if( isset( $oe_modules[ $postmodule ] ) and file_exists( $oe_modules[ $postmodule ]."api.php" ) ) {
 	    
 	        include( oe_lib.'post_minion.php' ) ;
 	    
-	        $post = new post_minion( isset( $_POST['oe_api'] ) ) ; 
+	        $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ; 
 	        
-	        include( $oe_modules[ $postmodule ].'post.php') ;
+	        include( $oe_modules[ $postmodule ].'api.php') ;
+	        die();
+	    }
+        
+	    if( isset( $oe_plugins[ $postmodule ] ) and file_exists( $oe_plugins[ $postmodule ]."api.php" ) ) {
+	    
+	        include( oe_lib.'post_minion.php' ) ;
+	    
+	        $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ; 
+	        
+	        include( $oe_modules[ $postmodule ].'api.php') ;
 	        die();
 	    }
 	    
@@ -74,7 +85,7 @@
 	
 	$pos = substr_count( httproot, '/' ) ;
 		
-	if( ( $uri[$pos] == 'index.php' ) or ( ! isset( $uri[ $pos ] ) ) or ( $uri[ $pos ] == '' ) ) 
+	if( ! isset( $uri[ $pos ] ) or $uri[ $pos ] == '' ) 
 	{
 		if( $user->is_logged_in() ){
 		    $uri[$pos] = './main' ;
@@ -102,10 +113,10 @@
 		 * the location of the module. The "handler" of that module takes over processing from here.
 		 */
 				
-		if( file_exists( $oe_modules[ $uri[ $pos ] ]."handler.php" ) )
+		if( file_exists( $oe_modules[ $uri[ $pos ] ]."module.php" ) )
 		{
 			$pos++ ;						 
-			include( $oe_modules[ $uri[ $pos - 1 ]]."handler.php"  ) ;
+			include( $oe_modules[ $uri[ $pos - 1 ]]."module.php"  ) ;
 		}
 			/*
 			 * Note that we do not die(). 
@@ -139,10 +150,6 @@
 		
 		$pos++ ;
 		
-		if( ! isset( $oe_config['module'] ) ){
-		    $oe_config['module'] = "./main" ;
-		}
-		
 		include( $oe_pages[ $uri[ $pos - 1 ] ] ) ;
 		
 		/*
@@ -152,17 +159,12 @@
 		
 		$uri[ $pos ] = './404' ;
 	}
-
-	// okay, it's not a page based in an actual file.  Let's check the DB.
-	
-    include( oe_core.'dbpagemodule.php' ) ;
 	
 	// if we've come all the way here, it's time to throw a 404.
 
     
     
 	http_404() ;
-	$oe_config['module'] = "./main" ;
 	include( $oe_pages['./404'] ) ;
 	die();
 	

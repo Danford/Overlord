@@ -9,7 +9,8 @@
  *  Really, though, there's no good reason to change them.
  */
 
-define( 'oe_mod', oe_root.'modules/' ) ;
+define( 'oe_mod', oe_root.'mods/' ) ;
+define( 'oe_plugins', oe_root.'plugins/' ) ;
 define( 'oe_lib', oe_core.'_lib/' ) ;
 define( 'oe_config', oe_core.'_conf/' ) ;
 define( 'oe_includes', oe_core.'includes/' ) ;
@@ -98,32 +99,14 @@ define( 'oe_frontend', oe_root.'frontend/' ) ;
 	$gender[3]["abbr"] = "TM" ;
 	$gender[4]["label"] = 'Trans Female' ;
 	$gender[4]["abbr"] = "TF" ;
-	$gender[5]["label"] = 'Gender Fluid' ;
+	$gender[5]["label"] = 'Genderfluid' ;
 	$gender[5]["abbr"] = "GF" ;
-	$gender[6]["label"] = 'Gender Queer' ;
+	$gender[6]["label"] = 'Genderqueer' ;
 	$gender[6]["abbr"] = "GQ" ;
 	$gender[7]["label"] = 'Non-Binary' ;
 	$gender[7]["abbr"] = "NB" ;
 	
 
-/*
- *  modules-- basically subsets of scripts defined for a specific purpose-- are defined here.
- *
- *  the array key for a module is the uri value that will lead to it being called, and the
- *  value is the script that manages the module itself (the 'handler').
- */
-
-	$oe_modules[ 'register' ] = oe_core.'register/' ;
-	//$oe_modules[ 'sample' ] = oe_core.'dbpagemodule.php' ;
-	$oe_modules[ 'login' ] = oe_core.'login/' ;
-	$oe_modules[ 'profile' ] = oe_mod.'profile/' ;
-	$oe_modules[ 'imgs' ] = oe_core.'images/' ;
-	$oe_modules[ 'group' ] = oe_mod.'group/' ;
-	$oe_modules[ 'groups' ] = oe_mod.'group/' ;
-	$oe_modules[ 'event' ] = oe_mod.'event/' ;
-	$oe_modules[ 'events' ] = oe_mod.'event/' ;
-	$oe_modules[ 'location' ] = oe_mod.'location/' ;
-	
 /*
  *  pages -- individual pages that exist as http://yoursite.com/whatever
  *  
