@@ -14,6 +14,8 @@ $post->require_true( preg_match( '/\d\d\d\d-\d\d-\d\d/', $_POST['birthdate'] ) =
 
 $post->checkpoint() ;
 
+$_POST['detail'] = process_user_supplied_html( $_POST['detail'] ) ;
+
 $sp = $db->build_set_string_from_post( 'show_age', 'allow_contact', 'birthdate', 'gender', 'detail','city') ;
 $sa = $db->build_set_string_from_post( 'email_notification', 'invite_notification' ) ;
 
