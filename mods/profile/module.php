@@ -94,8 +94,6 @@ if( isset( $oe_plugin[$uri[$pos] ] ) ){
         $pos++; 
         $tier++ ;
         
-        // load the default values for this plugin
-        
         include( $oe_plugin[$uri[$pos - 1]]."plugin.php" ) ;
         
         // does not die() to allow for bombing out to the main 404.
