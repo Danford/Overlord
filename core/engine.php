@@ -19,21 +19,27 @@
 	 
 	// POST PROCESSING
 	
-	if( isset( $_POST['oe_api'] ) )
+	if( isset( $_POST['oe_api'] ) or isset( $_POST['oe_post_api'] ) )
 	{
 	    // form submissions
 	    
+        include( oe_lib.'post_minion.php' ) ;
+        $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ;
+        
 	    if( isset( $_POST['oe_api'] ) ){
 	        $postmodule = $_POST['oe_api'] ;
 	    } else {
 	        $postmodule = $_POST['oe_post_api'] ;
 	    }
-        
+	    
+	    if( ! isset( $_POST["oe_call"] ) ){
+	        json_reply( "FAIL" ) ;
+	        die();
+	    }
+
+        $apiCall = $_POST["oe_call"] ;
+	    
 	    if( isset( $oe_modules[ $postmodule ] ) and file_exists( $oe_modules[ $postmodule ]."api.php" ) ) {
-	    
-	        include( oe_lib.'post_minion.php' ) ;
-	    
-	        $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ; 
 	        
 	        include( $oe_modules[ $postmodule ].'api.php') ;
 	        die();
@@ -41,9 +47,46 @@
         
 	    if( isset( $oe_plugins[ $postmodule ] ) and file_exists( $oe_plugins[ $postmodule ]."api.php" ) ) {
 	    
-	        include( oe_lib.'post_minion.php' ) ;
-	    
-	        $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ; 
+	        
+	        // verify oe_module and oe_module_id
+	        
+	        if( ! isset( $_POST['oe_module'] ) or ! isset( $_POST['oe_module_id'] ) ){
+	        
+	            $post->json_reply("FAIL") ;
+	            die();
+	        }
+	        
+	        // if plug isn't there, just use the values for module
+	        
+	        if( ! isset( $_POST['oe_plug'] ) ){
+	        
+	            $_POST['oe_plug'] = $_POST['oe_module'] ;
+	            $_POST['oe_plug_id'] = $_POST['oe_module_id'] ;
+	        }
+	        
+            // now to set some environment variables:
+
+                $basemodule = $_POST["oe_module"] ; 
+                $basemoduleID = $_POST["oe_module_id"] ;
+                $plug = $_POST["oe_plug"] ;
+                $plugID = $_POST["oe_plug_id"] ;
+	            $apiCall = $_POST["oe_call"] ;
+	         
+	        
+	        // check for Bobby Tables in the module/plug data
+
+	        if( ! verify_number( $_POST['oe_module_id'] ) or ! verify_number( $_POST['oe_plug_id'] )){
+	            $post->json_reply( "FAIL");
+	            die();
+	        }
+	        
+	        // now to check the plug to get configuration
+	        
+	        include( $oe_module[$basemodule]."conf/plugin.conf.php" ) ;
+	        
+	        
+	        // and now to load the plugin's api        
+	        
 	        
 	        include( $oe_modules[ $postmodule ].'api.php') ;
 	        die();
@@ -54,6 +97,7 @@
          * If we got to this spot,  oe_form is not valid.
          */
         
+	    $post->json_reply("FAIL") ;
         die( '<b>Error OE1:</b> Please report this to the webmaster.' ) ;
 	}
 	
