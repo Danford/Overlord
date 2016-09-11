@@ -22,7 +22,6 @@
 	if( isset( $_POST['oe_api'] ) or isset( $_POST['oe_post_api'] ) )
 	{
 	    // form submissions
-	    
         include( oe_lib.'post_minion.php' ) ;
         $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ;
         
@@ -58,19 +57,15 @@
 	        
 	        // if plug isn't there, just use the values for module
 	        
-	        if( ! isset( $_POST['oe_plug'] ) ){
-	        
-	            $_POST['oe_plug'] = $_POST['oe_module'] ;
-	            $_POST['oe_plug_id'] = $_POST['oe_module_id'] ;
+	        if( isset( $_POST['oe_plug'] ) ){
+                $lastplug = $_POST["oe_plug"] ;
+                $lastplugID = $_POST["oe_plug_id"] ;
 	        }
 	        
             // now to set some environment variables:
 
                 $basemodule = $_POST["oe_module"] ; 
                 $basemoduleID = $_POST["oe_module_id"] ;
-                $plug = $_POST["oe_plug"] ;
-                $plugID = $_POST["oe_plug_id"] ;
-	            $apiCall = $_POST["oe_call"] ;
 	         
 	        
 	        // check for Bobby Tables in the module/plug data
@@ -80,13 +75,46 @@
 	            die();
 	        }
 	        
-	        // now to check the plug to get configuration
+	        // now to check the module to get authentication and configuration
 	        
-	        include( $oe_module[$basemodule]."conf/plugin.conf.php" ) ;
+	        if( file_exists( $oe_module[$basemodule]."conf/plugin.conf.php" ) ){
+	            include( $oe_module[$basemodule]."conf/plugin.conf.php" ) ;
+	        } else {
+	            $post->json_reply("FAIL" ) ;
+	            die();
+	        }
 	        
+	        // now, how do we decide if the plug-- which decides the configuration of 
+	        // its plugin-- is a module or a plugin?
 	        
-	        // and now to load the plugin's api        
+	        if( isset( $lastplug ) ){
+	            
+	            // we also need to load the configuration file of the last plug
+	            
+	            // anything above the module level is either a plugin or
+	            // a module acting as a plugin.
 	        
+    	        if( file_exists( $oe_plugin[$basemodule]."conf/plugin.conf.php" ) ){
+    	            include( $oe_plugin[$basemodule]."conf/plugin.conf.php" ) ;
+    	        } else {
+    	            $post->json_reply("FAIL" ) ;
+    	            die();
+    	        }
+    	            
+	        }
+	        
+	        // still not quite ready.  now we load the configuration for the plugin.
+	        // it shouldn't override any previous settings but might provide defaults
+	        	         
+	        if( file_exists( $oe_plugin[$postmodule]."conf/conf.php" ) ){
+	            include( $oe_plugin[$postmodule]."conf/conf.php" ) ;
+	        
+	               // we don't die out at this level, in case of a plugin that 
+	               // requires no configuration.  It is the responsibility of
+	               // the API to determine if it has been properly configured.
+	        } 
+	        
+	        // and now finally to load the plugin's api        
 	        
 	        include( $oe_modules[ $postmodule ].'api.php') ;
 	        die();
