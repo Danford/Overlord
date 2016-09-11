@@ -29,6 +29,11 @@
 	        $postmodule = $_POST['oe_api'] ;
 	    } else {
 	        $postmodule = $_POST['oe_post_api'] ;
+	        
+	        if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
+	                json_reply( "FAIL" ) ;
+                    die();
+	        }
 	    }
 	    
 	    if( ! isset( $_POST["oe_call"] ) ){
@@ -83,10 +88,7 @@
 	            $post->json_reply("FAIL" ) ;
 	            die();
 	        }
-	        
-	        // now, how do we decide if the plug-- which decides the configuration of 
-	        // its plugin-- is a module or a plugin?
-	        
+	         
 	        if( isset( $lastplug ) ){
 	            
 	            // we also need to load the configuration file of the last plug
@@ -116,7 +118,7 @@
 	        
 	        // and now finally to load the plugin's api        
 	        
-	        include( $oe_modules[ $postmodule ].'api.php') ;
+	        include( $oe_plugins[ $postmodule ].'api.php') ;
 	        die();
 	    }
 	    
