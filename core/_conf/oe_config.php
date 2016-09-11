@@ -16,7 +16,6 @@ define( 'oe_config', oe_core.'_conf/' ) ;
 define( 'oe_includes', oe_core.'includes/' ) ;
 define( 'oe_css', httproot.'css/' ) ;
 define( 'oe_js', httproot.'js/' ) ;
-define( 'ul_img_dir', oe_root.'oe_images/' ) ;
 define( 'oe_log', oe_root."oe_logs/") ;
 
 define( 'oe_frontend', oe_root.'frontend/' ) ;
