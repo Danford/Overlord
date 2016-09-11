@@ -31,7 +31,6 @@
 	        $postmodule = $_POST['oe_post_api'] ;
 	        
 	        if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
-	                json_reply( "FAIL" ) ;
                     die();
 	        }
 	    }

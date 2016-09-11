@@ -1,21 +1,19 @@
 <?php
 
     // nothing should be changed below this line
-    
-    $tier = count( $parent );  // how deep is the rabbit hole?
    
-    if( isset( $pluginconf[ $tier - 1 ]['photo']['useAlbums'] ) ){
-        $useAlbums = $pluginconf[ $tier - 1 ]['photo']['useAlbums'] ;
-    } else {
-        $useAlbums = true ;
-    }
+    
+    // $tier was declared or incremented in the plug's config
+    // and here refers to the PLUG, not this plugin,
+    // because that's where the settings we're looking for are.
+    // if we must incremement it, we do so in our own plugin.conf.php
 
 
-    if( isset( $pluginconf[$tier]['photo']['view'] )){
-        $queryfrom = $pluginconf[$tier]['photo']['view'] ;
-    } else {
-        $queryfrom = 'photo' ;
-    }
+    // let's load the default settings....
+
+    include( $oe_plugins['photo']."conf/conf.php") ;
+    
+    // no further information in the uri?  load all the photos attached to this plug item
     
     if( isset( $uri[$pos] ) or $uri[$pos] == "" ){
     
@@ -23,36 +21,38 @@
         die();
     }
     
-    if( $pluginconf[0]['contributor'] and $uri[$pos] == 'upload' ){
+    // is it the upload page?  Do they have access?
+    
+    if( $plug[0]['contributor'] and $uri[$pos] == 'upload' ){
                
         include( $oe_plugins['photo']."/pages/upload.php" ) ;
         die();
                
     }
     
-    // photo display and edit pages
+    // is it a specific photo?
     
     
     if( verify_number($uri[$pos] ) ){
 
 
-        $q = "SELECT `owner`,`privacy`, `title`, `description` FROM `".$queryfrom."`
+        $q = "SELECT `owner`,`privacy`, `title`, `description` FROM `".$plug[$tier]['photo']['view']."`
             WHERE `id`='".$uri[$pos]."'
-            AND `module`='".$parent[0]['type']."'
-            AND `module_item_id`='".$parent[0]['id']."'";
+            AND `module`='".$plug[0]['type']."'
+            AND `module_item_id`='".$plug[0]['id']."'";
         
         if( $tier > 1 ){
-            $q .= " AND `plug`='".$parent[$tier - 1]['type']."'
-            AND `plug_item_id`='".$parent[$tier - 1]['id']."'";
+            $q .= " AND `plug`='".$plug[$tier]['type']."'
+            AND `plug_item_id`='".$plug[$tier]['id']."'";
         }
         
         $photo = $db->get_assoc($q) ;
         
-        if( $q != false and $accesslevel <= $photo['privacy'] ){
+        if( $q != false and ! $accesslevel < $photo['privacy'] ){
         
-            // we have verified that's it's a photo id that they can at least see
+            // it's a specific photo
             
-            if( $parent[0]['type'] == 'profile' ){
+            if( $plug[0]['type'] == 'profile' ){
                 // we already have the associated profile information, or should
                 $photo["owner"] = $profile ;
             } else {
@@ -62,13 +62,17 @@
         
             $pos++ ;
             
+            // do they want to see the photo?
+            
             if( ! isset( $uri[$pos] ) or $uri[$pos] = "" ){
                 
                 include( $oe_plugins['photo']."/pages/view_one.php" );
                 die();
             }
             
-            if( $photo->owner == $user->id and $uri[$pos] == "edit" ){
+            // do they want to edit it?  is that even allowed?
+            
+            if( ( $photo->owner == $user->id or $plug[0]['admin'] == true ) and $uri[$pos] == "edit" ){
                 
                 include( $oe_plugins['photo']."/pages/edit.php" );
                 die();
@@ -81,7 +85,7 @@
     // are they trying to load the actual image file??
     
 
-    if( in_array($uri[$pos], ['thumb','profile','tiny'] )){
+    if( in_array($uri[$pos], ['thumb','profile','profileThumb'] )){
         $imagetype = ".".$uri[$pos] ;
         $pos++ ;
     } else {
@@ -90,39 +94,35 @@
     
 
     if( strpos($uri[$pos], '.png') != false ){
-        
-        if( isset( $pluginconf[$tier]['photo']['folder'] )){
-            $imageDir = $pluginconf[$tier]['photo']['folder'] ;
-        } else {
-            $imageDir = ul_img_dir ;
-        }
-            // the above allows for creation of views for each kind of photo
-            
-            // $accesslevel is set at the modular level
+                    
             
         $split = explode('.', $uri[$pos]) ;
         
-        $q = "SELECT `privacy`, `filekey` FROM `".$queryfrom."` 
+        if( ! verify_number( $split[0] ) ) { die() ; }
+        
+        $q = "SELECT `privacy`, `filekey` FROM `".$plug[$tier]['photo']['view']."` 
                 WHERE `id`='".$split[0]."'
-                AND `module`='".$parent[0]['type']."'
-                AND `module_item_id`='".$parent[0]['id']."'";
+                AND `module`='".$plug[0]['type']."'
+                AND `module_item_id`='".$plug[0]['id']."'";
         
         if( $tier > 1 ){
-            $q .= " AND `plug`='".$parent[$tier - 1]['type']."'
-                AND `plug_item_id`='".$parent[$tier - 1]['id']."'";
+            $q .= " AND `plug`='".$plug[$tier]['type']."'
+                AND `plug_item_id`='".$plug[$tier]['id']."'" ;
         }
         
         $photo = $db->get_assoc($q) ;
         
-        if( $photo != false and $photo['privacy'] <= $accesslevel ){
+        // user's $accesslevel was set at the modular level
+        
+        if( $photo != false and ! $photo['privacy'] > $accesslevel ){
 
-            $filename = $parent[0]['type'].".".$parent[0].['id'].".".$photo['filekey'].$image['type'].".png" ;
+            $filename = $plug[$tier]['type'].".".$plug[$tier]['id'].".".$photo['filekey'].$imagetype.".png" ;
 
-            if( file_exists($imageDir.$filename ) ){
+            if( file_exists( $plug[$tier]['photo']['path'].$filename ) ){
                 
                 header("Content-Type: image/png");
-                header("Content-Length: " . filesize(ul_img_dir.$_SESSION["imagekey"][$uri[$pos]]));
-                $file = @fopen( $imageDir.$filename, "rb" ) ;
+                header("Content-Length: " . filesize($plug[$tier]['photo']['path'].$filename));
+                $file = @fopen( $plug[$tier]['photo']['path'].$filename, "rb" ) ;
                 
                 fpassthru( $file );
                 

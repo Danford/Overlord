@@ -9,7 +9,7 @@
  *          
  *          userbox of the poster
  *          
- *          delete button if $parent[0]['admin'] == true ;
+ *          delete button if $plug[0]['admin'] == true ;
  *          
  *          We'll need slightly separate designs for profile, event, and group pictures,
  *          mostly in how the page header looks.  For now, worry about user profile, just be aware 

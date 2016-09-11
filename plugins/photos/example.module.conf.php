@@ -1,17 +1,33 @@
 <?php 
 die("Don't Copy This.");
-    // the info should be in the plugin.conf.php of any module that calls it
+
+    /*
+     * 
+     * This info may be included in the plugin.conf.php of any plug that calls it.
+     * 
+     * A module may explicitly user 0 instead of $tier.
+     * 
+     * 
+     * 
+     */
+    
 
 
+$plug[$tier]['photo']['folder'] = oe_root.'oe_images/'  ;
 
-$pluginconf[]['photo']['use_albums'] = true ;
+    // This dictates where on the server the folder is uploaded.
+    // optional; default is defined at the top of plugin.php
+        
+
+
+$plug[$tier]['photo']['use_albums'] = true ;
 
     // include album functionality?  optional, default is true
     
-$pluginconf[]['photo']['table'] = 'photo' ;
+$plug[$tier]['photo']['table'] = 'photo' ;
 
     // the table where the info about the photo is kept.  optional, default is photo
     
-$pluginconf[]['photo']['folder'] = ul_img_dir ;
+$plug[$tier]['photo']['table'] = 'photo' ;
 
-    // the path on the server where images are stored. 
+    // the table or view from which to retrieve it.  optional, default is photo

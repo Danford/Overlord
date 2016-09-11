@@ -3,35 +3,9 @@
 include( $oe_modules['profile']."lib/album.lib.php" ) ;
 
 switch( $_POST['oe_formid'] ){
-
-    case "imageupload":    
+    
     case "imageUpload":
         
-        $post->checkbox('setavatar') ;
-        $post->hold( "private", "title", "description", "setavatar", "album", "new_album_title", "new_album_description" ) ;
-        
-        
-        $check = getimagesize( $_FILES["photo"]["tmp_name"] );
-        
-        $post->require_true( $check != false, 'image', 'This is not a valid image file.' ) ;
-        
-        $post->checkpoint() ;
-        
-        $imageFileType = pathinfo( ul_img_dir.$_FILES["photo"]["name"], PATHINFO_EXTENSION) ;
-        
-        if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-            && $imageFileType != "JPG" && $imageFileType != "PNG" && $imageFileType != "JPEG") {
-        
-                $post->set_error("image", "Only .jpg, .jpeg, and .png files are allowed. ".$_FILES["photo"]["name"] ) ;
-        
-        }
-    
-        $post->checkpoint();
-
-        $post->require_true( strlen( $_POST['title']) < 76 , 'title', 'Title must be 75 characters or less.' ) ;
-        $post->require_true( strlen( $_POST['description']) < 256, 'description', 'Description must be 75 characters or less.' ) ;
-        
-        $post->checkpoint() ;
         
         if( $_POST['album'] == "New" ){
             
