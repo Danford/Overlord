@@ -5,31 +5,35 @@
    *    
    *        oe_api          photo
    *        oe_call         upload
-   *        oe_module       $plug[0]['type']
-   *        oe_module_id    $plug[0]['id']
+   *        oe_module       $oepc[0]['type']
+   *        oe_module_id    $oepc[0]['id']
    *        oe_parent       to which module or plugin is this attached?
    *                        if omitted, oe_module is assumed
    *        oe_parent_id    to which item in that module or plugin?
    *                        if omitted, oe_module_id is assumed
-
-
-
-    		privacy         options defined by module
-    		title           string, optional
-    		description     text, optional
+   *                        
+   *                        
+                
+            photo           the actual file
+            
+    		privacy         int, options defined by module as $privacyoptions ;
+    		title           string, optional 75 chars max, no html
+    		description     text, optional 255 chars max, no html
     		
-    		parentavatar    checkbox      only if admin ( $plug[0]['admin'] == true ; )
+    		parentavatar    checkbox      only if admin ( $oepc[0]['admin'] == true )
     		
     		
-    		leave room for
+    		album fields
+    		
+    		  - may be part of an include, as any plugin that wants to use albums
+    		    will want it.
     		
     		album - 'None', 'New', or ID
     		new_album_title - string, optional
     		new_album_description - string, optional 
     		
     		albumavatar     checkbox      only if admin and albums are set 
-		                                  ( $pluginconf[ $tier ]['photo']['useAlbum'] == true )
-    		
+		                                  ( $oepc[ $tier ]['photo']['useAlbum'] == true )
    * 
    * 
    * 

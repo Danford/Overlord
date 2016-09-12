@@ -4,7 +4,7 @@ switch( $apiCall ){
     
     case 'uploadPhoto':
         
-        if( $plug[0]['contributor']){
+        if( $oepc[0]['contributor']){
         
             include( $oe_plugins['photo'].'/api/photo.php') ;
             die() ;
@@ -21,13 +21,13 @@ switch( $apiCall ){
             die();
         }
         
-        $original = $db->get_assoc( "SELECT `owner`, `filekey` 
-                                    FROM ".$plug[$tier]['photo']['view']." 
+        $original = $db->get_assoc( "SELECT `owner`, `filekey`, `title`, `description`, `privacy` 
+                                    FROM ".$oepc[$tier]['photo']['view']." 
                                     WHERE `module`='".$basemodule."'
                                       AND `module_item_id`='".$basemoduleID."'
                                       AND `id`='".$_POST['photo_id']."'" ) ;
         
-        if( $original['owner'] != false and ( $plug[0]['admin'] or $original['owner'] == $user->id ) ){
+        if( $original['owner'] != false and ( $oepc[0]['admin'] or $original['owner'] == $user->id ) ){
             
             // it's real, they have access to it...
             

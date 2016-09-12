@@ -46,24 +46,24 @@ $tier = 0 ;
         */
 
 
-$plug[0] = [ 'type' => 'profile', 'id' => $profile->id ] ;
+$oepc[0] = [ 'type' => 'profile', 'id' => $profile->id ] ;
 
      /* at tier 0, this gets referenced at every tier above. */
 
 
-$plug[0]['contributor'] = ( $profile->id == $user->id ) ;
+$oepc[0]['contributor'] = ( $profile->id == $user->id ) ;
 
     /*  This establishes who can add content via this module.   
      *  This setting is only present-- or at least noticed-- at tier 0 */
 
-$plug[0]['admin'] = ( $profile->id == $user->id ) ;
+$oepc[0]['admin'] = ( $profile->id == $user->id ) ;
 
     /* This establishes who can administer content.    
      *  This setting is only present-- or at least noticed-- at tier 0  
      *  
      *  In the case of profile, it's the same as above, but I'm commenting here. */
 
-$plug[0]['plugins'] = [ 'photo', 'writing', `albums`] ;
+$oepc[0]['plugins'] = [ 'photo', 'writing', `albums`] ;
 
     /* What plugins will we try to load?? 
      * Again, this could vary depending on whether it is being invoked
@@ -72,13 +72,13 @@ $plug[0]['plugins'] = [ 'photo', 'writing', `albums`] ;
 
     /* individual plugin config */
 
-//$plug[0]['photo']['folder'] = oe_root.'oe_images/'  ;
-$plug[0]['photo']['useAlbums'] = false ;
-//$plug[0]['photo']['table'] = 'photo' ;
-//$plug[0]['photo']['view'] = 'photo' ;
+//$oepc[0]['photo']['folder'] = oe_root.'oe_images/'  ;
+$oepc[0]['photo']['useAlbums'] = false ;
+//$oepc[0]['photo']['table'] = 'photo' ;
+//$oepc[0]['photo']['view'] = 'photo' ;
 
 
-//$plug[0]['writing']['use_albums'] = true ;
-//$plug[0]['writing']['view'] = 'writing_profile' ;
+//$oepc[0]['writing']['use_albums'] = true ;
+//$oepc[0]['writing']['view'] = 'writing_profile' ;
 
-//$plug[0]['album']['view'] = 'album_profile' ;
+//$oepc[0]['album']['view'] = 'album_profile' ;

@@ -23,7 +23,7 @@
     
     // is it the upload page?  Do they have access?
     
-    if( $plug[0]['contributor'] and $uri[$pos] == 'upload' ){
+    if( $oepc[0]['contributor'] and $uri[$pos] == 'upload' ){
                
         include( $oe_plugins['photo']."/pages/upload.php" ) ;
         die();
@@ -36,14 +36,14 @@
     if( verify_number($uri[$pos] ) ){
 
 
-        $q = "SELECT `owner`,`privacy`, `title`, `description` FROM `".$plug[$tier]['photo']['view']."`
+        $q = "SELECT `owner`,`privacy`, `title`, `description` FROM `".$oepc[$tier]['photo']['view']."`
             WHERE `id`='".$uri[$pos]."'
-            AND `module`='".$plug[0]['type']."'
-            AND `module_item_id`='".$plug[0]['id']."'";
+            AND `module`='".$oepc[0]['type']."'
+            AND `module_item_id`='".$oepc[0]['id']."'";
         
         if( $tier > 1 ){
-            $q .= " AND `plug`='".$plug[$tier]['type']."'
-            AND `plug_item_id`='".$plug[$tier]['id']."'";
+            $q .= " AND `plug`='".$oepc[$tier]['type']."'
+            AND `plug_item_id`='".$oepc[$tier]['id']."'";
         }
         
         $photo = $db->get_assoc($q) ;
@@ -52,7 +52,7 @@
         
             // it's a specific photo
             
-            if( $plug[0]['type'] == 'profile' ){
+            if( $oepc[0]['type'] == 'profile' ){
                 // we already have the associated profile information, or should
                 $photo["owner"] = $profile ;
             } else {
@@ -72,7 +72,7 @@
             
             // do they want to edit it?  is that even allowed?
             
-            if( ( $photo->owner == $user->id or $plug[0]['admin'] == true ) and $uri[$pos] == "edit" ){
+            if( ( $photo->owner == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
                 
                 include( $oe_plugins['photo']."/pages/edit.php" );
                 die();
@@ -100,14 +100,14 @@
         
         if( ! verify_number( $split[0] ) ) { die() ; }
         
-        $q = "SELECT `privacy`, `filekey` FROM `".$plug[$tier]['photo']['view']."` 
+        $q = "SELECT `privacy`, `filekey` FROM `".$oepc[$tier]['photo']['view']."` 
                 WHERE `id`='".$split[0]."'
-                AND `module`='".$plug[0]['type']."'
-                AND `module_item_id`='".$plug[0]['id']."'";
+                AND `module`='".$oepc[0]['type']."'
+                AND `module_item_id`='".$oepc[0]['id']."'";
         
         if( $tier > 1 ){
-            $q .= " AND `plug`='".$plug[$tier]['type']."'
-                AND `plug_item_id`='".$plug[$tier]['id']."'" ;
+            $q .= " AND `plug`='".$oepc[$tier]['type']."'
+                AND `plug_item_id`='".$oepc[$tier]['id']."'" ;
         }
         
         $photo = $db->get_assoc($q) ;
@@ -116,13 +116,13 @@
         
         if( $photo != false and ! $photo['privacy'] > $accesslevel ){
 
-            $filename = $plug[$tier]['type'].".".$plug[$tier]['id'].".".$photo['filekey'].$imagetype.".png" ;
+            $filename = $oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$photo['filekey'].$imagetype.".png" ;
 
-            if( file_exists( $plug[$tier]['photo']['path'].$filename ) ){
+            if( file_exists( $oepc[$tier]['photo']['path'].$filename ) ){
                 
                 header("Content-Type: image/png");
-                header("Content-Length: " . filesize($plug[$tier]['photo']['path'].$filename));
-                $file = @fopen( $plug[$tier]['photo']['path'].$filename, "rb" ) ;
+                header("Content-Length: " . filesize($oepc[$tier]['photo']['path'].$filename));
+                $file = @fopen( $oepc[$tier]['photo']['path'].$filename, "rb" ) ;
                 
                 fpassthru( $file );
                 
