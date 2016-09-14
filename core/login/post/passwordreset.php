@@ -27,7 +27,7 @@ $a = $db->update( "UPDATE `user_account` SET `passhash`='".hash_hmac( "sha256", 
                 WHERE `user_id`='".$_SESSION['reset']['id']."'" ) ;
 
 $db->update( "DELETE FROM `confirmation_key` 
-                WHERE `user_profile`='".$_SESSION['reset']['id']."' AND `confirmation_key`='".$_SESSION['reset']['key']."' AND `type`='1'" ) ;
+                WHERE `profile`='".$_SESSION['reset']['id']."' AND `confirmation_key`='".$_SESSION['reset']['key']."' AND `type`='1'" ) ;
 
 
 unset( $_SESSION['reset'] ) ;

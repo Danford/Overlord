@@ -16,7 +16,7 @@
         
 // verify that it's a valid key & id
 
-    $q = "SELECT COUNT(*) FROM `confirmation_key` WHERE `user_profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ;
+    $q = "SELECT COUNT(*) FROM `confirmation_key` WHERE `profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ;
     
     if( $db->get_field( $q ) == 0 ){
         include( $pagedir."activationfail.php" ) ;
@@ -32,7 +32,7 @@
 
         die("yo") ;include( $pagedir."activationfail.php" ) ; }
     
-    $db->update( "DELETE FROM `confirmation_key` WHERE `user_profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ) ;
+    $db->update( "DELETE FROM `confirmation_key` WHERE `profile`='".$id."' and `confirmation_key`='".$key."' and `type`='0'" ) ;
     
     
 include( oe_frontend."page_minion.php" ) ;

@@ -22,7 +22,7 @@ if( $db->num_rows() == 1 ) {
     $db->free() ;
     
     $db->insert( "INSERT INTO `confirmation_key` 
-                    SET `user_profile`='".$id."', `confirmation_key`='".$confirmation_key."', type='1', timestamp='".oe_time."'" ) ;
+                    SET `profile`='".$id."', `confirmation_key`='".$confirmation_key."', type='1', timestamp='".oe_time."'" ) ;
     
 
     include( oe_lib."email_minion.php" ) ;

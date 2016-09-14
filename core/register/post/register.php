@@ -41,7 +41,7 @@
         
     $post->checkpoint() ;
     
-        $usercheck = "SELECT COUNT(*) FROM `user_profile` WHERE `screen_name`='".$_POST['screen_name']."'" ;
+        $usercheck = "SELECT COUNT(*) FROM `profile` WHERE `screen_name`='".$_POST['screen_name']."'" ;
     
         $post->require_true( $db->get_field( $usercheck ) == 0 , 'screen_name', 'Screen Name is already in use.' ) ;
     
@@ -82,14 +82,14 @@
     $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender', 'show_age', 'allow_contact','city' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
-    $b['user_profile'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;
+    $b['profile'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;
     $b['confirmation_key'] = hash_hmac( "sha256", $_POST['email'].oe_time(), oe_seed );
     $b['type'] = 0 ;
     $b['timestamp'] = oe_time() ;
     
-    $db->insert( "INSERT INTO `user_profile` SET ".$set1p.", `user_id`='".$b['user_profile']."'" ) ;
+    $db->insert( "INSERT INTO `profile` SET ".$set1p.", `user_id`='".$b['profile']."'" ) ;
     $db->insert( "INSERT INTO `confirmation_key` SET ".$db->build_set_string_from_array($b) ) ;
-    $db->insert( "INSERT INTO `user_location` SET `user_id`='".$b["user_profile"]."', `zip`='".$db->sanitize($_POST['zip'])."', `primary`='1'" ) ;
+    $db->insert( "INSERT INTO `user_location` SET `user_id`='".$b["profile"]."', `zip`='".$db->sanitize($_POST['zip'])."', `primary`='1'" ) ;
 
     include( oe_lib."email_minion.php" ) ;
     include( oe_config."email.conf.php" ) ;
@@ -98,7 +98,7 @@
     $mailer->subject = $subject['reg'] ;
     $mailer->from = $address['reg'] ;
     
-    $mailer->body = str_replace( array( '%%USERID%%','%%KEY%%'), array( $b['user_profile'], $b['confirmation_key']), $message["reg"]) ;
+    $mailer->body = str_replace( array( '%%USERID%%','%%KEY%%'), array( $b['profile'], $b['confirmation_key']), $message["reg"]) ;
     
     if ( $mailer->send() ) {
     

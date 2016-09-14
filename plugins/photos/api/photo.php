@@ -69,7 +69,7 @@ if( $_POST["parentavatar"] == "on" and $oepc[0]['admin'] == true ){
     $oldAvatar = $db->get_assoc( "SELECT `avatar`, `filekey` 
                                     FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`
                                     WHERE `".$oepc[$tier]['photo']['avatarView']."`.`id`='".$oepc[$tier]['id']."'
-                                    AND `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['view']."`.`id`" ) ;
+                                    AND `".$oepc[$tier]['photo']['avatarView']."`.`id` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
 
     if( $_POST['photo_id'] != $oldAvatar["avatar"] ){
         

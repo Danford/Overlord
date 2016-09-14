@@ -130,7 +130,7 @@ class user_minion {
             $this->id = $a['user_id'] ;
             $this->last_login = $a['last_login'] ;
 
-            $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
+            $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `profile` WHERE `user_id` = '".$this->id."'" ) ;
             
             
             $this->avatar = $a['avatar'] ;
@@ -290,7 +290,7 @@ class user_minion {
     function load_profile(){
     	global $db;
     	
-        $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `user_profile` WHERE `user_id` = '".$this->id."'" ) ;
+        $a= $db->get_assoc( "SELECT `screen_name`, `avatar` FROM `profile` WHERE `user_id` = '".$this->id."'" ) ;
         
         $this->name = $a['screen_name'] ;
         $this->avatar = $a['avatar'] ;
@@ -314,18 +314,18 @@ class user_minion {
     
             $friend_list = array() ;
     
-            $db->query( "SELECT `user_profile`.`user_id`,
+            $db->query( "SELECT `profile`.`user_id`,
                                       `screen_name`, `avatar`,`show_age`, `birthdate`,
                                       `city_id`, `city`, `state`
-                                FROM `profile_friendship`, `user_profile`,`location_city`
+                                FROM `profile_friendship`, `profile`,`location_city`
                                 WHERE
                                  ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
-                                    `profile_friendship`.`friend2` =`user_profile`.`user_id` )
+                                    `profile_friendship`.`friend2` =`profile`.`user_id` )
                                     OR
                                   ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                `profile_friendship`.`friend1` =`user_profile`.`user_id` ) )
+                `profile_friendship`.`friend1` =`profile`.`user_id` ) )
                 AND
-                `user_profile`.`city_id` = `location_city`.`id`
+                `profile`.`city_id` = `location_city`.`id`
     
                 ORDER BY `'.$db->sanitize( $order ).'`
     
@@ -354,8 +354,8 @@ class user_minion {
         
         // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.  
         
-        $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `user_profile`
-                        WHERE `blocker` ='".$this->id."' and `blockee`=`user_profile`.`id` " ) ;
+        $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `profile`
+                        WHERE `blocker` ='".$this->id."' and `blockee`=`profile`.`id` " ) ;
         
         if( $db->count() == 0 ){
             return false ;

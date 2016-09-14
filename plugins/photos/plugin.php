@@ -15,28 +15,38 @@
     
     // no further information in the uri?  load all the photos attached to this plug item
     
-    if( isset( $uri[$pos] ) or $uri[$pos] == "" ){
-    
-        include( $oe_plugins['photo']."pages/view_all.php" );
-        die();
+    if( isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
+        
+        if( $uri[$pos] == "page" ){
+            $pos++ ;
+            
+            if( verify_number( $uri[$pos] ) ){
+                $page = $uri[$pos] ;
+            } 
+            
+        } else { $page = 1 ; }
+        
+        if( isset( $page ) ){
+        
+            include( $oe_plugins['photo']."pages/view_all.php" );
+            die();
+            
+        } // else nothing-- let them go ahead and fail out to 404
     }
     
     // is it the upload page?  Do they have access?
     
-    if( $oepc[0]['contributor'] and $uri[$pos] == 'upload' ){
-               
+    if( $oepc[0]['contributor'] and $uri[$pos] == 'upload' ){ 
         include( $oe_plugins['photo']."/pages/upload.php" ) ;
-        die();
-               
+        die(); 
     }
     
     // is it a specific photo?
     
-    
     if( verify_number($uri[$pos] ) ){
 
 
-        $q = "SELECT `owner`,`privacy`, `title`, `description` FROM `".$oepc[$tier]['photo']['view']."`
+        $q = "SELECT `owner`,`privacy`, `title`, `description`, `timestamp` FROM `".$oepc[$tier]['photo']['view']."`
             WHERE `id`='".$uri[$pos]."'
             AND `module`='".$oepc[0]['type']."'
             AND `module_item_id`='".$oepc[0]['id']."'";
@@ -51,6 +61,8 @@
         if( $q != false and ! $accesslevel < $photo['privacy'] ){
         
             // it's a specific photo
+            
+            include_once( $oe_modules['profile']."lib/profile_minion.php" ); 
             
             if( $oepc[0]['type'] == 'profile' ){
                 // we already have the associated profile information, or should

@@ -20,7 +20,7 @@ if( preg_match( $idregexp, $id ) == 0 or preg_match( $keyregexp, $key ) == 0 ) {
 
 // verify that it's a valid key & id
 
-$q = "SELECT COUNT(*) FROM `confirmation_key` WHERE `user_profile`='".$id."' and `confirmation_key`='".$key."' and `type`='1'" ;
+$q = "SELECT COUNT(*) FROM `confirmation_key` WHERE `profile`='".$id."' and `confirmation_key`='".$key."' and `type`='1'" ;
 
 if( $db->get_field( $q ) == 0 ){
 

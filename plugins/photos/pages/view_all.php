@@ -20,6 +20,8 @@
  *          
  *              id
  *              
+ *              owner -> profile object
+ *              
  *              title
  *              description
  *              privacy

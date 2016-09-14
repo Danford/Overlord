@@ -180,14 +180,46 @@ function store_uploaded_photo( $filename ){
     
 }
 
-function get_photos( $start = 0, $end = 9999 ) {
+function get_photos( $start = 0, $end = 9999, $album = null ) {
     
     global $db ;
     global $tier ;
     global $oepc ;
     global $accesslevel ;
+    global $user ;
+            
+    include_once( $oe_modules['profile']."lib/profile_minion.php" );
     
-    $db->query( "SELECT ")
-    ; 
+    // query will be different for albums
+    // if album is zero rather than null, yet another query for photos that are not in albums
     
+    
+    
+    $q = "SELECT `id`,`owner`, `privacy`, `title`, `description`, `timestamp`
+                    FROM ".$oepc[$tier]['photo'][$view]."
+                    WHERE `module`='".$oepc[0]['type']."'
+                      AND `module_id`='".$oepc[0]['id']."'" ;
+    
+    if( $tier > 0 ){
+        
+        $q .= "AND `plug`='".$oepc[$tier]['type']."'
+               AND `plug_id`='".$oepc[$tier]['id']."'" ;
+    }
+    
+    $db->query( $q." LIMIT ".$start.", ".$end ) ;
+    
+    while( ( $photo = $db->assoc() ) != false ){
+        
+        if( ! $photo['privacy'] > $accesslevel and ! $user->is_blocked( $photo['owner'] ) )
+        {
+            $response[] = $photo ;
+            $photo["owner"] = new profile_minion($photo["owner"], true );
+        }
+    }
+    
+    if( isset( $response ) ){
+        return $response ;
+    } else {
+        return false ;
+    }
 }

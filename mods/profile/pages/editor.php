@@ -20,8 +20,8 @@ $page->header() ;
 $form->header() ;
 
 $form->fill_from_db( $db, "SELECT `gender`,`birthdate`,`detail`, `allow_contact`, `show_age`,`email_notification`,`invite_notification`
-                            FROM `user_profile`, `user_account` WHERE `user_profile`.`user_id`='".$user->id."' 
-                                AND `user_profile`.`user_id` = `user_account`.`user_id`" ) ;
+                            FROM `profile`, `user_account` WHERE `profile`.`user_id`='".$user->id."' 
+                                AND `profile`.`user_id` = `user_account`.`user_id`" ) ;
 
 $form->fill_field('birth_day', substr( $form->data['birthdate'], 8, 2 ) ) ;
 $form->fill_field('birth_month', substr( $form->data['birthdate'], 5, 2 ) ) ;

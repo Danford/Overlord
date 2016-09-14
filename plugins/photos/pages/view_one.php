@@ -3,11 +3,14 @@
 
 /*
  *      should have 
- *          photo itself
+ *          photo itself  url: photo/id.png
+ *              examples:   /profile/1/photo/1.png
+ *                          /group/1/event/1/photo/1.png
+ *          
  *          title of photo (or not)
  *          description of photo (or not)
  *          
- *          userbox of the poster
+ *          userbox of the poster  ( user profile object in $profile['owner'] )
  *          
  *          delete button if $oepc[0]['admin'] == true ;
  *          

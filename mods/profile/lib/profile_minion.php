@@ -28,12 +28,15 @@ class profile_minion {
         } else {
             $q = "SELECT `screen_name`, `gender`, `avatar`, `birthdate`, 
                         `show_age`,`allow_contact`,
-                        `city_id`, `city`, `state`, `detail`
-                        FROM `user_profile`,`location_city`
+                        `city_id`, `city`, `state`" ;
+                        
+            if( $min != false ){ $q .=  ", `detail`" ; }
+            
+            $q .= "     FROM `profile`,`location_city`
                         WHERE 
-                            `user_profile`.`user_id`='".$this->id."'
+                            `profile`.`user_id`='".$this->id."'
                         AND
-                          `user_profile`.`city_id` = `location_city`.`id`" ;
+                          `profile`.`city_id` = `location_city`.`id`" ;
          
             $info = $this->db->get_assoc( $q );
             
@@ -85,18 +88,18 @@ class profile_minion {
             
             $friend_list = array() ;
             
-            $this->db->query( "SELECT `user_profile`.`user_id`, 
+            $this->db->query( "SELECT `profile`.`user_id`, 
                                       `screen_name`, `avatar`,`show_age`,`allow_contact`,`birthdate`,
                                       `city_id`, `city`, `state`   
-                                FROM `profile_friendship`, `user_profile`,`location_city`
+                                FROM `profile_friendship`, `profile`,`location_city`
                                 WHERE 
                                  ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
-                                    `profile_friendship`.`friend2` =`user_profile`.`user_id` )
+                                    `profile_friendship`.`friend2` =`profile`.`user_id` )
                                     OR
                                   ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                                    `profile_friendship`.`friend1` =`user_profile`.`user_id` ) )
+                                    `profile_friendship`.`friend1` =`profile`.`user_id` ) )
                                 AND
-                                  `user_profile`.`city_id` = `location_city`.`id`
+                                  `profile`.`city_id` = `location_city`.`id`
                 
                                 ORDER BY `'.$this->db->sanitize( $order ).'`
 
@@ -160,9 +163,9 @@ class profile_minion {
         
         return $this->db->get_field( "SELECT COUNT(*) FROM `profile_friendship` WHERE 
                                  ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
-                                    `profile_friendship`.`friend2` =`user_profile`.`user_id` )
+                                    `profile_friendship`.`friend2` =`profile`.`user_id` )
                                     OR
                                   ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                                    `profile_friendship`.`friend1` =`user_profile`.`user_id` ) ) ") ;
+                                    `profile_friendship`.`friend1` =`profile`.`user_id` ) ) ") ;
     }    
 }
