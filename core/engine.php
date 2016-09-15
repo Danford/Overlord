@@ -31,12 +31,13 @@
 	        $postmodule = $_POST['oe_post_api'] ;
 	        
 	        if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
-                    die();
+	            $post->json_reply( "FAIL" ) ;
+	            die();
 	        }
 	    }
 	    
 	    if( ! isset( $_POST["oe_call"] ) ){
-	        json_reply( "FAIL" ) ;
+	        $post->json_reply( "FAIL" ) ;
 	        die();
 	    }
 
@@ -64,7 +65,7 @@
 	        if( isset( $_POST['oe_plug'] ) ){
                 $lastplug = $_POST["oe_plug"] ;
                 $lastplugID = $_POST["oe_plug_id"] ;
-	        }
+	        } 
 	        
             // now to set some environment variables:
 

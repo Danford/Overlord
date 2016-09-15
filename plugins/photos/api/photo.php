@@ -24,6 +24,15 @@ $s = $db->build_set_string_from_post( 'title', 'description', 'privacy' ) ;
 
 $o['file_key'] = $filekey ;
 $o['owner'] = $user->id ;
+$o['module'] = $basemodule ;
+$o['module_id'] = $basemoduleID ;
+
+if( $tier > 0 ){
+    $o['plug'] = $lastplug ;
+    $o['plug_id'] = $lastplugID ;
+}
+
+
 
 $s .= ", ".$db->build_set_string_from_array( $o ) ;
 
