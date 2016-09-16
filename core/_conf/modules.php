@@ -8,8 +8,8 @@
     
 // other modules    
     
-    $oe_modules[ 'profile' ] = oe_mods.'profile/' ;
-	$oe_modules[ 'location' ] = oe_mods.'location/' ;
+    $oe_modules[ 'profile' ] = oe_mod.'profile/' ;
+	$oe_modules[ 'location' ] = oe_mod.'location/' ;
     
 // plugins
 
