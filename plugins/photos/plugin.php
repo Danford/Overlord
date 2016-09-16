@@ -60,9 +60,7 @@
         
         if( $q != false and ! $accesslevel < $photo['privacy'] ){
         
-            // it's a specific photo
-            
-            include_once( $oe_modules['profile']."lib/profile_minion.php" ); 
+            // it's a specific photo 
             
             if( $oepc[0]['type'] == 'profile' ){
                 // we already have the associated profile information, or should

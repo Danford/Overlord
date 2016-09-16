@@ -59,7 +59,7 @@ if( $apiCall == "uploadPhoto " ){
     
     $filekey = store_uploaded_photo( $_FILES['photo']['name'] ) ;
     
-    $s .= ", `ip`='".$_SERVER['REMOTE_ADDR']."', `timestamp`='".oe_time()."'" ;
+    $s .= ", `ip`='".get_client_ip()."', `timestamp`='".oe_time()."'" ;
     
     $_POST['photo_id'] = $db->insert( "INSERT INTO `".$oepc[$tier]['photo']['table']." SET ".$s );
     

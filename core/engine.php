@@ -5,6 +5,7 @@
 	include_once( oe_lib.'oe_lib.php' ) ;
 	include_once( oe_lib.'mysqli_minion.php' ) ;
 	include_once( $oe_modules['group'].'lib/group_minion.php' ) ; // TODO remember why this is here.  Probably an event thing.
+    include_once( $oe_modules['profile']."lib/profile_minion.php" );
 	include_once( oe_lib.'user_minion.php' ) ;
 	
 	session_start() ;

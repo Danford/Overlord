@@ -41,8 +41,6 @@ if( ! verify_number($uri[$pos] )  or $user->is_blocked($uri[$pos]) ) {
     die() ;
 }
 
-
-include $oe_modules['profile']."lib/profile_minion.php" ;
 $profile = new profile_minion($uri[$pos]) ;
 
 if( $profile->name == false ) {
