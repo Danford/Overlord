@@ -22,18 +22,22 @@
 	if( isset( $_POST['oe_api'] ) or isset( $_POST['oe_post_api'] ) )
 	{
 	    // form submissions
-        include( oe_lib.'post_minion.php' ) ;
+
+	    if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
+	        
+	        // makes it harder to hack; in theory any submissions from elsewhere will be rejected
+	        
+	        $post->json_reply( "FAIL" ) ;
+	        die(); 
+	    }
+	    
+	    include( oe_lib.'post_minion.php' ) ;
         $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ;
         
 	    if( isset( $_POST['oe_api'] ) ){
 	        $postmodule = $_POST['oe_api'] ;
 	    } else {
 	        $postmodule = $_POST['oe_post_api'] ;
-	        
-	        if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
-	            $post->json_reply( "FAIL" ) ;
-	            die();
-	        }
 	    }
 	    
 	    if( ! isset( $_POST["oe_call"] ) ){

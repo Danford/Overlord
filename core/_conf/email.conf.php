@@ -17,7 +17,7 @@ $subject['reg'] = 'Activate your Membership' ;
 
 
 
-$message["reg"] = "A user at ".$_SERVER['REMOTE_ADDR']." has registered an account with our website.  If this was not you,
+$message["reg"] = "A user at ".get_client_ip()." has registered an account with our website.  If this was not you,
 take no action, and the request will expire after 48 hours.  To activate your membership, click the
 link below or copy and paste it into your web browser.
 
@@ -29,7 +29,7 @@ $address["reset"] = "Password Reset <do-not-reply@codexfive.net>" ;
 
 $subject["reset"] = "Reset Your Password" ;
 
-$message["reset"] = "A user at ".$_SERVER['REMOTE_ADDR']." has requested a password reset.  If this was not you,
+$message["reset"] = "A user at ".get_client_ip()." has requested a password reset.  If this was not you,
 take no action, and the request will expire after 24 hours.  To reset your password, click the
 link below or copy and paste it into your web browser.
 

@@ -28,7 +28,7 @@
         
         // they were required to login on a restricted page; now we send them back to access it.
         
-        header( "Location: ".$_POST["oe_return"] ) ;
+        header( "Location: ".$_SERVER['HTTP_REFERER'] ) ;
     }
     
     die() ;

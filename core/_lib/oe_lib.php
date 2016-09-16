@@ -119,7 +119,7 @@ function security_report( $string ) {
     $f = @fopen( debug_log , 'a' ) ;
     fwrite( $f, oe_time()."----".PHP_EOL ) ;
 
-    fwrite( $f, "IP ADDRESS:".$_SERVER['REMOTE_ADDR']." port ".$_SERVER['REMOTE_PORT'].PHP_EOL ) ;
+    fwrite( $f, "IP ADDRESS:".get_client_ip()." port ".$_SERVER['REMOTE_PORT'].PHP_EOL ) ;
     fwrite( $f, "TARGET: ".$_SERVER['REQUEST_URI'].PHP_EOL ) ;
     fwrite( $f, "REF: ".$_SERVER['HTTP_REFERER'].PHP_EOL ) ;
     
@@ -233,4 +233,8 @@ function verify_update( $table, $id, $column='id' ) {
     while( $a == 0 and $timer < verify_timeout ) ;
 
     return ( $a == 1 ) ;
+}
+
+function get_client_ip(){
+    return $_SERVER['REMOTE_ADDR'] ; // this will be spruced up later.
 }

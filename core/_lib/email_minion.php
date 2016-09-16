@@ -175,7 +175,7 @@ class email_minion
 
 			$db->insert( "INSERT INTO oe_mail_archive
 							SET `timestamp`='".oe_time()."',
-							`ip`='".$_SERVER["REMOTE_ADDR"]."',
+							`ip`='".get_client_ip()."',
 							`from`='".addslashes($this->from)."',
 							`to`='".addslashes($this->to)."',
 							`body`='".addslashes($this->body)."',

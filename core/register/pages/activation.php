@@ -27,7 +27,7 @@
 // at this point, we have an valid id/key combo    
 
        
-    if( $db->update( "UPDATE `user_account` SET status='1', date_verified='".oe_time()."', ip_verified='".$_SERVER['REMOTE_ADDR']."' WHERE `user_id`='".$id."'" ) == 0 )
+    if( $db->update( "UPDATE `user_account` SET status='1', date_verified='".oe_time()."', ip_verified='".get_client_ip()."' WHERE `user_id`='".$id."'" ) == 0 )
     { 
 
         die("yo") ;include( $pagedir."activationfail.php" ) ; }

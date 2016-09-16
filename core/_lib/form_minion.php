@@ -1,7 +1,7 @@
 <?php
 
 /*
- *  Form Minion 2.0
+ *  Form Minion 4.0.1
  *  
  *      Creates dynamic forms that autofill their data based on data that is manually provided, pulled from
  *      a database, or passed back to the form from the post minion
@@ -65,6 +65,29 @@
  *      checkbox( $name[, $css, $js ] )
  *   
  * 
+ * 
+ *  Version History:
+
+	0.x - mid 2004 to early 2005 - a series of messianic and complicated configurations that started wonderfully but 
+	   eventually became more trouble than they were worth.
+
+	0.9.x - Early 2005 - An object class
+
+	1.0 - April 2005 - Table generation split off into a child class, begin version tracking
+	1.0.1 - May 10, 2005 - fixed textarea bug
+	2b - February 2006 - Complete overhaul
+	2.01 - 2007-12-11 - Made constant httproot the default form action
+	
+	4.0 - somewhere in 2016.
+	
+	   Overhauled for new incarnation of the Overload project. 
+	
+	   Mostly just code reformatting, but added footer() to replace cosmetic function close().   Footer wipes out session 
+	   variable.  Version history got lost somehow.
+	   
+	4.0.1 - 2016-09-16
+	
+	   removed field oe_return; post minion now uses $_SERVER[ 'HTTP_REFERER' ]
  * 
  * 
  */
@@ -152,7 +175,6 @@ class form_minion
 		
 		print( '>'.PHP_EOL.'<input type="hidden" name="oe_call" value="'.$this->oe_form_id.'" />'.PHP_EOL ) ;
     	print( '<input type="hidden" name="oe_post_api" value="'.$this->module.'" />'.PHP_EOL ) ;
-    	print( '<input type="hidden" name="oe_return" value="'.$_SERVER["REQUEST_URI"].'" />'.PHP_EOL ) ; 
     
 	} // end header()
 

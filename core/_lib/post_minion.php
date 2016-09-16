@@ -153,6 +153,10 @@
 	4.0 - August 29, 2016
 	
 	   Added a constructor method and json reply functionality.  
+	   
+	4.0.1 - September 16, 2016
+	 
+	   Ditched $_POST['oe_return'] in favour of $_SERVER[ 'HTTP_REFERER' ]
 
 */
 
@@ -203,7 +207,7 @@ class post_minion
 
 			$_SESSION["oe_form"][$_POST["oe_formid"]]["error"] = $this->form_error ;
 
-			header( "Location: ".$_POST["oe_return"] ) ;
+			$this->return_to_form() ;
 			die() ;
 
 		}
@@ -211,7 +215,7 @@ class post_minion
 	} // end method checkpoint
 
 	function return_to_form(){
-	    header( "Location: ".$_POST["oe_return"] ) ;
+	    header( "Location: ".$_SERVER( 'HTTP_REFERER' ) ) ;
 	    die() ;
 	}
 	
