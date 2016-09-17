@@ -6,10 +6,10 @@
  */
 
 
-$post->checkbox('parentavatar') ;
+$post->checkbox('setparentavatar') ;
 $post->checkbox('setalbumavatar') ;
 
-$post->hold( "private", "title", "description", "parentavatar", "setalbumvatar", "album", 
+$post->hold( "privacy", "title", "description", "setparentavatar", "setalbumvatar", "album", 
              "new_album_title", "new_album_description" ) ;
 
 $post->require_true( strlen( $_POST['title']) < 76 , 'title', 'Title must be 75 characters or less.' ) ;
@@ -73,7 +73,7 @@ if( $apiCall == "uploadPhoto " ){
 
 // avatar check
     
-if( $_POST["parentavatar"] == "on" and $oepc[0]['admin'] == true ){
+if( $_POST["setparentavatar"] == "on" and $oepc[0]['admin'] == true ){
 
     $oldAvatar = $db->get_assoc( "SELECT `avatar`, `filekey` 
                                     FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`

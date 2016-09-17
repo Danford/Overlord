@@ -4,8 +4,7 @@
     include_once( oe_core.'_conf/modules.php' ) ;
 	include_once( oe_lib.'oe_lib.php' ) ;
 	include_once( oe_lib.'mysqli_minion.php' ) ;
-	include_once( $oe_modules['group'].'lib/group_minion.php' ) ; // TODO remember why this is here.  Probably an event thing.
-    include_once( $oe_modules['profile']."lib/profile_minion.php" );
+	include_once( $oe_modules['profile']."lib/profile_minion.php" );
 	include_once( oe_lib.'user_minion.php' ) ;
 	
 	session_start() ;
@@ -129,7 +128,7 @@
 	    
         
         /*
-         * If we got to this spot,  oe_form is not valid.
+         * If we got to this spot,  api call is not valid.
          */
         
 	    $post->json_reply("FAIL") ;

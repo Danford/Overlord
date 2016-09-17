@@ -2,11 +2,16 @@
 
     // is this picture an avatar?  
     
-$itemAvatar = $db->get_assoc( "SELECT `avatar`, `filekey`
+$itemAvatar = $db->get_assoc( "SELECT `owner`,`avatar`, `filekey`
                                 FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`
                                 WHERE `".$oepc[$tier]['photo']['avatarView']."`.`id`='".$oepc[$tier]['id']."'
                                 AND `".$oepc[$tier]['photo']['avatarView']."`.`id` = ".$oepc[$tier]['photo']['view']."`.`id`" ) ;
 
+if( $itemAvatar == false or ( ! $oepc[$tier]['admin'] and $itemAvatar['owner'] != $user->id()) ){
+    $post->json_reply("FAIL") ;
+    die();
+}    
+    
 if( $_POST['photo_id'] == $itemAvatar["avatar"] ){
     
     $filekey = $itemAvatar['filekey'] ;
