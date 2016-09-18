@@ -22,6 +22,8 @@ switch( $apiCall ){
             
             $cid = $db->insert( "INSERT INTO `".$oepc[$tier]['comment']['table']."` SET ".$db->build_set_string_from_array($o) ) ;
             
+            verify_update($oepc[$tier]['comment']['view'], 'id', $cid ) ;
+            
             $post->reply( "SUCCESS", [ 'id' => $cid ] ) ;
             
             if( $oepc[$tier]['comment']['page'] == false ) {
