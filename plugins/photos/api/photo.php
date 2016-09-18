@@ -63,7 +63,7 @@ if( $apiCall == "uploadPhoto " ){
     
     $_POST['photo_id'] = $db->insert( "INSERT INTO `".$oepc[$tier]['photo']['table']." SET ".$s );
     
-    verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id'], 'id' ) ;
+    verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id'] ) ;
     
 } elseif( ! isset( $_POST['photo_id'] ) ){
     
@@ -118,7 +118,7 @@ if( $oepc[$tier]['photo']['useAlbums'] ){
 }
 
 if( $apiCall == "uploadPhoto" ){
-    verify_update( $oepc[$tier]['photo']['view'], 'id', $_POST['photo_id']) ;
+    verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id']) ;
     
     $return = str_replace( $_POST["photo_id"], "upload", $_SERVER['HTTP_REFERER'] );
     $post->json_reply( "SUCCESS", [ 'photo_id' => $_POST['photo_id'] ] )  ;
