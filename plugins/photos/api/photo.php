@@ -118,7 +118,8 @@ if( $oepc[$tier]['photo']['useAlbums'] ){
 }
 
 if( $apiCall == "uploadPhoto" ){
-
+    verify_update( $oepc[$tier]['photo']['view'], 'id', $_POST['photo_id']) ;
+    
     $return = str_replace( $_POST["photo_id"], "upload", $_SERVER['HTTP_REFERER'] );
     $post->json_reply( "SUCCESS", [ 'photo_id' => $_POST['photo_id'] ] )  ;
 } else {

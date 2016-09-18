@@ -220,13 +220,13 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
                AND `plug_id`='".$oepc[$tier]['id']."'" ;
     }
     
-    if( $album = 0 ){
+    if( $album == 0 ){
         $q .= " AND `album`= NULL" ;
     } elseif( $album != null ) {
         $q .= " AND `album`='".$album."'" ;
     }
     
-    $db->query( $q." LIMIT ".$start.", ".$end ) ;
+    $db->query( $q." ORDER BY `timestamp` DESC LIMIT ".$start.", ".$end ) ;
     
     while( ( $photo = $db->assoc() ) != false ){
         
