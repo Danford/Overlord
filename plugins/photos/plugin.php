@@ -82,7 +82,7 @@
             
             // do they want to edit it?  is that even allowed?
             
-            if( ( $photo->owner == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
+            if( ( $photo['owner']->id == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
                 
                 include( $oe_plugins['photo']."/pages/edit.php" );
                 die();
