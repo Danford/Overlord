@@ -76,6 +76,15 @@
             
             if( ! isset( $uri[$pos] ) or $uri[$pos] = "" or $uri[$pos] == 'page' ){
                 
+                if( $uri[$pos] == "page" ){
+                    $pos++ ;
+                
+                    if( verify_number( $uri[$pos] ) ){
+                        $page = $uri[$pos] ;
+                    }
+                
+                } else { $page = 1 ; }
+                
                 include( $oe_plugins['photo']."/pages/view_one.php" );
                 die();
             }
