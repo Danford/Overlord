@@ -2,8 +2,7 @@
 
     include( $oe_modules['location']."lib/location.lib.php" ) ;
     
-    switch( $_POST["oe_formid"] ) {
-        
+    switch( $apiCall ){
         case "getCityFromZip":
             
             $result = getCityFromZip( $_POST['zip'] ) ;
