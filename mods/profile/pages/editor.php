@@ -11,7 +11,7 @@ include( oe_lib.'form_minion.php' ) ;
 include( oe_frontend."page_minion.php" ) ;
 
 $page = new page_minion("Edit Your Profile");
-$form = new form_minion('editprofile', 'profile' ) ;
+$form = new form_minion('editProfile', 'profile' ) ;
 
 $page->addjs( '/js/tinymce/tinymce.min.js' ) ;
 $page->addjs( '/js/invoketinymce.js') ;
