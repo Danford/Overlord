@@ -14,7 +14,7 @@ const OE_API = {
 };
 
 function jsonRequest(api, formid, requestVariables, onSuccess) {
-	var postVariables = { oe_api: api, oe_formid: formid };
+	var postVariables = { oe_api: api, oe_call: formid };
 	$.extend(postVariables, requestVariables);
 	
 	var response = $.post( "/", postVariables, function( result ) {

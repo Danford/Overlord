@@ -27,7 +27,7 @@
 	        
 	        // makes it harder to hack; in theory any submissions from elsewhere will be rejected
 	        
-	        $post->json_reply( "FAIL" ) ;
+	        $post->json_reply( "FAIL1" ) ;
 	        die(); 
 	    }
 	    
@@ -80,7 +80,7 @@
 	        // check for Bobby Tables in the module/plug data
 
 	        if( ! verify_number( $_POST['oe_module_id'] ) or ! verify_number( $_POST['oe_plug_id'] )){
-	            $post->json_reply( "FAIL");
+	            $post->json_reply( "FAIL3");
 	            die();
 	        }
 	        
@@ -89,7 +89,7 @@
 	        if( file_exists( $oe_module[$basemodule]."conf/plugin.conf.php" ) ){
 	            include( $oe_module[$basemodule]."conf/plugin.conf.php" ) ;
 	        } else {
-	            $post->json_reply("FAIL" ) ;
+	            $post->json_reply("FAIL4" ) ;
 	            die();
 	        }
 	         

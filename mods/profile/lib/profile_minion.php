@@ -4,6 +4,7 @@
 class profile_minion {
     
     var $user ;
+    var $name ;
     var $db ;
     var $id ;
     var $screen_name ;
@@ -27,25 +28,25 @@ class profile_minion {
             $this->name = false ;
         } else {
             $q = "SELECT `screen_name`, `gender`, `avatar`, `birthdate`, 
-                        `show_age`,`allow_contact`,
-                        `city_id`, `city`, `state`" ;
+                        `show_age`,`allow_contact`,`city` as `city_id`";
                         
             if( $min != false ){ $q .=  ", `detail`" ; }
             
-            $q .= "     FROM `profile`,`location_city`
+            $q .= "     FROM `profile`
                         WHERE 
-                            `profile`.`user_id`='".$this->id."'
-                        AND
-                          `profile`.`city_id` = `location_city`.`id`" ;
+                            `profile`.`user_id`='".$this->id."'" ;
          
             $info = $this->db->get_assoc( $q );
             
             if( $info == false ){
-                $this->name = false ;
+                $this->name = false ; 
+            } else {
+                $this->name = $info['screen_name'] ;
             }
          }
          
          if( $this->name != false ){
+         
                 $info['allow_contact'] = ( $info['allow_contact'] == 1 ) ;
                 
                 if( $info['show_age'] == 1 ){
@@ -53,14 +54,25 @@ class profile_minion {
                 } else {
                     $info['age'] = '' ;
                 }
+                
+                if( $info['city_id'] != null and $info['city_id'] != 0 ){
+                    
+                    $loc = $db->get_assoc( "SELECT `city`,`state` FROM `location_city` WHERE `is`='".$info['city_id']."'" ) ;
+                    
+                    $info['city'] = $loc['city'] ;
+                    $info['state'] = $loc['state'] ;
+                    
+                } else {
+                    $info['city'] = "" ;   
+                    $info['state'] = "" ;
+                }
 
-                $info['detail'] = prevent_html( $info['detail'] )  ;
-                $info['screen_name'] = process_user_supplied_html( $info['screen_name'] ) ;
+                $info['detail'] = process_user_supplied_html( $info['detail'] )  ;
                 
                 unset( $info['birthdate'] );
                 
                 foreach( $info as $key => $val ){
-                       $this->$key = val ;
+                       $this->$key = $val ;
                 }
                 
                 $this->info = $info ;

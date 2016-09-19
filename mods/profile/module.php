@@ -57,16 +57,15 @@ if( $user->is_friend( $profile->id )){
     $accesslevel = 1 ;  // not so much
 }
 
-
 $pos++ ;
 
-if( ! isset( $uri[$pos]) or $uri[$pos] == "" ){
+if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
 
     include( $pagedir."show_profile.php" ) ;
     die() ;
 
 } else {
-
+    die( 'yo') ;
     switch( $uri[$pos] ) {
         
         // module specific sub pages of user profile

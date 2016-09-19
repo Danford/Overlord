@@ -36,12 +36,16 @@ switch( $apiCall ){
         $_POST['copy'] = process_user_supplied_html( $_POST['copy'] ) ;
         
         $o['owner'] = $user->id ;
-        $o['ip'] = get_client_ip() ;
-        $o['timestamp'] = oe_time() ;
-            
-        $setstring = $db->build_set_string_from_array($o).", ".$db->build_set_string_from_post('title','subtitle','copy' );
 
-        if( $apiCall == 'write' ){
+        if( $apiCall == 'write' ){ 
+            
+            $o['ip'] = get_client_ip() ;
+            $o['timestamp'] = oe_time() ;
+            
+            $o['updated_ip'] = get_client_ip() ;
+            $o['last_updated'] = oe_time() ;
+            
+            $setstring = $db->build_set_string_from_array($o).", ".$db->build_set_string_from_post('title','subtitle','copy','privacy' );
         
             $q = "INSERT INTO `".$oepc[$tier]['writing']['table']."` SET ".build_api_set_string().", ".$setstring ;
             $w = $db->insert( $q ) ;
@@ -54,6 +58,11 @@ switch( $apiCall ){
             die() ;
         
         } else {
+            
+            $o['updated_ip'] = get_client_ip() ;
+            $o['last_updated'] = oe_time() ;
+                
+            $setstring = $db->build_set_string_from_array($o).", ".$db->build_set_string_from_post('title','subtitle','copy','privacy' );
          
             $db->update( "UPDATE ".$oepc[$tier]['writing']['table']." SET ".$setstring." WHERE ".build_api_where_string()." AND `id`='".$_POST['writing_id']."'" ) ;
             
@@ -86,5 +95,27 @@ switch( $apiCall ){
         header( "Location: ".str_replace( '/'.$_POST["writing_id"], '', $_SERVER['HTTP_REFERER' ] ) ) ;
         die() ;
         
+    case 'getWriting':
         
+        include_once $oe_plugins['writing'].'lib/writing.lib.php' ;
+        
+        if( ! isset( $_POST['start'] ) ){
+            $_POST['start'] = 0 ;
+        }
+        if( ! isset( $_POST['limit'] ) ){
+            $_POST['limit'] = 999999 ;
+        }
+        if( ! isset( $_POST['album'] ) ){
+            $_POST['album'] = null ;
+        }
+        
+        $w = get_writings() ;
+        
+        if( $w == false ){
+            $post->json_reply("FAIL") ;
+            die();
+        }
+        
+        $post->json_reply("SUCCESS", $w );
+        die();
 }
