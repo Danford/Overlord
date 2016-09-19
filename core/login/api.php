@@ -3,7 +3,7 @@
 $baseurl = httproot.'login/' ;
 $postdir = $oe_modules['login'].'post/' ;
 
-switch( $_POST["oe_formid"] ) {
+switch( $apiCall ) {
 
     case "login":
         include( $postdir.'login.php' ) ;

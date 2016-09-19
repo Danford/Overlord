@@ -4,7 +4,7 @@
     
     $baseurl = httproot.'register/' ;
     
-    switch( $_POST["oe_formid"] ) {
+    switch( $apiCall ) {
     
         case "start":
             include( $pagedir.'register.php' ) ;
