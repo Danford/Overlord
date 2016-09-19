@@ -238,3 +238,37 @@ function verify_update( $table, $id, $column='id' ) {
 function get_client_ip(){
     return $_SERVER['REMOTE_ADDR'] ; // this will be spruced up later.
 }
+
+function build_api_where_string(){
+    
+    global $tier ;
+    global $basemodule ;
+    global $basemoduleID ;
+    global $lastplug;
+    global $lastplugID ;
+    
+    $q = "`module`='".$basemodule."' AND `module_id`='".$basemoduleID."'" ;
+    
+    if( $tier > 0 ){
+        $q .= " AND `plug`='".$lastplug."' AND `plug_id`='".$lastplugID."'" ;
+    }
+    
+    return $q ;
+}
+
+function build_api_set_string(){
+    
+    global $tier ;
+    global $basemodule ;
+    global $basemoduleID ;
+    global $lastplug;
+    global $lastplugID ;
+    
+    $q = "`module`='".$basemodule."', `module_id`='".$basemoduleID."'" ;
+    
+    if( $tier > 0 ){
+        $q .= ", `plug`='".$lastplug."' AND `plug_id`='".$lastplugID."'" ;
+    }
+    
+    return $q ;
+}

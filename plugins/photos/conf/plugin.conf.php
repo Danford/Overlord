@@ -9,7 +9,7 @@
 
     $tier++ ;
     
-    /* plugins must have this statement, and refer to $tier where modules flatly declare 0.
+    /* plugins must have this statement, where modules flatly declare 0.
      * 
         
         A module that can be invoked as a plugin will need 
@@ -23,18 +23,13 @@
      */
 
     $oepc[$tier]['type'] = 'photo' ;
-    // $oepc[$tier]['id'] = ??? ;  That hasn't been defined in a plugin context.
+    $oepc[$tier]['id'] = $photo['id'] ;  
     
-    $oepc[$tier] = [ 'like', 'comment' ] ;
+    $oepc[$tier]['plugins'] = [ 'like', 'comment' ] ; // not strictly necessary, as these are inline plugins.
+
+    $oepc[$tier]['comment']['page'] = false ;  // all photo comments appear on a single page
+    $oepc[$tier]['comment']['table'] = 'comment' ;  
+    $oepc[$tier]['comment']['view'] = 'comment' ;  
     
-        /* I am pretty sure that 'like' will have no fucks to give regarding
-         * this configuration file. 
-         * 
-         * The same can be said of the first generation of 'comments',
-         * though configurable comments has potential.
-         * 
-         * If it turns out that this file is unneccessary, I will remove 
-         * the file and any mechanism that accesses it.
-         * 
-         * 
-         */
+    $oepc[$tier]['like']['table'] = 'like' ;  
+    $oepc[$tier]['like']['view'] = 'like' ;  

@@ -46,7 +46,7 @@
     if( verify_number($uri[$pos] ) ){
 
 
-        $q = "SELECT `owner`,`privacy`, `title`, `description`, `timestamp` FROM `".$oepc[$tier]['photo']['view']."`
+        $q = "SELECT `id`, `owner`,`privacy`, `title`, `description`, `timestamp` FROM `".$oepc[$tier]['photo']['view']."`
             WHERE `id`='".$uri[$pos]."'
             AND `module`='".$oepc[0]['type']."'
             AND `module_item_id`='".$oepc[0]['id']."'";
@@ -74,7 +74,16 @@
             
             // do they want to see the photo?
             
-            if( ! isset( $uri[$pos] ) or $uri[$pos] = "" ){
+            if( ! isset( $uri[$pos] ) or $uri[$pos] = "" or $uri[$pos] == 'page' ){
+                
+                if( $uri[$pos] == "page" ){
+                    $pos++ ;
+                
+                    if( verify_number( $uri[$pos] ) ){
+                        $page = $uri[$pos] ;
+                    }
+                
+                } else { $page = 1 ; }
                 
                 include( $oe_plugins['photo']."/pages/view_one.php" );
                 die();
@@ -82,7 +91,7 @@
             
             // do they want to edit it?  is that even allowed?
             
-            if( ( $photo->owner == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
+            if( ( $photo['owner']->id == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
                 
                 include( $oe_plugins['photo']."/pages/edit.php" );
                 die();

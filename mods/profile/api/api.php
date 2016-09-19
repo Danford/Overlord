@@ -25,7 +25,7 @@ switch( $_POST['oe_formid'] ) {
         
         if( $friends == false ){ $post->json_reply("FAIL") ; }
         
-        json_reply( "SUCCESS", [ 'friends' => $friends ] ) ;
+        $post->json_reply( "SUCCESS", [ 'friends' => $friends ] ) ;
  
         
         

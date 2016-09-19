@@ -209,7 +209,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
     }
     
     
-    $q = "SELECT `id`,`owner`, `privacy`, `title`, `description`, `timestamp`
+    $q = "SELECT `id`,`owner`, 'album`, `privacy`, `title`, `description`, `timestamp`
                     FROM ".$oepc[$tier]['photo']['view']."
                     WHERE `module`='".$oepc[0]['type']."'
                       AND `module_id`='".$oepc[0]['id']."'" ;
@@ -220,13 +220,13 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
                AND `plug_id`='".$oepc[$tier]['id']."'" ;
     }
     
-    if( $album = 0 ){
+    if( $album == 0 ){
         $q .= " AND `album`= NULL" ;
     } elseif( $album != null ) {
         $q .= " AND `album`='".$album."'" ;
     }
     
-    $db->query( $q." LIMIT ".$start.", ".$end ) ;
+    $db->query( $q." ORDER BY `timestamp` DESC LIMIT ".$start.", ".$end ) ;
     
     while( ( $photo = $db->assoc() ) != false ){
         
@@ -241,5 +241,43 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
         return $response ;
     } else {
         return false ;
+    }
+}
+
+
+function get_photo_info( $photo_id ) {
+
+    global $db ;
+    global $tier ;
+    global $oepc ;
+    global $accesslevel ;
+    global $user ;
+
+    if( ! verify_number( $photo_id ) ){
+
+        return false ;
+    } else {
+
+        
+        $q = "SELECT `id`,`owner`, `privacy`, `album`, `title`, `description`, `timestamp`
+                        FROM ".$oepc[$tier]['photo']['view']."
+                        WHERE `module`='".$oepc[0]['type']."'
+                          AND `module_id`='".$oepc[0]['id']."'" ;
+        
+        if( $tier > 0 ){
+        
+            $q .= "AND `plug`='".$oepc[$tier]['type']."'
+                   AND `plug_id`='".$oepc[$tier]['id']."'" ;
+        }
+        
+        $photo = $db->get_assoc( $q." AND `id`='".$photo_id."'" ) ;
+        
+        if( $photo != false and ! $photo['privacy'] > $accesslevel and ! $user->is_blocked( $photo['owner'] )){
+        
+            $photo["owner"] = new profile_minion($photo["owner"], true );
+            return $photo ;    
+        } else {
+            return false ;
+        }
     }
 }
