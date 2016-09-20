@@ -82,7 +82,7 @@
     $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender', 'show_age', 'allow_contact','city' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
-    $b['profile'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;
+    $b['user_id'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;
     $b['confirmation_key'] = hash_hmac( "sha256", $_POST['email'].oe_time(), oe_seed );
     $b['type'] = 0 ;
     $b['timestamp'] = oe_time() ;

@@ -35,17 +35,10 @@ if( $oepc[0]['contributor'] and $uri[$pos] == 'write' ){
 if( verify_number($uri[$pos] ) ){
 
 
-    $q = "SELECT `id`, `owner`, `privacy`, `title`, `subtitle`, `copy`, `timestamp` FROM `".$oepc[$tier]['writing']['view']."`
-        WHERE `id`='".$uri[$pos]."'
-        AND `module`='".$oepc[0]['type']."'
-        AND `module_item_id`='".$oepc[0]['id']."'";
-
-    if( $tier > 1 ){
-        $q .= " AND `plug`='".$oepc[$tier]['type']."'
-        AND `plug_item_id`='".$oepc[$tier]['id']."'";
-    }
-
-    $writing = $db->get_assoc($q) ;
+    $q = "SELECT `id` as `writing_id`, `owner`, `privacy`, `title`, `subtitle`, `copy`, `timestamp` FROM `".$oepc[$tier]['writing']['view']."`
+        WHERE `id`='".$uri[$pos]."' AND ".build_api_where_string() ;
+       
+    $writing = $db->get_assoc( $q ) ;
 
     if( $q != false and ! $accesslevel < $writing['privacy'] ){
 
@@ -63,7 +56,7 @@ if( verify_number($uri[$pos] ) ){
 
         // do they want to read the writing?
 
-        if( ! isset( $uri[$pos] ) or $uri[$pos] = "" or $uri[$pos] == 'page' ){    
+        if( ! isset( $uri[$pos] ) or $uri[$pos] = "" or $uri[$pos] == 'page' and ! $accesslevel < $writing['privacy'] ){    
             
             if( $uri[$pos] == "page" ){
             
@@ -81,7 +74,7 @@ if( verify_number($uri[$pos] ) ){
 
         // do they want to edit it?  is that even allowed?
 
-        if( ( $writing['owner']->id  == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
+        if( ( $writing['owner']  == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
 
             include( $oe_plugins['writing']."/pages/edit.php" );
             die();

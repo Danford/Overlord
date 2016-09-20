@@ -5,14 +5,14 @@ if( $user->id == 0 ){ die('not logged in') ; } // THERE IS NO REASON THEY SHOULD
 $baseurl = httproot.'profile/' ;
 $pagedir = $oe_modules['profile']."api/" ;
 
-if( $_POST["oe_call"] ){
+if( $apiCall ){
 
     // eventually the ability to check a username will be here.
 }
 
 $user->require_login() ;
 
-switch( $_POST["oe_call"] ) {
+switch( $apiCall ) {
 
     case 'editProfile':
         

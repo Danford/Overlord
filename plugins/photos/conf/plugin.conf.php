@@ -23,7 +23,18 @@
      */
 
     $oepc[$tier]['type'] = 'photo' ;
-    $oepc[$tier]['id'] = $photo['id'] ;  
+    
+    if( ! isset( $photo ) ){
+    
+        // this is being accessed via a plugin API
+        // it goes here to let the plugin ignore what kind of
+        // plug it's plugging
+    
+        $oepc[$tier]['id'] = $lastplugID ;
+    
+    } else {
+        $oepc[$tier]['id'] = $photo['id'] ;
+    }
     
     $oepc[$tier]['plugins'] = [ 'like', 'comment' ] ; // not strictly necessary, as these are inline plugins.
 
