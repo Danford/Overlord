@@ -87,9 +87,9 @@
     $b['type'] = 0 ;
     $b['timestamp'] = oe_time() ;
     
-    $db->insert( "INSERT INTO `profile` SET ".$set1p.", `user_id`='".$b['profile']."'" ) ;
+    $db->insert( "INSERT INTO `profile` SET ".$set1p.", `user_id`='".$b['user_id']."'" ) ;
     $db->insert( "INSERT INTO `confirmation_key` SET ".$db->build_set_string_from_array($b) ) ;
-    $db->insert( "INSERT INTO `user_location` SET `user_id`='".$b["profile"]."', `zip`='".$db->sanitize($_POST['zip'])."', `primary`='1'" ) ;
+    $db->insert( "INSERT INTO `user_location` SET `user_id`='".$b["user_id"]."', `zip`='".$db->sanitize($_POST['zip'])."', `primary`='1'" ) ;
 
     include( oe_lib."email_minion.php" ) ;
     include( oe_config."email.conf.php" ) ;
@@ -98,7 +98,7 @@
     $mailer->subject = $subject['reg'] ;
     $mailer->from = $address['reg'] ;
     
-    $mailer->body = str_replace( array( '%%USERID%%','%%KEY%%'), array( $b['profile'], $b['confirmation_key']), $message["reg"]) ;
+    $mailer->body = str_replace( array( '%%USERID%%','%%KEY%%'), array( $b['user_id'], $b['confirmation_key']), $message["reg"]) ;
     
     if ( $mailer->send() ) {
     
