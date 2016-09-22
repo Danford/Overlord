@@ -65,7 +65,7 @@ if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
     die() ;
 
 } else {
-    die( 'yo') ;
+    
     switch( $uri[$pos] ) {
         
         // module specific sub pages of user profile
