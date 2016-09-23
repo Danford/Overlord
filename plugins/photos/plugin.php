@@ -26,12 +26,10 @@
             
         } else { $page = 1 ; }
         
-        if( isset( $page ) ){
-        
-            include( $oe_plugins['photo']."pages/view_all.php" );
-            die();
+        include( $oe_plugins['photo']."pages/view_all.php" );
+        die();
             
-        } // else nothing-- let them go ahead and fail out to 404
+        
     }
     
     // is it the upload page?  Do they have access?
