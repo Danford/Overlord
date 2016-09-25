@@ -74,8 +74,10 @@ if( verify_number( $uri[$pos] ) ){
             if( isset( $oe_plugin[$uri[$pos] ] ) ){
             
                 include( $oe_module['group']."conf/plugin.conf.php" ) ;
+                
+                $accesslevel = 2 ; // all group content is members only
             
-                if( in_array($uri[$pos], $plugins[0] )){
+                if( in_array($uri[$pos], $oepc[0]['plugins'] )){
             
                     $pos++;
             
