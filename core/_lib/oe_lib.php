@@ -242,15 +242,12 @@ function get_client_ip(){
 function build_api_where_string(){
     
     global $tier ;
-    global $basemodule ;
-    global $basemoduleID ;
-    global $lastplug;
-    global $lastplugID ;
+    global $oepc ;
     
-    $q = "`module`='".$basemodule."' AND `module_id`='".$basemoduleID."'" ;
+    $q = "`module`='".$oepc[0]['type']."' AND `module_id`='".$oepc[0]['id']."'" ;
     
     if( $tier > 0 ){
-        $q .= " AND `plug`='".$lastplug."' AND `plug_id`='".$lastplugID."'" ;
+        $q .= " AND `plug`='".$oepc[$tier]['type']."' AND `plug_id`='".$oepc[$tier]['id']."'" ;
     }
     
     return $q ;
@@ -259,15 +256,12 @@ function build_api_where_string(){
 function build_api_set_string(){
     
     global $tier ;
-    global $basemodule ;
-    global $basemoduleID ;
-    global $lastplug;
-    global $lastplugID ;
+    global $oepc ;
     
-    $q = "`module`='".$basemodule."', `module_id`='".$basemoduleID."'" ;
+    $q = "`module`='".$oepc[0]['type']."', `module_id`='".$oepc[0]['id']."'" ;
     
     if( $tier > 0 ){
-        $q .= ", `plug`='".$lastplug."' AND `plug_id`='".$lastplugID."'" ;
+        $q .= ", `plug`='".$oepc[$tier]['type']."' AND `plug_id`='".$oepc[$tier]['id']."'" ;
     }
     
     return $q ;
