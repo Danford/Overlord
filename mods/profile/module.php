@@ -82,15 +82,15 @@ if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
 
 // still nothing?  Let's check for a plugin.
 
-if( isset( $oe_plugin[$uri[$pos] ] ) ){
+if( isset( $oe_plugins[$uri[$pos] ] ) ){
 
-    include( $oe_module['profile']."conf/plugin.conf.php" ) ;
+        include( $oe_module['profile']."conf/plugin.conf.php" ) ;
     
-    if( in_array($uri[$pos], $plugins[0] )){
+    if( in_array($uri[$pos], $oepc[0]['plugins'] )){
             
         $pos++; 
         
-        include( $oe_plugin[$uri[$pos - 1]]."plugin.php" ) ;
+        include( $oe_plugins[$uri[$pos - 1]]."plugin.php" ) ;
         
         // does not die() to allow for bombing out to the main 404.
     }
