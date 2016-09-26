@@ -113,7 +113,7 @@ class profile_minion {
                                 AND
                                   `profile`.`city_id` = `location_city`.`id`
                 
-                                ORDER BY `'.$this->db->sanitize( $order ).'`
+                                ORDER BY `".$this->db->sanitize( $order )."`
 
                                 LIMIT ".$offset.", ".$limit ) ;
             
