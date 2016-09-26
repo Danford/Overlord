@@ -25,7 +25,7 @@
     		parentavatar    checkbox      only if admin ( $oepc[0]['admin'] == true ; )
     		
     		
-    		album fields
+    		album fields - not yet implemented
     		
     		  - may be part of an include, as any plugin that wants to use albums
     		    will want it.
