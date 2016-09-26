@@ -16,3 +16,4 @@
 	$oe_plugins[ 'photo' ] = oe_plugin."photo/" ;
     $oe_plugins[ 'comment' ] = oe_plugin."comment/" ;
     $oe_plugins[ 'like' ] = oe_plugin."like/" ;
+    $oe_plugins[ 'thread' ] = oe_plugin."thread/" ;

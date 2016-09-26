@@ -299,55 +299,16 @@ class user_minion {
         $this->load_group_membership() ;
     }
     
-    function get_friends_as_array( $offset = 0, $limit = 99999999, $order='screen_name' ){
+    function get_friends_as_array( $offset = 0, $limit = 99999999 ){
     
-        // conspicuously similar to the function of the same name in the profile minion.
-        // almost as if I copied and pasted the thing in, and removed friend and block check
-        // since hey, we know they're friends.
-    
-        global $user ;
-        global $db ;
-    
-        if( $this->name == false ){
-            return false ;
-        } else {
-    
-            $friend_list = array() ;
-    
-            $db->query( "SELECT `profile`.`user_id`,
-                                      `screen_name`, `avatar`,`show_age`, `birthdate`,
-                                      `city_id`, `city`, `state`
-                                FROM `profile_friendship`, `profile`,`location_city`
-                                WHERE
-                                 ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
-                                    `profile_friendship`.`friend2` =`profile`.`user_id` )
-                                    OR
-                                  ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                `profile_friendship`.`friend1` =`profile`.`user_id` ) )
-                AND
-                `profile`.`city_id` = `location_city`.`id`
-    
-                ORDER BY `'.$db->sanitize( $order ).'`
-    
-                LIMIT ".$offset.", ".$limit ) ;
-    
-            while( ( $p = $db->assoc() ) != false ){
-    
-                if( $p['show_age'] != 0 )
-                { $p['age'] = user_age( $p['birthdate'] ) ; }
-                else
-                { $p['age'] = 0 ; }
-
-                unset( $p['birthdate'] ) ;
-                unset( $p['show_age'] ) ;
-                
-                $p['avatar'] = image_link('userthumb', $p['avatar'] ) ;
-
-                $friend_list[] = $p ;
-            
-            }
-            return $friend_list ;
+        $array_list == array() ;
+        
+        foreach( $this->friends as $friend ){
+            $array_list = new profile_minion( $friend );
         }
+        
+        return $array_list ;
+        
     }
     
     function get_blocked_as_array(){

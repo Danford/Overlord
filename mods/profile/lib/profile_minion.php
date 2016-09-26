@@ -57,7 +57,7 @@ class profile_minion {
                 
                 if( $info['city_id'] != null and $info['city_id'] != 0 ){
                     
-                    $loc = $db->get_assoc( "SELECT `city`,`state` FROM `location_city` WHERE `is`='".$info['city_id']."'" ) ;
+                    $loc = $db->get_assoc( "SELECT `city`,`state` FROM `location_city` WHERE `id`='".$info['city_id']."'" ) ;
                     
                     $info['city'] = $loc['city'] ;
                     $info['state'] = $loc['state'] ;
@@ -100,50 +100,30 @@ class profile_minion {
             
             $friend_list = array() ;
             
-            $this->db->query( "SELECT `profile`.`user_id`, 
-                                      `screen_name`, `avatar`,`show_age`,`allow_contact`,`birthdate`,
-                                      `city_id`, `city`, `state`   
-                                FROM `profile_friendship`, `profile`,`location_city`
-                                WHERE 
-                                 ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
-                                    `profile_friendship`.`friend2` =`profile`.`user_id` )
-                                    OR
-                                  ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                                    `profile_friendship`.`friend1` =`profile`.`user_id` ) )
-                                AND
-                                  `profile`.`city_id` = `location_city`.`id`
-                
-                                ORDER BY `".$this->db->sanitize( $order )."`
-
-                                LIMIT ".$offset.", ".$limit ) ;
+            $this->db->query( "SELECT `friend1`, `friend2`, `timestamp` from `profile_friendship`
+                            WHERE `friend1` ='".$this->id."'
+                               OR `friend2` ='".$this->id."'" ) ;
+        
+            while( ( $f = $this->db->assoc() ) != false ){
+        
+                if( $f['friend1'] == $this->id ){
+        
+                    $p = new profile_minion( $f['friend2'] , true );
+                } else {
+        
+                    $p = new profile_minion( $f['friend1'] , true ); ;
+                }
             
-            while( ( $p = $this->db->assoc() ) != false ){
-                
-                if( ! $user->is_blocked( $p['user_id'] ) ) {
-                    
-                    if( $p['show_age'] != 0 )
-                        { $p['age'] = user_age( $p['birthdate'] ) ; } 
-                    else
-                        { $p['age'] = 0 ; }
-
-                    unset( $p['birthdate'] );
-                    unset( $p['show_age'] ); 
-                    
-                    if( $user->is_friend($p['user_id']) ){
-                        $p['friend'] = 1 ;
-                    } else { 
-                        $p['friend'] = 0 ;
-                    }
-                    
-                    $p['avatar'] = image_link('userthumb', $p['avatar'] ) ;
+                if( $p->name != false ) {
                     
                     $friend_list[] = $p ;
                 }
             }
-        return $friend_list ;
+        
+            return $friend_list ;
         }
         
-    }
+    } 
     
     
     function friend_request_status() {
@@ -174,10 +154,7 @@ class profile_minion {
     function get_friends_count(){
         
         return $this->db->get_field( "SELECT COUNT(*) FROM `profile_friendship` WHERE 
-                                 ( ( `profile_friendship`.`friend1` ='".$this->id."' AND
-                                    `profile_friendship`.`friend2` =`profile`.`user_id` )
-                                    OR
-                                  ( `profile_friendship`.`friend2` ='".$this->id."' AND
-                                    `profile_friendship`.`friend1` =`profile`.`user_id` ) ) ") ;
+                                        `profile_friendship`.`friend1` ='".$this->id."' OR
+                                        `profile_friendship`.`friend2` ='".$this->id."'" ) ;
     }    
 }
