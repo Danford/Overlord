@@ -1,6 +1,6 @@
 <?php
 
-include( oe_lib.'page_minion.php' ) ;
+include( oe_frontend.'page_minion.php' ) ;
 
 $p = new page_minion( "404 - Not Found" ) ;
 
