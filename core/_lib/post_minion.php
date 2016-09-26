@@ -215,7 +215,7 @@ class post_minion
 	} // end method checkpoint
 
 	function return_to_form(){
-	    header( "Location: ".$_SERVER( 'HTTP_REFERER' ) ) ;
+	    header( "Location: ".$_SERVER[ 'HTTP_REFERER' ] ) ;
 	    die() ;
 	}
 	

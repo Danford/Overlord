@@ -25,6 +25,7 @@ switch( $apiCall ) {
     case 'denyFriend' :
     case 'cancelFriendrq' :
     case 'blockUser' :
+    case 'unblockUser' :
 
         include( $pagedir."friendmanagement.php") ;
         die();

@@ -140,18 +140,12 @@
             header( 'Location: /profile/block_list' );
             die() ;
             
-        case 'blockUser' :
+        case 'unblockUser' :
             
             // add block entry 
             
-            $db->insert( "INSERT INTO `profile_block` SET `blocker`='".$user->id."' AND `blockee`='".$db->sanitize( $_POST['user'] )."'" ) ;
+            $db->update( "DELETE FROM `profile_block` WHERE `blocker`='".$user->id."' AND `blockee`='".$db->sanitize( $_POST['user'] )."'" ) ;
                        
-            // add activity for BLOCKED user so that they will have their friend/block list updated
-            // reusing the block user feature because it isn't displayed, and does the exact same thing.
-                
-            $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$db->sanitize( $_POST['user'] )."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
-            $user->load_friends_list() ;
-         
             $post->json_reply( 'SUCCESS' ) ;
             
             header( 'Location: /profile/block_list' );

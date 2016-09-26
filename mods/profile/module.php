@@ -65,7 +65,7 @@ if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
     die() ;
 
 } else {
-    die( 'yo') ;
+    
     switch( $uri[$pos] ) {
         
         // module specific sub pages of user profile
@@ -84,12 +84,11 @@ if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
 
 if( isset( $oe_plugin[$uri[$pos] ] ) ){
 
-    include( $oe_module['profile']."conf/plugin.php" ) ;
+    include( $oe_module['profile']."conf/plugin.conf.php" ) ;
     
     if( in_array($uri[$pos], $plugins[0] )){
             
         $pos++; 
-        $tier++ ;
         
         include( $oe_plugin[$uri[$pos - 1]]."plugin.php" ) ;
         
