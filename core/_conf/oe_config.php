@@ -10,7 +10,7 @@
  */
 
 define( 'oe_mod', oe_root.'mods/' ) ;
-define( 'oe_plugins', oe_root.'plugins/' ) ;
+define( 'oe_plugin', oe_root.'plugins/' ) ;
 define( 'oe_lib', oe_core.'_lib/' ) ;
 define( 'oe_config', oe_core.'_conf/' ) ;
 define( 'oe_includes', oe_core.'includes/' ) ;
