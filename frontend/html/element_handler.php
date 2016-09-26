@@ -35,6 +35,6 @@ class ElementHandler
     
     public function GetElements()
     {
-        return $elements;
+        return $this->elements;
     }
 }
