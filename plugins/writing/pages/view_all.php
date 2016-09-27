@@ -22,3 +22,5 @@
  * 
  * 
  */
+
+echo "This is view_all.php";

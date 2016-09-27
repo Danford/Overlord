@@ -33,6 +33,8 @@
 		                                  ( $oepc[ $tier ]['photo']['useAlbum'] == true )
    */
 
+echo "This is upload.php";
+
 include(oe_frontend . "page_minion.php");
 
 $page = new page_minion("Upload Photo");

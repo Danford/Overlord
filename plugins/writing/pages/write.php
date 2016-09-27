@@ -17,3 +17,5 @@
  * 
  * 
  */
+
+echo "this is write.php";

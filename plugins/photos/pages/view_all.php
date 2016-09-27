@@ -36,3 +36,5 @@
  * 
  * 
  */
+
+echo "this is view_all.php";

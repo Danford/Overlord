@@ -16,3 +16,5 @@
  * 
  * 
  */
+
+echo "this is view_one.php";

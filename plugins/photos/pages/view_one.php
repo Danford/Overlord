@@ -32,3 +32,6 @@
  * 
  * 
  */
+
+
+echo "This is view_one.php";
