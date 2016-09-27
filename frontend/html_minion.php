@@ -71,8 +71,8 @@ class html_minion extends Element
 	        
 	        $pMenu = $this->menu->AddMenuList(new MenuItem("Profile", "/profile/". $user->id));
 	        $pMenu->AddElement(new MenuItem("Edit", "/profile"));
-	        $pMenu->AddElement(new MenuItem("Write", "/profile/write"));
-	        $pMenu->AddElement(new MenuItem("Upload Photo", "/profile/upload_photo"));
+	        $pMenu->AddElement(new MenuItem("Write", "/writing/write"));
+	        $pMenu->AddElement(new MenuItem("Upload Photo", "/photos/upload"));
 	        $pMenu->AddElement(new MenuItem("Block List", "/profile/block_list"));
 	        
 	        /*

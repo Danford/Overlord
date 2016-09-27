@@ -28,6 +28,7 @@ $friends = $profile->get_friends_as_array(0, 9);
 
 <div id="profile">
 	<div id="main-image">
+		<img src="<?php echo $profile->avatar; ?>"/>
 	</div>
 	
 	<div id="friends">
