@@ -49,7 +49,7 @@
                
         $photo = $db->get_assoc($q) ;
                 
-        if( $photo != false and ! $accesslevel < $photo['privacy'] ){
+        if( $photo != false and $accesslevel >= $photo['privacy'] ){
         
             // it's a specific photo 
             
@@ -109,18 +109,16 @@
         $split = explode('.', $uri[$pos]) ;
         
         if( ! verify_number( $split[0] ) ) { die() ; }
-        
-        $q = "SELECT `privacy`, `file_key` FROM `".$oepc[$tier]['photo']['view']."` 
+                
+        $q = "SELECT `id`, `privacy`, `file_key` FROM `".$oepc[$tier]['photo']['view']."` 
                 WHERE `id`='".$split[0]."'
                 AND ".build_api_where_string() ;
         
-        die( $q ) ;
-        
         $photo = $db->get_assoc($q) ;
-                
-        // user's $accesslevel was set at the modular level
         
-        if( $photo != false and ! $photo['privacy'] > $accesslevel ){
+         // user's $accesslevel was set at the modular level
+        
+        if( $photo != false and ! $photo['privacy'] <= $accesslevel ){
 
             $filename = $oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$photo['file_key'].$imagetype.".png" ;
         
