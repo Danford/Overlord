@@ -36,5 +36,16 @@
  * 
  * 
  */
+include(oe_frontend."page_minion.php");
+include(oe_lib."form_minion.php");
+include($oe_plugins['photo']."lib/photo.lib.php");
 
-echo "this is view_all.php";
+$page = new page_minion("Upload Photo");
+
+$page->header();
+
+?>
+
+<p>This is the /photos/pages/view_all.php page</p>
+<pre><?php print_r(get_photos()); ?></pre>
+<?php $page->footer(); ?>

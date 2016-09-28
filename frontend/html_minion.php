@@ -71,9 +71,17 @@ class html_minion extends Element
 	        
 	        $pMenu = $this->menu->AddMenuList(new MenuItem("Profile", "/profile/". $user->id));
 	        $pMenu->AddElement(new MenuItem("Edit", "/profile"));
-	        $pMenu->AddElement(new MenuItem("Write", "/profile/". $user->id ."/writing/write"));
-	        $pMenu->AddElement(new MenuItem("Upload Photo", "/profile/". $user->id ."/photo/upload"));
 	        $pMenu->AddElement(new MenuItem("Block List", "/profile/block_list"));
+	        
+	        $gMenu = $this->menu->AddMenuList(new MenuItem("Photos", "/profile/". $user->id ."/photo/"));
+	        $gMenu->AddElement(new MenuItem("Upload", "/profile/". $user->id ."/photo/upload/"));
+	        
+	        // loop to add albums to menu will go here.
+	        
+	        $gMenu = $this->menu->AddMenuList(new MenuItem("Writing", "/profile/". $user->id ."/writing/"));
+	        $gMenu->AddElement(new MenuItem("Write New", "/profile/". $user->id ."/writing/write/"));
+	        
+	        // loop adding writing albums to menu will go here.
 	        
 	        /*
 	         * Group profiles:

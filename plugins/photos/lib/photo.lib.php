@@ -211,14 +211,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
     
     $q = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`
                     FROM ".$oepc[$tier]['photo']['view']."
-                    WHERE `module`='".$oepc[0]['type']."'
-                      AND `module_id`='".$oepc[0]['id']."'" ;
-    
-    if( $tier > 0 ){
-        
-        $q .= "AND `plug`='".$oepc[$tier]['type']."'
-               AND `plug_id`='".$oepc[$tier]['id']."'" ;
-    }
+                    WHERE ".build_api_where_string() ;
     
     if( $album == 0 ){
         $q .= " AND `album`= NULL" ;
