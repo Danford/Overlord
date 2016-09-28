@@ -209,7 +209,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
     }
     
     
-    $q = "SELECT `id`,`owner`, 'album`, `privacy`, `title`, `description`, `timestamp`
+    $q = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`
                     FROM ".$oepc[$tier]['photo']['view']."
                     WHERE `module`='".$oepc[0]['type']."'
                       AND `module_id`='".$oepc[0]['id']."'" ;
