@@ -2,7 +2,7 @@
 
 
 /*
- *  include( $oe_plugins['writing']."lib/writing.lib.php" ) ; and use get_writing( $start, $end, $album )
+ *  include( $oe_plugins['writing']."lib/writing.lib.php" ) ; and use get_writings( $start, $end, $album )
  *  
  *   or writing api getWriting 
  *   
@@ -23,4 +23,6 @@
  * 
  */
 
-echo "This is view_all.php";
+include($oe_plugins['writing']."lib/writing.lib.php");
+
+print_r(get_writings());

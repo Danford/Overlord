@@ -4,7 +4,7 @@ include( $oe_plugins['writing']."conf/conf.php") ;
     
 // no further information in the uri?  load all the writing attached to this plug item
 
-if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
+if( ! isset( $uri[$pos] ) and ($uri[$pos] == "" or $uri[$pos] == "page")){
     
     if( $uri[$pos] == "page" ){
         $pos++ ;
@@ -26,7 +26,7 @@ if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
 // is it the upload page?  Do they have access?
 
 if( $oepc[0]['contributor'] and $uri[$pos] == 'write' ){
-    include( $oe_plugins['writing']."/pages/writing.php" ) ;
+    include( $oe_plugins['writing']."pages/write.php" ) ;
     die();
 }
 
