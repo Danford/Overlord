@@ -88,6 +88,11 @@
 	4.0.1 - 2016-09-16
 	
 	   removed field oe_return; post minion now uses $_SERVER[ 'HTTP_REFERER' ]
+	   
+	4.1 - 2016-09-27 
+	
+	   added support for overlord plugin API
+	
  * 
  * 
  */
@@ -109,10 +114,10 @@ class form_minion
     
     // constructor
 
-    function __construct( $form_id, $module, $action= httproot, $method="POST"  )
+    function __construct( $api_call, $module, $action= httproot, $method="POST"  )
     {
-        $this->form_id = $form_id ;
-        $this->oe_form_id = $form_id ;
+        $this->form_id = $api_call ;
+        $this->oe_form_id = $api_call ;
         $this->module = $module ;
         $this->method = $method ;
         $this->form_action = $action ;
@@ -175,6 +180,26 @@ class form_minion
 		
 		print( '>'.PHP_EOL.'<input type="hidden" name="oe_call" value="'.$this->oe_form_id.'" />'.PHP_EOL ) ;
     	print( '<input type="hidden" name="oe_post_api" value="'.$this->module.'" />'.PHP_EOL ) ;
+    	
+    	// for plugin API
+    	
+    	global $oepc ;
+    	global $tier ;
+    	
+        if( isset( $oepc[0]['type'] ) ){
+    	    
+    	    $this->hidden( "oe_module", $oepc[0]['type'] ) ;
+    	    $this->hidden( "oe_module_id", $oepc[0]['id'] ) ;
+    	    	
+    	}
+    	
+    	if( $tier > 0 ){
+    	    
+    	    $this->hidden( "oe_plug", $oepc[$tier]['plug'] ) ;
+    	    $this->hidden( "oe_plug_id", $oepc[$tier]['id'] ) ;
+    	    	
+    	}
+    	
     
 	} // end header()
 
