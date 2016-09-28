@@ -92,6 +92,7 @@
 	4.1 - 2016-09-27 
 	
 	   added support for overlord plugin API
+	   renamed fields to better reflect the modern state of overlord
 	
  * 
  * 
@@ -104,9 +105,8 @@
 class form_minion
 {
 
-    var $form_id ;
-    var $oe_form_id ;
-    var $module ;
+    var $api_call ;
+    var $api ;
     var $method ;
     var $form_action ;
     var $css ;
@@ -114,17 +114,16 @@ class form_minion
     
     // constructor
 
-    function __construct( $api_call, $module, $action= httproot, $method="POST"  )
+    function __construct( $api_call, $api, $action= httproot, $method="POST"  )
     {
-        $this->form_id = $api_call ;
-        $this->oe_form_id = $api_call ;
-        $this->module = $module ;
+        $this->api_call = $api_call ;
+        $this->api = $api ;
         $this->method = $method ;
         $this->form_action = $action ;
         
-        if( isset( $_SESSION["oe_form"][$this->oe_form_id]["data"] ) )
+        if( isset( $_SESSION["oe_form"][$this->api_call]["data"] ) )
         {
-            $this->data = $_SESSION["oe_form"][$this->oe_form_id]["data"] ;
+            $this->data = $_SESSION["oe_form"][$this->api_call]["data"] ;
         }        
     }
     
@@ -133,7 +132,7 @@ class form_minion
         // fills the form from the supplied associative array
         // if data has been prefilled from the session, it will not overwrite unless $overwrite == true 
         
-        if( ( ! isset( $_SESSION["oe_form"][$this->oe_form_id]["data"] ) ) or $overwrite == true )
+        if( ( ! isset( $_SESSION["oe_form"][$this->api_call]["data"] ) ) or $overwrite == true )
         {
             $this->data = $assoc ;
         }
@@ -144,7 +143,7 @@ class form_minion
         // fills the form from the DB, assuming that it does not currently exist in the session
         // if data has been prefilled from the session, it will not overwrite unless $overwrite == true 
     
-        if( ( ! isset( $_SESSION["oe_form"][$this->oe_form_id]["data"] ) ) or $overwrite == true )
+        if( ( ! isset( $_SESSION["oe_form"][$this->api_call]["data"] ) ) or $overwrite == true )
         {
             $this->data = $db_obj->get_assoc( $query ) ;
         }
@@ -154,7 +153,7 @@ class form_minion
     {
         // should only be used AFTER fill_with_values() or fill_from_db(), else these functions will overwrite this usage
     
-        if( ( ! isset( $_SESSION["oe_form"][$this->oe_form_id]["data"] ) ) or $overwrite == true )
+        if( ( ! isset( $_SESSION["oe_form"][$this->api_call]["data"] ) ) or $overwrite == true )
         {$this->data[$field] = $value ; }
     }
     
@@ -178,8 +177,11 @@ class form_minion
 
 		print( $this->check_css( $this->css ) );
 		
-		print( '>'.PHP_EOL.'<input type="hidden" name="oe_call" value="'.$this->oe_form_id.'" />'.PHP_EOL ) ;
-    	print( '<input type="hidden" name="oe_post_api" value="'.$this->module.'" />'.PHP_EOL ) ;
+		print( '>'.PHP_EOL ) ; 
+
+    	$this->hidden( 'oe_call', $this->api_call ) ;
+    	$this->hidden( 'oe_api', $this->api ) ;
+    	
     	
     	// for plugin API
     	
@@ -207,7 +209,7 @@ class form_minion
 	{
 		print( '</form>' );
 		
-		unset( $_SESSION["oe_form"][$this->oe_form_id] ) ;
+		unset( $_SESSION["oe_form"][$this->api_call] ) ;
 	} // end footer()
 	
 	
@@ -446,9 +448,9 @@ class form_minion
 	
 	function error( $field )
 	{
-		if( isset ( $_SESSION["oe_form"][$this->oe_form_id]["error"][$field] ) )
+		if( isset ( $_SESSION["oe_form"][$this->api_call]["error"][$field] ) )
 		{
-			return( $_SESSION["oe_form"][$this->oe_form_id]["error"][$field] ) ;
+			return( $_SESSION["oe_form"][$this->api_call]["error"][$field] ) ;
 		}
 		else
 		{
@@ -459,7 +461,7 @@ class form_minion
 
 	function is_error( $field )
 	{
-		return( isset ( $_SESSION["oe_form"][$this->oe_form_id]["error"][$field] ) ) ;
+		return( isset ( $_SESSION["oe_form"][$this->api_call]["error"][$field] ) ) ;
 
 	} // end method is_error
 	

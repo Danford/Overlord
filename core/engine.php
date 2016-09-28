@@ -19,7 +19,7 @@
 	 
 	// POST PROCESSING
 	
-	if( isset( $_POST['oe_api'] ) or isset( $_POST['oe_post_api'] ) )
+	if( isset( $_POST['oe_api'] )  )
 	{
 	    // form submissions
 
@@ -34,11 +34,7 @@
 	    include( oe_lib.'post_minion.php' ) ;
         $post = new post_minion( ! isset( $_POST['oe_post_api'] ) ) ;
         
-	    if( isset( $_POST['oe_api'] ) ){
-	        $postmodule = $_POST['oe_api'] ;
-	    } else {
-	        $postmodule = $_POST['oe_post_api'] ;
-	    }
+	    $postmodule = $_POST['oe_api'] ;
 	    
 	    if( ! isset( $_POST["oe_call"] ) ){
 	        $post->json_reply( "FAIL" ) ;
