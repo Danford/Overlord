@@ -15,7 +15,7 @@
     
     // no further information in the uri?  load all the photos attached to this plug item
     
-    if( isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
+    if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
         
         if( $uri[$pos] == "page" ){
             $pos++ ;

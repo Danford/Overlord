@@ -4,7 +4,7 @@ include( $oe_plugins['writing']."conf/conf.php") ;
     
 // no further information in the uri?  load all the writing attached to this plug item
 
-if( isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
+if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
     
     if( $uri[$pos] == "page" ){
         $pos++ ;
