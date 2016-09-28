@@ -33,5 +33,7 @@
  * 
  */
 
-
+?>
 echo "This is view_one.php";
+
+<img src="/profile/1/photo/5.png" />

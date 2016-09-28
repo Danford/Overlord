@@ -15,6 +15,7 @@ class user_minion {
     var $error ;
     var $last_login ;
     var $avatar ;
+    var $groups_in ;
     
     function __construct(){
         
@@ -233,7 +234,7 @@ class user_minion {
         
         $this->groups_in = array() ;
         
-        $query = "SELECT `group_id` FROM `group_members` WHERE `member_id`='".$this->id."'" ;
+        $query = "SELECT `group` FROM `group_membership` WHERE `user`='".$this->id."' and `access` != '0'" ;
         
         $db->query( $query ) ;
         
@@ -304,5 +305,28 @@ class user_minion {
             
             return $blocked ;
         }
+    } /**
+     * Returns a comma-delimited list of the user's friends
+     *
+     * @return string
+     */
+    
+    
+    function is_in_group( $group_id ){
+        return in_array($group_id, $this->groups_in ) ;
+    }
+    
+    /**
+     * Returns a comma-delimited list of groups the user is a member of
+     * 
+     * @return string
+     */
+    function group_list(){
+        
+        $list = '' ;
+        foreach( $this->groups_in as $group_id ){
+            $list .= $group_id.',' ;
+        }
+        return substr( $list, 0, -1 );
     }
 }

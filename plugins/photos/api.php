@@ -1,5 +1,4 @@
 <?php
-
 switch( $apiCall ){
     
     case 'uploadPhoto':
@@ -12,7 +11,7 @@ switch( $apiCall ){
         }
         
         $post->json_reply("FAIL") ;
-        die();
+        die( json_encode($oepc));
         
     case "editPhoto":
         

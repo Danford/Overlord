@@ -111,7 +111,7 @@ function create_square_thumb($original, $destination, $dimension ){
         $new_width = $dimension;
         $new_height = $dimension;
     }
-
+    
     $source = imagecreatefrompng( $original );
     $scaled = imagecreatetruecolor( $new_width, $new_height );
 
@@ -155,7 +155,7 @@ function store_uploaded_photo( $filename ){
 
     $filekey = createGUID() ;
     
-    $newFilename = $path.$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey  ;
+    $newFilename = $oepc[0]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey  ;
     
     if( $imageFileType == "png" or $imageFileType == "PNG" ) {
     
@@ -169,7 +169,7 @@ function store_uploaded_photo( $filename ){
     
     // create thumbnail
     
-    create_square_thumb( $newFilename.".thumb.png", $oepc[$tier]['photo']['thumbSize'] );
+    create_square_thumb( $newFilename.".png" , $newFilename.".thumb.png", $oepc[$tier]['photo']['profileThumbSize'] );
     
     // delete the original
     

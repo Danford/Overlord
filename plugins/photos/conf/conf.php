@@ -46,7 +46,7 @@ $default[ 'profileThumbSize'] = 75 ;
 // insert into settings if not already defined.
 
 foreach( $default as $setting => $value ){
-    if( isset( $oepc[$tier]['photo'][$setting] ) ){
+    if( ! isset( $oepc[$tier]['photo'][$setting] ) ){
         $oepc[$tier]['photo'][$setting] = $value ;
     }
 }

@@ -20,7 +20,7 @@
 	// POST PROCESSING
 	
 	if( isset( $_POST['oe_api'] )  )
-	{
+	{ 
 	    // form submissions
 
 	    if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
@@ -28,7 +28,7 @@
 	        // makes it harder to hack; in theory any submissions from elsewhere will be rejected
 	        
 	        $post->json_reply( "FAIL1" ) ;
-	        die(); 
+	        die('1'); 
 	    }
 	    
 	    include( oe_lib.'post_minion.php' ) ;
@@ -38,7 +38,7 @@
 	    
 	    if( ! isset( $_POST["oe_call"] ) ){
 	        $post->json_reply( "FAIL" ) ;
-	        die();
+	        die('2');
 	    }
 
         $apiCall = $_POST["oe_call"] ;
@@ -46,7 +46,7 @@
 	    if( isset( $oe_modules[ $postmodule ] ) and file_exists( $oe_modules[ $postmodule ]."api.php" ) ) {
 	        
 	        include( $oe_modules[ $postmodule ].'api.php') ;
-	        die();
+	        die('3');
 	    }
         
 	    if( isset( $oe_plugins[ $postmodule ] ) and file_exists( $oe_plugins[ $postmodule ]."api.php" ) ) {
@@ -57,7 +57,7 @@
 	        if( ! isset( $_POST['oe_module'] ) or ! isset( $_POST['oe_module_id'] ) ){
 	        
 	            $post->json_reply("FAIL") ;
-	            die();
+	            die('4');
 	        }
 	        
 	        // if plug isn't there, just use the values for module
@@ -76,17 +76,16 @@
 	        // check for Bobby Tables in the module/plug data
 
 	        if( ! verify_number( $_POST['oe_module_id'] ) or ! verify_number( $_POST['oe_plug_id'] )){
-	            $post->json_reply( "FAIL3");
-	            die();
+	            $post->json_reply( "FAIL");
+	            die('5');
 	        }
 	        
 	        // now to check the module to get authentication and configuration
 	        
-	        if( file_exists( $oe_module[$basemodule]."conf/plugin.conf.php" ) ){
-	            include( $oe_module[$basemodule]."conf/plugin.conf.php" ) ;
+	        if( file_exists( $oe_modules[$basemodule]."conf/plugin.conf.php" ) ){
+	            include( $oe_modules[$basemodule]."conf/plugin.conf.php" ) ;
 	        } else {
-	            $post->json_reply("FAIL4" ) ;
-	            die();
+	            $post->json_reply("FAIL" ) ;
 	        }
 	         
 	        if( isset( $lastplug ) ){
@@ -96,11 +95,11 @@
 	            // anything above the module level is either a plugin or
 	            // a module acting as a plugin.
 	        
-    	        if( file_exists( $oe_plugin[$basemodule]."conf/plugin.conf.php" ) ){
-    	            include( $oe_plugin[$basemodule]."conf/plugin.conf.php" ) ;
+    	        if( file_exists( $oe_plugins[$basemodule]."conf/plugin.conf.php" ) ){
+    	            include( $oe_plugins[$basemodule]."conf/plugin.conf.php" ) ;
     	        } else {
     	            $post->json_reply("FAIL" ) ;
-    	            die();
+    	            die('7');
     	        }
     	            
 	        }
@@ -108,8 +107,8 @@
 	        // still not quite ready.  now we load the configuration for the plugin.
 	        // it shouldn't override any previous settings but might provide defaults
 	        	         
-	        if( file_exists( $oe_plugin[$postmodule]."conf/conf.php" ) ){
-	            include( $oe_plugin[$postmodule]."conf/conf.php" ) ;
+	        if( file_exists( $oe_plugins[$postmodule]."conf/conf.php" ) ){
+	            include( $oe_plugins[$postmodule]."conf/conf.php" ) ;
 	        
 	               // we don't die out at this level, in case of a plugin that 
 	               // requires no configuration.  It is the responsibility of
@@ -130,7 +129,7 @@
 	    $post->json_reply("FAIL") ;
         die( '<b>Error OE1:</b> Please report this to the webmaster.' ) ;
 	}
-	
+	//die( "WE SHOULD NOT BE HERE" );
 	/*
 	 *  Environment Setup
 	 *  
