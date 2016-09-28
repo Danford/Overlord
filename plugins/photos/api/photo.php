@@ -5,7 +5,6 @@
  * 
  */
 
-
 $post->checkbox('setparentavatar') ;
 $post->checkbox('setalbumavatar') ;
 
@@ -22,34 +21,20 @@ $_POST['description'] = prevent_html( $_POST['description'] );
 
 $s = $db->build_set_string_from_post( 'title', 'description', 'privacy' ) ;
 
-$o['file_key'] = $filekey ;
-$o['owner'] = $user->id ;
-$o['module'] = $basemodule ;
-$o['module_id'] = $basemoduleID ;
 
-if( $tier > 0 ){
-    $o['plug'] = $lastplug ;
-    $o['plug_id'] = $lastplugID ;
-}
-
-
-
-$s .= ", ".$db->build_set_string_from_array( $o ) ;
-
-
-if( $apiCall == "uploadPhoto " ){
+if( $apiCall == "uploadPhoto" ){
     
     $check = getimagesize( $_FILES["photo"]["tmp_name"] );
     
     $post->require_true( $check != false, 'image', 'This is not a valid image file.' ) ;
     
     $post->checkpoint() ;
-    
-    $imageFileType = pathinfo( $oepc[$tier]['photo'].['path'].$_FILES["photo"]["name"], PATHINFO_EXTENSION) ;
         
+    $imageFileType = pathinfo( $_FILES["photo"]["name"], PATHINFO_EXTENSION) ;
+            
     if( ! in_array( $imageFileType, ['jpg','JPG','jpeg','JPEG','png','PNG' ] ) ) {
     
-        $post->set_error("image", "Only .jpg, .jpeg, and .png files are allowed. ".$_FILES["photo"]["name"] ) ;
+        $post->set_error("image", "Only .jpg, .jpeg, and .png files are allowed. ".$_FILES["photo"]["tmp_name"] ) ;
         unlink($_FILES["photo"]["tmp_name"] ) ;
     }
 
@@ -57,11 +42,14 @@ if( $apiCall == "uploadPhoto " ){
     
     include( $oe_plugins['photo']."lib/photo.lib.php" ) ;
     
-    $filekey = store_uploaded_photo( $_FILES['photo']['name'] ) ;
+    $filekey = store_uploaded_photo( $_FILES['photo']['tmp_name'] ) ;
+
+    $u['file_key'] = $filekey ;
+    $u['owner'] = $user->id ;
     
-    $s .= ", `ip`='".get_client_ip()."', `timestamp`='".oe_time()."'" ;
-    
-    $_POST['photo_id'] = $db->insert( "INSERT INTO `".$oepc[$tier]['photo']['table']." SET ".$s );
+    $s .= ", ".$db->build_set_string_from_array($u).", `ip`='".get_client_ip()."', `timestamp`='".oe_time()."'" ;
+        
+    $_POST['photo_id'] = $db->insert( "INSERT INTO `".$oepc[$tier]['photo']['table']."` SET ".$s.", ".build_api_set_string() );
     
     verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id'] ) ;
     
@@ -120,11 +108,11 @@ if( $oepc[$tier]['photo']['useAlbums'] ){
 if( $apiCall == "uploadPhoto" ){
     verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id']) ;
     
-    $return = str_replace( $_POST["photo_id"], "upload", $_SERVER['HTTP_REFERER'] );
+    $return = str_replace( "upload", $_POST["photo_id"], $_SERVER['HTTP_REFERER'] );
     $post->json_reply( "SUCCESS", [ 'photo_id' => $_POST['photo_id'] ] )  ;
 } else {
 
-    $return = str_replace( $_POST["photo_id"], "edit", $_SERVER['HTTP_REFERER'] );
+    $return = str_replace( "edit", $_POST["photo_id"], $_SERVER['HTTP_REFERER'] );
     $post->json_reply( "SUCCESS" ) ;
 }
 

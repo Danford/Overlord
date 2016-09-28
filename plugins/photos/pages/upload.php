@@ -39,10 +39,12 @@ include(oe_lib."form_minion.php");
 $page = new page_minion("Upload Photo");
 
 $page->header();
-$form = new form_minion("upload", "photo"); 
+$form = new form_minion("uploadPhoto", "photo"); 
 
 $form->has_file();
-
+$form->if_error('photo', 'photoerror') ;
+$form->if_error('title', 'titleerror') ;
+$form->if_error('description', 'descriptionerrror') ;
 global $privacyoptions;
 ?>
 
@@ -51,7 +53,7 @@ global $privacyoptions;
 	<p>Uploaded Image: <?php $form->file_input("photo") ; ?></p>
 	<p>Privacy:	<?php $form->select("privacy", $privacyoptions ); ?></p>
 	<p>Title: <?php $form->text_field("title" ); ?></p>
-	<p>Description: <?php $form->text_field("title" ); ?></p>
+	<p>Description: <?php $form->text_field("description" ); ?></p>
 	<p>Make Avatar <?php $form->checkbox("parentavatar") ; ?></p>
 	<?php $form->submit_button("Upload Photo" ); ?>
 			

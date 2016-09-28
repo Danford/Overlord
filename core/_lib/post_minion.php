@@ -163,7 +163,7 @@
 class post_minion
 {
 
-	function __construct( $type = true ) {
+	function __construct() {
 	    
 	    $this->is_a_json_request = ( isset( $_POST['oe_api_type'] ) and $_POST['oe_api_type'] == 'json' ) ;
 	    

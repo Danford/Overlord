@@ -244,10 +244,10 @@ function build_api_where_string(){
     global $tier ;
     global $oepc ;
     
-    $q = "`module`='".$oepc[0]['type']."' AND `module_id`='".$oepc[0]['id']."'" ;
+    $q = "`module`='".$oepc[0]['type']."' AND `module_item_id`='".$oepc[0]['id']."'" ;
     
     if( $tier > 0 ){
-        $q .= " AND `plug`='".$oepc[$tier]['type']."' AND `plug_id`='".$oepc[$tier]['id']."'" ;
+        $q .= " AND `plug`='".$oepc[$tier]['type']."' AND `plug_item_id`='".$oepc[$tier]['id']."'" ;
     }
     
     return $q ;
@@ -258,10 +258,10 @@ function build_api_set_string(){
     global $tier ;
     global $oepc ;
     
-    $q = "`module`='".$oepc[0]['type']."', `module_id`='".$oepc[0]['id']."'" ;
+    $q = "`module`='".$oepc[0]['type']."', `module_item_id`='".$oepc[0]['id']."'" ;
     
     if( $tier > 0 ){
-        $q .= ", `plug`='".$oepc[$tier]['type']."' AND `plug_id`='".$oepc[$tier]['id']."'" ;
+        $q .= ", `plug`='".$oepc[$tier]['type']."' AND `plug_item_id`='".$oepc[$tier]['id']."'" ;
     }
     
     return $q ;

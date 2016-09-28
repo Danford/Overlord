@@ -45,18 +45,11 @@
 
 
         $q = "SELECT `id`, `owner`,`privacy`, `title`, `description`, `timestamp` FROM `".$oepc[$tier]['photo']['view']."`
-            WHERE `id`='".$uri[$pos]."'
-            AND `module`='".$oepc[0]['type']."'
-            AND `module_item_id`='".$oepc[0]['id']."'";
-        
-        if( $tier > 1 ){
-            $q .= " AND `plug`='".$oepc[$tier]['type']."'
-            AND `plug_item_id`='".$oepc[$tier]['id']."'";
-        }
-        
+            WHERE `id`='".$uri[$pos]."' AND ".build_api_where_string() ;
+               
         $photo = $db->get_assoc($q) ;
-        
-        if( $q != false and ! $accesslevel < $photo['privacy'] ){
+                
+        if( $photo != false and ! $accesslevel < $photo['privacy'] ){
         
             // it's a specific photo 
             
@@ -117,24 +110,20 @@
         
         if( ! verify_number( $split[0] ) ) { die() ; }
         
-        $q = "SELECT `privacy`, `filekey` FROM `".$oepc[$tier]['photo']['view']."` 
+        $q = "SELECT `privacy`, `file_key` FROM `".$oepc[$tier]['photo']['view']."` 
                 WHERE `id`='".$split[0]."'
-                AND `module`='".$oepc[0]['type']."'
-                AND `module_item_id`='".$oepc[0]['id']."'";
+                AND ".build_api_where_string() ;
         
-        if( $tier > 1 ){
-            $q .= " AND `plug`='".$oepc[$tier]['type']."'
-                AND `plug_item_id`='".$oepc[$tier]['id']."'" ;
-        }
+        die( $q ) ;
         
         $photo = $db->get_assoc($q) ;
-        
+                
         // user's $accesslevel was set at the modular level
         
         if( $photo != false and ! $photo['privacy'] > $accesslevel ){
 
-            $filename = $oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$photo['filekey'].$imagetype.".png" ;
-
+            $filename = $oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$photo['file_key'].$imagetype.".png" ;
+        
             if( file_exists( $oepc[$tier]['photo']['path'].$filename ) ){
                 
                 header("Content-Type: image/png");

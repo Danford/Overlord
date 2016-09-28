@@ -12,19 +12,14 @@ class user_minion {
     var $name ;
     var $friends ;
     var $blocked ;
-    var $groups_in ;
-    var $groups_owned ;
-    var $groups_banned ;
     var $error ;
     var $last_login ;
     var $avatar ;
+    var $groups_in ;
     
     function __construct(){
         
-        $this->friends = array() ;
-        $this->groups_in = array() ;
-        $this->groups_owned = array() ;
-        $this->groups_banned = array() ;
+        $this->friends = array() ;;
         
         // if there is a valid login token, log user in
         
@@ -239,7 +234,7 @@ class user_minion {
         
         $this->groups_in = array() ;
         
-        $query = "SELECT `group_id` FROM `group_members` WHERE `member_id`='".$this->id."'" ;
+        $query = "SELECT `group` FROM `group_membership` WHERE `user`='".$this->id."' and `access` != '0'" ;
         
         $db->query( $query ) ;
         
@@ -247,25 +242,7 @@ class user_minion {
             $this->groups_in[] = $group_id ;
         }
     }
-    
-    function is_in_group( $group_id ){
-        return in_array($group_id, $this->groups_in ) ;
-    }
-    
-    /**
-     * Returns a comma-delimited list of groups the user is a member of
-     * 
-     * @return string
-     */
-    function group_list(){
         
-        $list = '' ;
-        foreach( $this->groups_in as $group_id ){
-            $list .= $group_id.',' ;
-        }
-        return substr( $list, 0, -1 );
-    }
-    
     function is_logged_in() {
         return ($this->id != 0 ) ;
     }
@@ -328,5 +305,28 @@ class user_minion {
             
             return $blocked ;
         }
+    } /**
+     * Returns a comma-delimited list of the user's friends
+     *
+     * @return string
+     */
+    
+    
+    function is_in_group( $group_id ){
+        return in_array($group_id, $this->groups_in ) ;
+    }
+    
+    /**
+     * Returns a comma-delimited list of groups the user is a member of
+     * 
+     * @return string
+     */
+    function group_list(){
+        
+        $list = '' ;
+        foreach( $this->groups_in as $group_id ){
+            $list .= $group_id.',' ;
+        }
+        return substr( $list, 0, -1 );
     }
 }
