@@ -12,19 +12,13 @@ class user_minion {
     var $name ;
     var $friends ;
     var $blocked ;
-    var $groups_in ;
-    var $groups_owned ;
-    var $groups_banned ;
     var $error ;
     var $last_login ;
     var $avatar ;
     
     function __construct(){
         
-        $this->friends = array() ;
-        $this->groups_in = array() ;
-        $this->groups_owned = array() ;
-        $this->groups_banned = array() ;
+        $this->friends = array() ;;
         
         // if there is a valid login token, log user in
         
@@ -247,25 +241,7 @@ class user_minion {
             $this->groups_in[] = $group_id ;
         }
     }
-    
-    function is_in_group( $group_id ){
-        return in_array($group_id, $this->groups_in ) ;
-    }
-    
-    /**
-     * Returns a comma-delimited list of groups the user is a member of
-     * 
-     * @return string
-     */
-    function group_list(){
         
-        $list = '' ;
-        foreach( $this->groups_in as $group_id ){
-            $list .= $group_id.',' ;
-        }
-        return substr( $list, 0, -1 );
-    }
-    
     function is_logged_in() {
         return ($this->id != 0 ) ;
     }
