@@ -219,6 +219,8 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
         $q .= " AND `album`='".$album."'" ;
     }
     
+    $response = array() ;
+    
     $db->query( $q." ORDER BY `timestamp` DESC LIMIT ".$start.", ".$end ) ;
     
     while( ( $photo = $db->assoc() ) != false ){
@@ -230,11 +232,8 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
         }
     }
     
-    if( isset( $response ) ){
-        return $response ;
-    } else {
-        return false ;
-    }
+    return $response ;
+    
 }
 
 
