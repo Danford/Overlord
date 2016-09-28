@@ -12,7 +12,7 @@ $default['view'] = 'writing' ;
 // insert into settings if not already defined.
 
 foreach( $default as $setting => $value ){
-    if( isset( $oepc[$tier]['writing'][$setting] ) ){
+    if( ! isset( $oepc[$tier]['writing'][$setting] ) ){
         $oepc[$tier]['writing'][$setting] = $value ;
     }
 }
