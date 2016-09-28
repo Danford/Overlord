@@ -197,7 +197,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
         if( isset( $post->is_a_json_request ) ){        
             $post->json_reply("FAIL") ;
         }
-        die() ;
+        die( 'invalid start or end') ;
     }
     
     if( $album != null and ! verify_number( $album ) ){
@@ -205,7 +205,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
         if( isset( $post->is_a_json_request ) ){        
             $post->json_reply("FAIL") ;
         }
-        die() ;
+        die( 'invalid album' ) ;
     }
     
     
