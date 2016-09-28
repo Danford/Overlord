@@ -73,7 +73,7 @@ class html_minion extends Element
 	        $pMenu->AddElement(new MenuItem("Edit", "/profile"));
 	        $pMenu->AddElement(new MenuItem("Write", "/profile/". $user->id ."/writing/write"));
 	        $pMenu->AddElement(new MenuItem("Upload Photo", "/profile/". $user->id ."/photo/upload"));
-	        $pMenu->AddElement(new MenuItem("Block List", "/profile/". $user->id ."block_list"));
+	        $pMenu->AddElement(new MenuItem("Block List", "/profile/block_list"));
 	        
 	        /*
 	         * Group profiles:
@@ -103,9 +103,12 @@ class html_minion extends Element
 	        $gMenu = $this->menu->AddMenuList(new MenuItem("Groups", "/group"));
 	        $gMenu->AddElement(new MenuItem("Create Group", "/group/create"));
 	        
-	        foreach ($user->groups_in as $group)
+	        if (count($user->groups_in) > 0)
 	        {
-	        	$gMenu->AddElement(new MenuItem($group, "/group/". $group));
+		        foreach ($user->groups_in as $group)
+		        {
+		        	$gMenu->AddElement(new MenuItem($group, "/group/". $group));
+		        }
 	        }
 	        
 	        $this->menu->AddMenuItem(new MenuItem("Logout", "/logout/"));

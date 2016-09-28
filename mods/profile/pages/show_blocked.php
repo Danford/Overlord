@@ -21,6 +21,27 @@
  * 
  */
 
+print_r($user->get_blocked_as_array());
 
+include(oe_frontend."page_minion.php");
+include(oe_lib."form_minion.php");
+
+$page = new page_minion("Blocked List");
+
+$page->header();
+$form = new form_minion("profile", "blockUser");
+
+?>
+
+<div id="upload-photo-form">
+	<?php $form->header(); ?>
+	<p>Privacy:	<?php //$form->select("user", $user->get_friends_as_array()); ?></p>
+	<?php $form->submit_button("Block User"); ?>
+</div>
+
+<?php 
+	$form->footer(); // it's not just cosmetic, it does session cleanup.
+    $page->footer();
+?>
 
 ?>
