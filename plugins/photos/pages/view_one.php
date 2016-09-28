@@ -36,4 +36,4 @@
 ?>
 echo "This is view_one.php";
 
-<img src="/profile/1/photo/5.png" />
+<img src="/profile/<?php print( $oepc[$tier]['id'] ) ; ?>/photo/<?php print( $photo['id'] );?>.png" />

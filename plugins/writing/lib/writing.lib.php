@@ -1,6 +1,7 @@
 <?php
 function get_writings( $start = 0, $limit = 999999, $album = null ){
     
+    global $db ;
     global $oepc ;
     global $tier ;
     global $accesslevel ;
