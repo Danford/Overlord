@@ -21,8 +21,6 @@
  * 
  */
 
-print_r($user->get_blocked_as_array());
-
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
 
@@ -32,7 +30,7 @@ $page->header();
 $form = new form_minion("profile", "blockUser");
 
 ?>
-
+<pre><?php print_r($user->get_blocked_as_array()); ?></pre>
 <div id="upload-photo-form">
 	<?php $form->header(); ?>
 	<p>Privacy:	<?php //$form->select("user", $user->get_friends_as_array()); ?></p>
