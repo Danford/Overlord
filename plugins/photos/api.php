@@ -20,7 +20,7 @@ switch( $apiCall ){
             die();
         }
         
-        $original = $db->get_assoc( "SELECT `owner`, `filekey`, `title`, `description`, `privacy` 
+        $original = $db->get_assoc( "SELECT `owner`, `file_key`, `title`, `description`, `privacy` 
                                     FROM ".$oepc[$tier]['photo']['view']." 
                                     WHERE `module`='".$basemodule."'
                                       AND `module_item_id`='".$basemoduleID."'

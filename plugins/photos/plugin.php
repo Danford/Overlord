@@ -85,6 +85,17 @@
             
             if( ( $photo['owner']->id == $user->id or $oepc[0]['admin'] == true ) and $uri[$pos] == "edit" ){
                 
+                // we've already pulled the info needed to populate
+                // most of the form, but we don't know if this is an avatar
+                
+                $avatarcheck = $db->get_field( " SELECT COUNT(*) 
+                    FROM `".$oepc[$tier]['photo']['avatarView']."`
+                    WHERE `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'
+                    AND `avatar` = '".$photo['id']."'") ;
+                
+                if( $avatarcheck > 0 ){ $photo['parentavatar'] = 'on' ; } ;
+                
+                
                 include( $oe_plugins['photo']."/pages/edit.php" );
                 die();
                 

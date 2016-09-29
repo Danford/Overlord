@@ -2,7 +2,7 @@
 
     // is this picture an avatar?  
     
-$itemAvatar = $db->get_assoc( "SELECT `owner`,`avatar`, `filekey`
+$itemAvatar = $db->get_assoc( "SELECT `owner`,`avatar`, `file_key`
                                 FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`
                                 WHERE `".$oepc[$tier]['photo']['avatarView']."`.`id`='".$oepc[$tier]['id']."'
                                 AND `".$oepc[$tier]['photo']['avatarView']."`.`id` = ".$oepc[$tier]['photo']['view']."`.`id`" ) ;
@@ -36,7 +36,7 @@ if( $_POST['photo_id'] == $itemAvatar["avatar"] ){
 
 if( ! isset( $filekey ) ){
     
-    $filekey = $db->get_field( "SELECT `filekey` FROM `".$oepc[$tier]['photo']['view']."` 
+    $filekey = $db->get_field( "SELECT `file_key` FROM `".$oepc[$tier]['photo']['view']."` 
                                 WHERE `id`='".$_POST['photo_id']."'" );
 }
 

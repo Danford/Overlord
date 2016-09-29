@@ -5,7 +5,11 @@
  * 
  */
 
-$post->checkbox('setparentavatar') ;
+
+
+include( $oe_plugins['photo']."lib/photo.lib.php" ) ;
+
+$post->checkbox('parentavatar') ;
 $post->checkbox('setalbumavatar') ;
 
 $post->hold( "privacy", "title", "description", "setparentavatar", "setalbumvatar", "album", 
@@ -40,8 +44,6 @@ if( $apiCall == "uploadPhoto" ){
 
     $post->checkpoint();
     
-    include( $oe_plugins['photo']."lib/photo.lib.php" ) ;
-    
     $filekey = store_uploaded_photo( $_FILES['photo']['tmp_name'] ) ;
 
     $u['file_key'] = $filekey ;
@@ -53,54 +55,89 @@ if( $apiCall == "uploadPhoto" ){
     
     verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id'] ) ;
     
-} elseif( ! isset( $_POST['photo_id'] ) ){
+} else {
     
-    $post->json_reply("FAIL") ;
-    die();
+    if( ! isset( $_POST['photo_id'] ) ){
+        $post->json_reply("FAIL") ;
+        die('invalid');
+    }
+    
+    $db->update( "UPDATE `".$oepc[$tier]['photo']['table']."` SET ".$s."
+                    WHERE ".build_api_where_string()."
+                    AND `id`='".$_POST['photo_id']."'" ) ;
+    
 }
-
 // avatar check
-    
-if( $_POST["parentavatar"] == "on" and $oepc[0]['admin'] == true ){
 
-    $oldAvatar = $db->get_assoc( "SELECT `avatar`, `file_key` 
+
+
+if( $oepc[0]['admin'] == true ){
+    
+    $oldAvatar = $db->get_assoc( "SELECT `avatar`, `file_key`
                                     FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`
                                     WHERE `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'
-                                    AND `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
+                                    AND `".$oepc[$tier]['photo']['avatarView']."`.`avatar` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
     
-    if( $_POST['photo_id'] != $oldAvatar["avatar"] ){
+    if( $_POST["parentavatar"] == "on"  ){
         
-        // create the new profile thumb
-        
-        $filebase =  $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey ;
-        
+        if( $oldAvatar == false or $_POST['photo_id'] != $oldAvatar["avatar"] ){
+            
+            if( $apiCall == 'editPhoto'){
+                // we need to look up the file key of THIS photo
+                
+                $filekey = $db->get_field("SELECT `file_key` FROM `".$oepc[$tier]['photo']['table']."`
+                    WHERE ".build_api_where_string()."
+                    AND `id`='".$_POST['photo_id']."'" ) ;
+            }
 
-        resize_png( $filebase.".png", $filebase.".profile.png", 
-                         $oepc[$tier]['photo'][ 'profileImageSize'], $oepc[$tier]['photo'][ 'profileImageSize'] ) ;
-        resize_png( $filebase.".png", $filebase.".profileThumb.png", $oepc[$tier]['photo'][ 'profileThumbSize'] ) ;
-        
-        
-        
-        // update the field
-        
-        $db->update( "UPDATE `".$oepc[$tier]['photo']['avatarTable']."` 
-                SET `avatar` = '".$_POST["photo_id"]."'
-                WHERE `".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'" ); 
-        
-        // delete the old profile & profile thumb
+            $filebase =  $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey ;
+            
+            // create the new profile thumb
+            
+            resize_png( $filebase.".png", $filebase.".profile.png", 
+                             $oepc[$tier]['photo'][ 'profileImageSize'], $oepc[$tier]['photo'][ 'profileImageSize'] ) ;
+            resize_png( $filebase.".png", $filebase.".profileThumb.png", 
+                             $oepc[$tier]['photo'][ 'profileImageSize'], $oepc[$tier]['photo'][ 'profileThumbSize'] ) ;
+            
+            
+            
+            // update the field
+            
+            $db->update( "UPDATE `".$oepc[$tier]['photo']['avatarTable']."` 
+                    SET `avatar` = '".$_POST["photo_id"]."'
+                    WHERE `".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'" ); 
+            
+            // delete the old profile & profile thumb
+    
+            if( $oldAvatar != false ) {
 
-        if( $oldAvatar["avatar"] != '' ) {
-        
-            unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$oldAvatar['filekey'].".profile.png"  );
-            unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$oldAvatar['filekey'].".profileThumb.png"  );
+                unlink( $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$oldAvatar['file_key'].".profile.png"  );
+                unlink( $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$oldAvatar['file_key'].".profileThumb.png"  );
+            }
+            
         }
+        // else nothing.  It's already the avatar.
+        
+    } elseif( $oldAvatar['avatar'] == $_POST['photo_id'] ) {
+    
+        // they've unchecked the avatar button
+        
+        // remove the avatar from the parent item 
+    
+        $db->update( "UPDATE `".$oepc[$tier]['photo']['avatarTable']."` 
+                SET `avatar` = NULL
+                WHERE `".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'" );
+        
+        // delete the old avatar files
+        
+        unlink( $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$oldAvatar['file_key'].".profile.png"  );
+        unlink( $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$oldAvatar['file_key'].".profileThumb.png"  );
+            
         
     }
-    // else nothing.  It's already the avatar.
-    
+
+   
 }
-
-
 if( $oepc[$tier]['photo']['useAlbums'] ){
     
     // include( $oe_plugins['album']."/includes/albumprocessor.php" );
@@ -110,12 +147,12 @@ if( $oepc[$tier]['photo']['useAlbums'] ){
 if( $apiCall == "uploadPhoto" ){
     verify_update( $oepc[$tier]['photo']['view'], $_POST['photo_id']) ;
     
-    $return = str_replace( "upload", $_POST["photo_id"], $_SERVER['HTTP_REFERER'] );
-    $post->json_reply( "SUCCESS", [ 'photo_id' => $_POST['photo_id'] ] )  ;
+    $return = str_replace( 'upload', $_POST["photo_id"], $_SERVER['HTTP_REFERER'] );
+    $post->json_reply( 'SUCCESS', [ 'photo_id' => $_POST['photo_id'] ] )  ;
 } else {
-
-    $return = str_replace( "edit", $_POST["photo_id"], $_SERVER['HTTP_REFERER'] );
-    $post->json_reply( "SUCCESS" ) ;
+    
+    $return = str_replace( '/edit', '', $_SERVER['HTTP_REFERER'] );
+    $post->json_reply( 'SUCCESS' ) ;
 }
 
 header( 'Location: '.$return ) ;
