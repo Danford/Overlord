@@ -36,7 +36,7 @@
     // is it the upload page?  Do they have access?
     
     if( $oepc[0]['contributor'] and $uri[$pos] == 'upload' ){ 
-        include( $oe_plugins['photo']."/pages/upload.php" ) ;
+        include( $oe_plugins['photo']."/pages/photoinfo.php" ) ;
         die(); 
     }
     
@@ -96,7 +96,7 @@
                 if( $avatarcheck > 0 ){ $photo['parentavatar'] = 'on' ; } ;
                 
                 
-                include( $oe_plugins['photo']."/pages/edit.php" );
+                include( $oe_plugins['photo']."/pages/photoinfo.php" );
                 die();
                 
             }
