@@ -46,6 +46,6 @@ $page->header();
 
 ?>
 
-<p>This is the /photos/pages/view_all.php page</p>
 <pre><?php print_r(get_photos()); ?></pre>
+<p>This is the /photos/pages/view_all.php page</p>
 <?php $page->footer(); ?>
