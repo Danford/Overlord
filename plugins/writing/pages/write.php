@@ -17,7 +17,7 @@ include(oe_lib."form_minion.php");
 $page = new page_minion("New Writing");
 
 $page->header();
-$form = new form_minion("writing", "write");
+$form = new form_minion("write", "writing");
 
 global $privacyoptions;
 ?>

@@ -290,6 +290,8 @@ class user_minion {
     
     function get_blocked_as_array(){
         
+        global $db ;
+        
         // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.  
         
         $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `profile`
