@@ -4,7 +4,7 @@ include( $oe_plugins['writing']."conf/conf.php") ;
     
 // no further information in the uri?  load all the writing attached to this plug item
 
-if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page"){
+if( $uri[$pos] == 'page' or $uri[$pos] == './final' ){
     
     if( $uri[$pos] == "page" ){
         $pos++ ;
@@ -15,12 +15,8 @@ if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page"){
         
     } else { $page = 1 ; }
     
-    if( isset( $page ) ){
-    
-        include( $oe_plugins['writing']."pages/view_all.php" );
-        die();
-        
-    } // else nothing-- let them go ahead and fail out to 404
+    include( $oe_plugins['writing']."pages/view_all.php" );
+    die();
 }
 
 // is it the upload page?  Do they have access?
@@ -56,7 +52,7 @@ if( verify_number($uri[$pos] ) ){
 
         // do they want to read the writing?
 
-        if( ! isset( $uri[$pos] ) or $uri[$pos] = "" or $uri[$pos] == 'page' and ! $accesslevel < $writing['privacy'] ){    
+        if( $uri[$pos] = './final' or $uri[$pos] == 'page' and ! $accesslevel < $writing['privacy'] ){    
             
             if( $uri[$pos] == "page" ){
             

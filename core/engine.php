@@ -149,6 +149,12 @@
 	
 	$uri = explode( '/', $fulluri ) ;
 	
+	if( $uri[count($uri) - 1] == '' ) {
+	    $uri[count($uri) - 1] = './final' ;
+	} else {
+	    $uri[] = './final' ;
+	}
+	
 	/*
 	 *  Now, one or more of the values here is useless.
 	 * 
@@ -158,7 +164,7 @@
 	
 	$pos = substr_count( httproot, '/' ) ;
 		
-	if( ! isset( $uri[ $pos ] ) or $uri[ $pos ] == '' ) 
+	if( $uri[ $pos ] == './final' ) 
 	{
 		if( $user->is_logged_in() ){
 		    $uri[$pos] = './main' ;

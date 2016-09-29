@@ -16,9 +16,9 @@
     // no further information in the uri?  load all the photos attached to this plug item
     
     
-    if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == "page" ){
+    if( $uri[$pos] == './final' or $uri[$pos] == 'page' ){
         
-        if( $uri[$pos] == "page" ){
+        if( $uri[$pos] == 'page' ){
             $pos++ ;
             
             if( verify_number( $uri[$pos] ) ){
@@ -66,7 +66,7 @@
             
             // do they want to see the photo?
             
-            if( ! isset( $uri[$pos] ) or $uri[$pos] == "" or $uri[$pos] == 'page' ){
+            if( $uri[$pos] == './final' or $uri[$pos] == 'page' ){
                 
                 if( $uri[$pos] == "page" ){
                     $pos++ ;

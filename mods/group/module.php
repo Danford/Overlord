@@ -12,19 +12,20 @@ $pagedir = $oe_modules['group']."pages/" ;
 
 // things are specific to the logged in user.
 
-if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ) {
+switch( $uri[$pos ]){
 
-    // no id specified-- show them a list of their groups
+    case './final':
+
+        // no id specified-- show them a list of their groups
+        
+        include( $oe_modules['group']."lib/group.lib.php" ) ;
+        $groups = get_my_groups() ;
     
-    include( $oe_modules['group']."lib/group.lib.php" ) ;
-    $groups = get_my_groups() ;
+        include( $pagedir."mygroups.php" ) ;
+        die() ;
 
-    include( $pagedir."mygroups.php" ) ;
-    die() ;
-}
-
-if( $uri[$pos] == "create" ) {
-
+   case "create":
+       
         include( $pagedir."create.php" ) ;
         die() ;
     
@@ -44,7 +45,7 @@ if( verify_number( $uri[$pos] ) ){
         
         $pos++ ;
         
-        if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
+        if( $uri[$pos] == './final' ){
             
             include( $pagedir."profile.php" );
             die() ;

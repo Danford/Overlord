@@ -2,11 +2,9 @@
 
 $pagedir = $oe_modules['login']."pages/" ;
 
-if( ! isset( $uri[$pos] ) ){ $uri[$pos] == '' ; }
-
 switch( $uri[$pos] ) {
     
-    case '' :
+    case './final' :
         include( $pagedir."login.php" ) ;
         die() ;
         

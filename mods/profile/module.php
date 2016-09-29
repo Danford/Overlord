@@ -14,15 +14,15 @@ $pagedir = $oe_modules['profile']."pages/" ;
 
     // things are specific to the logged in user.
 
-if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ) {
-
-    // no id specified-- they're trying to access their own profile
-    
-    include( $pagedir."editor.php" ) ;
-    die() ;
-}
-
 switch( $uri[$pos] ) {
+    
+    case './final':
+
+        // no id specified-- they're trying to edit their own profile
+        
+        include( $pagedir."editor.php" ) ;
+        die() ;
+        
     
     case "block_list":
 
@@ -59,25 +59,23 @@ if( $user->is_friend( $profile->id )){
 
 $pos++ ;
 
-if( ! isset( $uri[$pos] ) or $uri[$pos] == "" ){
-
-    include( $pagedir."show_profile.php" ) ;
-    die() ;
-
-} else {
-    
-    switch( $uri[$pos] ) {
+switch( $uri[$pos] ) {
         
         // module specific sub pages of user profile
 
-        case 'friends':
+    case './final':
 
-            $pos++ ;
-            include( $pagedir."show_friends.php") ;
-            die();
+        include( $pagedir."show_profile.php" ) ;
+        die() ;
 
-    } //switch
-}
+    case 'friends':
+
+        $pos++ ;
+        include( $pagedir."show_friends.php") ;
+        die();
+
+} //switch
+
 
 
 // still nothing?  Let's check for a plugin.
