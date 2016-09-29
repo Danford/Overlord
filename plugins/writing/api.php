@@ -1,18 +1,19 @@
 <?php
 
+
 switch( $apiCall ){
     
     case "write":
     case "edit":
-        
+                
         if( $apiCall == "write" and $oepc[0]['contributor'] != true ){
             $post->json_reply("FAIL") ;
-            die() ;
-        } elseif ( $apiCall = "edit" ){
+            die('1') ;
+        } elseif ( $apiCall == "edit" ){
         
                 if( ! isset( $_POST['writing_id']) or ! verify_number( $_POST['writing_id'])){
                     $post->json_reply("FAIL") ;
-                    die() ;
+                    die('2') ;
                 }
                 
                 $q = "SELECT `owner` FROM ".$oepc[$tier]['writing']['view']." WHERE ".build_api_where_string()." AND `id`='".$_POST['writing_id']."'" ;
@@ -21,10 +22,10 @@ switch( $apiCall ){
     
                 if( $owner == false or $owner != $user->id ){
                     $post->json_reply("FAIL") ;
-                    die() ;
+                    die('invalid') ;
                 }
         }
-
+        
         $post->require_true( strlen( $_POST['title'] ) < 76 , 'title', 'Title cannot be longer than 75 Characters.' ) ;
         $post->require_true( strlen( $_POST['subtitle'] ) < 256 , 'subtitle', 'Subtitle cannot be longer than 255 Characters.' ) ;
         $post->require_true( strlen( $_POST['copy'] ) > 2 , 'copy', 'You actually have to write something.' ) ;

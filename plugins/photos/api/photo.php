@@ -61,18 +61,18 @@ if( $apiCall == "uploadPhoto" ){
 
 // avatar check
     
-if( $_POST["setparentavatar"] == "on" and $oepc[0]['admin'] == true ){
+if( $_POST["parentavatar"] == "on" and $oepc[0]['admin'] == true ){
 
-    $oldAvatar = $db->get_assoc( "SELECT `avatar`, `filekey` 
+    $oldAvatar = $db->get_assoc( "SELECT `avatar`, `file_key` 
                                     FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`
-                                    WHERE `".$oepc[$tier]['photo']['avatarView']."`.`id`='".$oepc[$tier]['id']."'
-                                    AND `".$oepc[$tier]['photo']['avatarView']."`.`id` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
-
-    if( $_POST['photo_id'] != $oldAvatar["avatar"] ){
+                                    WHERE `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'
+                                    AND `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
+    
+    if( $oldAvatar["avatar"] != '' and $_POST['photo_id'] != $oldAvatar["avatar"] ){
         
         // create the new profile thumb
         
-        $filebase =  $oepc[$tier]['path'].$oepc[$tier]['type'].".".$_POST['photo_id'].".".$filekey ;
+        $filebase =  $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey ;
         
 
         resize_png( $filebase.".png", $filebase.".profile.png", 
@@ -85,7 +85,7 @@ if( $_POST["setparentavatar"] == "on" and $oepc[0]['admin'] == true ){
         
         $db->update( "UPDATE `".$oepc[$tier]['photo']['avatarTable']."` 
                 SET `avatar` = '".$_POST["photo_id"]."'
-                WHERE `id`='".$oepc[$tier]['id']."'" ); 
+                WHERE `".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'" ); 
         
         // delete the old profile & profile thumb
 

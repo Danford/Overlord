@@ -29,11 +29,15 @@ $default['path'] = oe_root.'oe_images/' ;
 
 $default['avatarTable'] = $oepc[$tier]['type'] ; 
 
-    // the table to check the existing avatar
+    // the table to change the existing avatar
 
 $default['avatarView'] = $oepc[$tier]['type'] ;
 
-    // the table to change the existing avatar
+    // the view to check the existing avatar
+
+$default['avatarID'] = 'id' ;
+
+    // the primary key of the table or view above
 
 // maximum dimensions of uploaded images in pixels
 

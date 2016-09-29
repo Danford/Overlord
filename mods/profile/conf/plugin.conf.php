@@ -77,6 +77,7 @@ $oepc[0]['photo']['useAlbums'] = false ;
 //$oepc[0]['photo']['table'] = 'photo' ;
 //$oepc[0]['photo']['view'] = 'photo' ;
 
+$oepc[0]['photo']['avatarID'] = 'user_id' ;
 
 //$oepc[0]['writing']['use_albums'] = true ;
 //$oepc[0]['writing']['view'] = 'writing_profile' ;
