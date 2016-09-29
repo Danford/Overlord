@@ -18,8 +18,7 @@ class profile_minion {
         
         $this->id = $id ;
         
-        global $db ;
-        $this->db = $db ;
+        global $db ;;
 
         global $user ;
         $this->user = $user ;
@@ -36,7 +35,7 @@ class profile_minion {
                         WHERE 
                             `profile`.`user_id`='".$this->id."'" ;
          
-            $info = $this->db->get_assoc( $q );
+            $info = $db->get_assoc( $q );
             
             if( $info == false ){
                 $this->name = false ; 
@@ -93,6 +92,7 @@ class profile_minion {
             // for userboxes and the friends page
         
         global $user ;
+        global $db ;
         
         if( $this->name == false ){
             return false ;
@@ -100,11 +100,11 @@ class profile_minion {
             
             $friend_list = array() ;
             
-            $this->db->query( "SELECT `friend1`, `friend2`, `timestamp` from `profile_friendship`
+            $db->query( "SELECT `friend1`, `friend2`, `timestamp` from `profile_friendship`
                             WHERE `friend1` ='".$this->id."'
                                OR `friend2` ='".$this->id."'" ) ;
         
-            while( ( $f = $this->db->assoc() ) != false ){
+            while( ( $f = $db->assoc() ) != false ){
         
                 if( $f['friend1'] == $this->id ){
         
@@ -128,13 +128,15 @@ class profile_minion {
     
     function friend_request_status() {
         
+        global $db ;
+        
         if ( $this->id == $this->user->id ) {
             return "self" ;
         } elseif( $this->user->is_friend($this->id ) ) {
             return "friend" ;
         } else {
             
-            $a = $this->db->get_field( "SELECT `requestee` from `profile_friendship_rq` WHERE
+            $a = $db->get_field( "SELECT `requestee` from `profile_friendship_rq` WHERE
                     ( `requestor`='".$this->id."' AND `requestee`='".$this->user->id."' )
                     OR
                     ( `requestor`='".$this->user->id."' AND `requestee`='".$this->id."' )") ;
@@ -153,7 +155,9 @@ class profile_minion {
     
     function get_friends_count(){
         
-        return $this->db->get_field( "SELECT COUNT(*) FROM `profile_friendship` WHERE 
+        global $db ;
+        
+        return $db->get_field( "SELECT COUNT(*) FROM `profile_friendship` WHERE 
                                         `profile_friendship`.`friend1` ='".$this->id."' OR
                                         `profile_friendship`.`friend2` ='".$this->id."'" ) ;
     }    
