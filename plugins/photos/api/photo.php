@@ -68,7 +68,7 @@ if( $_POST["parentavatar"] == "on" and $oepc[0]['admin'] == true ){
                                     WHERE `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."`='".$oepc[$tier]['id']."'
                                     AND `".$oepc[$tier]['photo']['avatarView']."`.`".$oepc[$tier]['photo']['avatarID']."` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
     
-    if( $oldAvatar["avatar"] != '' and $_POST['photo_id'] != $oldAvatar["avatar"] ){
+    if( $_POST['photo_id'] != $oldAvatar["avatar"] ){
         
         // create the new profile thumb
         
@@ -89,9 +89,11 @@ if( $_POST["parentavatar"] == "on" and $oepc[0]['admin'] == true ){
         
         // delete the old profile & profile thumb
 
-        unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$oldAvatar['filekey'].".profile.png"  );
-        unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$oldAvatar['filekey'].".profileThumb.png"  );
+        if( $oldAvatar["avatar"] != '' ) {
         
+            unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$oldAvatar['filekey'].".profile.png"  );
+            unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$oldAvatar['filekey'].".profileThumb.png"  );
+        }
         
     }
     // else nothing.  It's already the avatar.

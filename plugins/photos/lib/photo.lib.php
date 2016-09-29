@@ -180,9 +180,9 @@ function store_uploaded_photo( $filename ){
     
 }
 
-function get_photos( $start = 0, $end = 9999, $album = null ) {
+function get_photos( $start = 0, $end = 9999, $album = 'all' ) {
     
-    // album null -- all photos, regardless of album
+    // album 'all' -- all photos, regardless of album or lack thereof
     // album 0 - only photos not in albums
     
     global $db ;
@@ -200,7 +200,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
         die( 'invalid start or end') ;
     }
     
-    if( $album != null and ! verify_number( $album ) ){
+    if( $album != 'all' and ! verify_number( $album ) ){
         
         if( isset( $post->is_a_json_request ) ){        
             $post->json_reply("FAIL") ;
@@ -214,10 +214,11 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
                     WHERE ".build_api_where_string() ;
     
     if( $album == 0 ){
-        $q .= " AND `album`= NULL" ;
-    } elseif( $album != null ) {
+        $q .= " AND `album` IS NULL" ;
+    } elseif( $album != 'all' ) {
         $q .= " AND `album`='".$album."'" ;
     }
+    
     
     $response = array() ;
     
@@ -225,7 +226,7 @@ function get_photos( $start = 0, $end = 9999, $album = null ) {
     
     while( ( $photo = $db->assoc() ) != false ){
         
-        if( ! $photo['privacy'] > $accesslevel and ! $user->is_blocked( $photo['owner'] ) )
+        if( $photo['privacy'] <= $accesslevel and ! $user->is_blocked( $photo['owner'] ) )
         {
             $photo["owner"] = new profile_minion($photo["owner"], true );
             $response[] = $photo ;
