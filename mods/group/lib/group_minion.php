@@ -117,6 +117,8 @@ class group_minion {
     
     function city_name(){
         
+        global $db ;
+        
         $r = false ;
         
         if( $this->city_id != 0 and $this->city_id != null ){
@@ -169,7 +171,7 @@ class group_minion {
                     
                     if( $p->name != false ){
                         
-                        if( $person['access'] = 1 ){
+                        if( $person['access'] == 1 ){
                             $output['members'][] = $p ;
                         } else {
                             $output['admins'][] = $p ;
@@ -184,8 +186,35 @@ class group_minion {
     
     function get_member_count(){
         
+        global $db ;
+        
         return $db->get_field( "SELECT COUNT(*) FROM `group_membership` WHERE `group`='".$this->id."' AND `access` > 1" ) ;
         
     }
     
+    function check_membership( $id ){
+        
+        global $db ;
+        
+        $c = $db->get_field( "SELECT `access` FROM `group_membership` WHERE `group`='".$this->id."' AND `user`='".$id."'" ) ;
+                
+        return $c ;
+        
+    }
+    
+    function join_group(){
+        
+        if( $this->privacy == 1 or $this->invited == true ){
+            
+            global $db ;
+            global $user ;
+            
+            $db->insert( "INSERT INTO `group_membership` SET `group`='".$this->id."', `user`='".$user->id."', `access`='1'" ) ;
+            $db->update( "DELETE FROM `invitations` WHERE `module`='group' AND `module_item_id`='".$this->id."' AND `invitee`='".$user->id."'" ) ;
+            
+            return true ;
+        } else {
+            return false ;
+        }
+    }
 }
