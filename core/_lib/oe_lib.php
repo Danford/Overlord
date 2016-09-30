@@ -64,16 +64,6 @@ function security_restrict() {
     
 }
 
-function image_link( $type, $id = null ){
-    
-    if ( ( $type == 'avatar' or $type == 'userthumb' ) and ( $id == 0 or $id == null )) {
-            return '/images/noavatar.png' ;
-    } else {
-        return '/imgs/'.$type.'/'.$id.'.png' ;
-    }    
-    
-}
-
 function process_user_supplied_html( $input ) {
 
     global $htmlawed_config ;

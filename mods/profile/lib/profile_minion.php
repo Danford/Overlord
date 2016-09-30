@@ -52,18 +52,6 @@ class profile_minion {
                     $info['age'] = '' ;
                 }
                 
-                if( $info['city_id'] != null and $info['city_id'] != 0 ){
-                    
-                    $loc = $db->get_assoc( "SELECT `city`,`state` FROM `location_city` WHERE `id`='".$info['city_id']."'" ) ;
-                    
-                    $info['city'] = $loc['city'] ;
-                    $info['state'] = $loc['state'] ;
-                    
-                } else {
-                    $info['city'] = "" ;   
-                    $info['state'] = "" ;
-                }
-
                 $info['detail'] = process_user_supplied_html( $info['detail'] )  ;
                 
                 unset( $info['birthdate'] );
@@ -76,12 +64,32 @@ class profile_minion {
          }  
     }
 
+    function city_name(){
+    
+        global $db ;
+    
+        $r = false ;
+    
+        if( $this->city_id != 0 and $this->city_id != null ){
+             
+            $r = $db->get_assoc( "SELECT `city`,`state` FROM `location_city` WHERE `id`='".$this->city_id."'" ) ;
+    
+            if( $r != false ){
+                $r = $r['city'].",".$r['state'] ;
+            }
+        }
+    
+        if( $r == false ){ $r = "" ; }
+    
+        return $r ;
+    }
+    
     function profile_picture(){
-            return image_link('avatar', $this->avatar ) ;
+            return siteurl."profile/".$this->id."/photo/profile/".$this->avatar.".png" ;
     }
     
     function profile_thumbnail(){
-            return image_link('profilethumb', $this->avatar ) ;
+            return siteurl."profile/".$this->id."/photo/profileThumb/".$this->avatar.".png" ;
     }
 
     function get_friends_as_array( $offset = 0, $limit = 99999999, $order='screen_name' ){

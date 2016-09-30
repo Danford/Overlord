@@ -43,7 +43,7 @@ $default['avatarID'] = 'id' ;
 
 $default[ 'maxImageWidth'] = 1000 ;
 $default[ 'maxImageHeight'] = 800 ;
-$default[ 'thumbnailSize'] = 125 ;
+$default[ 'thumbnailSize'] = 175 ;
 $default[ 'profileImageSize'] = 300 ;
 $default[ 'profileThumbSize'] = 75 ;
 

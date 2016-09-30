@@ -155,7 +155,7 @@ function store_uploaded_photo( $filename ){
 
     $filekey = createGUID() ;
     
-    $newFilename = $oepc[0]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey  ;
+    $newFilename = $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey  ;
     
     if( $imageFileType == "png" or $imageFileType == "PNG" ) {
     

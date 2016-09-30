@@ -28,7 +28,7 @@ $friends = $profile->get_friends_as_array(0, 9);
 
 <article id="profile">
 	<div id="main-image">
-		<img src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
+		<img src="<?php echo $profile->profile_picture() ; ?>"/>
 	</div>
 	
 	<div id="profile-about">
@@ -41,7 +41,7 @@ $friends = $profile->get_friends_as_array(0, 9);
 						<?php echo $friend->screen_name ?>
 					</div>
 					<div class="profile-img">
-						<img src="<?php echo $friend->avatar ?>"/>
+						<img src="<?php echo $friend->profile_thumbnail()?>"/>
 					</div>
 					<div class="button request-friend">Add Friend</div>
 				</div>						
@@ -53,7 +53,7 @@ $friends = $profile->get_friends_as_array(0, 9);
 		<div id="details">
 			<p id="name"><?php echo $profile->screen_name; ?></p>
 			<p id="age"><?php echo $profile->age; ?></p>
-			<p id="location"><?php echo $profile->city ?>, <?php echo $profile->state; ?></p>
+			<p id="location"><?php echo $profile->city_name() ; ?></p>
 			<p id="gender"><?php echo $profile->gender; ?></p>
 			<p id="about-me"><?php echo $profile->detail; ?></p>
 		</div>

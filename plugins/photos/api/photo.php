@@ -92,12 +92,14 @@ if( $oepc[0]['admin'] == true ){
 
             $filebase =  $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey ;
             
-            // create the new profile thumb
+            // create the smaller image for the profile page
             
             resize_png( $filebase.".png", $filebase.".profile.png", 
                              $oepc[$tier]['photo'][ 'profileImageSize'], $oepc[$tier]['photo'][ 'profileImageSize'] ) ;
-            resize_png( $filebase.".png", $filebase.".profileThumb.png", 
-                             $oepc[$tier]['photo'][ 'profileImageSize'], $oepc[$tier]['photo'][ 'profileThumbSize'] ) ;
+            
+            
+            create_square_thumb( $filebase.".png", $filebase.".profileThumb.png", 
+                             $oepc[$tier]['photo'][ 'profileThumbSize'] ) ;
             
             
             
