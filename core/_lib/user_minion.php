@@ -18,6 +18,7 @@ class user_minion {
     var $groups_in ;
     var $groups_owned ;
     var $groups_administered ;
+    var $groups_blocked ;
     
     function __construct(){
         
@@ -240,21 +241,29 @@ class user_minion {
         
         $db->query ( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
         
-        while( $group_id = $db->field() ){
+        while( ( $group_id = $db->field() ) != false ){
             $this->groups_in[] = $group_id ;
             $this->groups_owned[] = $group_id ;
             $this->groups_administered[] = $group_id ;
         }
         
-        $query = "SELECT `group`,`access` FROM `group_membership` WHERE `user`='".$this->id."' and `access` != '0'" ;
+        $query = "SELECT `group`,`access` FROM `group_membership` WHERE `user`='".$this->id."'" ;
         
         $db->query( $query ) ;
         
         while( ( $group = $db->assoc() ) != false ){
-            $this->groups_in[] = $group['group'] ;
             
-            if( $group['access'] > 1 ){
-                $this->groups_administered = $group['group'] ;
+            if( $group['access'] == 0 ){
+                
+                $this->groups_blocked[] = $group['group'] ;
+            
+            } else {
+            
+                $this->groups_in[] = $group['group'] ;
+                
+                if( $group['access'] > 1 ){
+                    $this->groups_administered = $group['group'] ;
+                }
             }
         }
     }
@@ -344,6 +353,20 @@ class user_minion {
         $list = '' ;
         foreach( $this->groups_in as $group_id ){
             $list .= $group_id.',' ;
+        }
+        return substr( $list, 0, -1 );
+    }
+    
+    /**
+     * Returns a comma-delimited list of user's friends
+     * 
+     * @return string
+     */
+    function friends_list(){
+        
+        $list = '' ;
+        foreach( $this->friends as $id => $ignored ){
+            $list .= $id.',' ;
         }
         return substr( $list, 0, -1 );
     }
