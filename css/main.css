@@ -28,17 +28,22 @@ footer {
 content {
 	display: block;
 	background-color: #eee;
-	padding: 8px;
 	padding-left: 75px;
 	max-width: 1000px;
 	margin-left: auto;
 	margin-right: auto;
+	overflow: auto;
+}
+
+article {
+	
 }
 
 div#content-wrapper {
 	display: block;
 	background-color: #eee;	
-	border-bottom-right-radius: 75px;	
+	border-bottom-right-radius: 75px;
+	overflow: auto;	
 }
 
 content header {
@@ -135,13 +140,15 @@ nav li li {
 /* profile styling */
 /**/
 
-#p-img img {
+#profile #main-image img {
 	float: left;
-	margin-right: 10px;
+	max-width: 400px;
+	max-height: 400px;
 }
 
 #profile-about {
-	padding-top: 10px;
+	padding: 10px;
+	overflow: auto;
 }
 
 /**/
