@@ -3,7 +3,6 @@
 
 class profile_minion {
     
-    var $user ;
     var $name ;
     var $db ;
     var $id ;
@@ -18,10 +17,9 @@ class profile_minion {
         
         $this->id = $id ;
         
-        global $db ;;
+        global $db ;
 
         global $user ;
-        $this->user = $user ;
         
         if( $user->is_blocked( $id ) ){
             $this->name = false ;
@@ -29,7 +27,7 @@ class profile_minion {
             $q = "SELECT `screen_name`, `gender`, `avatar`, `birthdate`, 
                         `show_age`,`allow_contact`,`city` as `city_id`";
                         
-            if( $min != false ){ $q .=  ", `detail`" ; }
+            if( $min != true ){ $q .=  ", `detail`" ; }
             
             $q .= "     FROM `profile`
                         WHERE 
