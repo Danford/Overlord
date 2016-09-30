@@ -127,17 +127,18 @@ class profile_minion {
     function friend_request_status() {
         
         global $db ;
+        global $user ;
         
-        if ( $this->id == $this->user->id ) {
+        if ( $this->id == $user->id ) {
             return "self" ;
-        } elseif( $this->user->is_friend($this->id ) ) {
+        } elseif( $user->is_friend($this->id ) ) {
             return "friend" ;
         } else {
             
             $a = $db->get_field( "SELECT `requestee` from `profile_friendship_rq` WHERE
-                    ( `requestor`='".$this->id."' AND `requestee`='".$this->user->id."' )
+                    ( `requestor`='".$this->id."' AND `requestee`='".$user->id."' )
                     OR
-                    ( `requestor`='".$this->user->id."' AND `requestee`='".$this->id."' )") ;
+                    ( `requestor`='".$user->id."' AND `requestee`='".$this->id."' )") ;
         
             if( $a == false ){
                 return "none" ;        
