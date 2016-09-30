@@ -16,6 +16,8 @@ class user_minion {
     var $last_login ;
     var $avatar ;
     var $groups_in ;
+    var $groups_owned ;
+    var $groups_administered ;
     
     function __construct(){
         
@@ -233,13 +235,27 @@ class user_minion {
         global $db ;
         
         $this->groups_in = array() ;
+        $this->groups_owned = array() ;
+        $this->groups_administered = array() ;
         
-        $query = "SELECT `group` FROM `group_membership` WHERE `user`='".$this->id."' and `access` != '0'" ;
+        $db->query ( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
+        
+        while( $group_id = $db->field() ){
+            $this->groups_in[] = $group_id ;
+            $this->groups_owned[] = $group_id ;
+            $this->groups_administered[] = $group_id ;
+        }
+        
+        $query = "SELECT `group`,`access` FROM `group_membership` WHERE `user`='".$this->id."' and `access` != '0'" ;
         
         $db->query( $query ) ;
         
-        while( ( $group_id = $db->field() ) != false ){
-            $this->groups_in[] = $group_id ;
+        while( ( $group = $db->assoc() ) != false ){
+            $this->groups_in[] = $group['group'] ;
+            
+            if( $group['access'] > 1 ){
+                $this->groups_administered = $group['group'] ;
+            }
         }
     }
         
