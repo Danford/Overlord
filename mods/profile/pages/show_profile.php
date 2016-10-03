@@ -28,20 +28,20 @@ $friends = $profile->get_friends_as_array(0, 9);
 
 <article id="profile">
 	<div id="left-sidebar">
-		<div class="sidebar-container">
+		<div class="sidebar-container tile">
 			<p id="name"><?php echo $profile->screen_name; ?></p>
 			<div id="main-image">
 				<img src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
 			</div>
 		</div>
-		<div class="sidebar-container">
+		<div class="sidebar-container tile">
 			<div id="details">
 				<p id="age">Age: <?php echo $profile->age; ?></p>
 				<p id="location">City: <?php echo $profile->city_name() ; ?></p>
 				<p id="gender">Gender: <?php echo $profile->gender; ?></p>
 			</div>
 		</div>
-		<div class="sidebar-container">
+		<div class="sidebar-container tile">
 			<div id="friends">
 				<div id="head">Friends - (<?php echo $profile->get_friends_count(); ?>)</div>
 				<div id="body">
@@ -60,7 +60,7 @@ $friends = $profile->get_friends_as_array(0, 9);
 			</div>
 		</div>
 	</div>
-	<div id="main">
+	<div id="main" class="tile">
 		<p id="about-me"><?php echo $profile->detail; ?></p>
 	</div>
 </article>
