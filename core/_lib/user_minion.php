@@ -16,6 +16,9 @@ class user_minion {
     var $last_login ;
     var $avatar ;
     var $groups_in ;
+    var $groups_owned ;
+    var $groups_administered ;
+    var $groups_blocked ;
     
     function __construct(){
         
@@ -233,13 +236,35 @@ class user_minion {
         global $db ;
         
         $this->groups_in = array() ;
+        $this->groups_owned = array() ;
+        $this->groups_administered = array() ;
         
-        $query = "SELECT `group` FROM `group_membership` WHERE `user`='".$this->id."' and `access` != '0'" ;
-        
-        $db->query( $query ) ;
+        $db->query ( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
         
         while( ( $group_id = $db->field() ) != false ){
             $this->groups_in[] = $group_id ;
+            $this->groups_owned[] = $group_id ;
+            $this->groups_administered[] = $group_id ;
+        }
+        
+        $query = "SELECT `group`,`access` FROM `group_membership` WHERE `user`='".$this->id."'" ;
+        
+        $db->query( $query ) ;
+        
+        while( ( $group = $db->assoc() ) != false ){
+            
+            if( $group['access'] == 0 ){
+                
+                $this->groups_blocked[] = $group['group'] ;
+            
+            } else {
+            
+                $this->groups_in[] = $group['group'] ;
+                
+                if( $group['access'] > 1 ){
+                    $this->groups_administered = $group['group'] ;
+                }
+            }
         }
     }
         
@@ -328,6 +353,20 @@ class user_minion {
         $list = '' ;
         foreach( $this->groups_in as $group_id ){
             $list .= $group_id.',' ;
+        }
+        return substr( $list, 0, -1 );
+    }
+    
+    /**
+     * Returns a comma-delimited list of user's friends
+     * 
+     * @return string
+     */
+    function friends_list(){
+        
+        $list = '' ;
+        foreach( $this->friends as $id => $ignored ){
+            $list .= $id.',' ;
         }
         return substr( $list, 0, -1 );
     }

@@ -11,10 +11,10 @@ class group_minion {
         var $avatar ;
         var $city_id ;
         var $invited ;
-        var $membership ;          
+        var $membership ;
+        var $blocked ;
         var $table = 'groups' ;     // this needs to be customisable
         var $view = 'groups' ;      // but for now it's hardcoded here.
-        var $admins = null ;
     
         function __construct( $id, $min = false ){
             
@@ -45,15 +45,14 @@ class group_minion {
                         
                     } else {
                         
-                        $c = $db->get_field( "SELECT `access` FROM `group_membership` 
-                                                WHERE `group`='".$id."' AND `user`='".$user->id."'") ;
-                        
-                        if( $c == false ){
-                            $membership = 0 ; // non member
-                        } elseif( $c == 0 ){
-                            $membership = false ; // blocked
+                        if( in_array($this->id, $user->groups_administered ) ){
+                            $membership = 2 ; // admin
+                        } elseif( in_array($this->id, $user->groups_in ) ) {
+                            $membership = 1 ;
+                        } elseif( in_array($this->id, $user->groups_blocked ) ) {
+                            $membership = false ;
                         } else {
-                            $membership = $c ;  // 1 for member 2 for admin
+                            $membership = 0 ;
                         }
                     }
                     
@@ -217,4 +216,45 @@ class group_minion {
             return false ;
         }
     }
+    
+    /**
+     *   Returns an array of all users that are members, blocked from the group, or blocked from the group owner
+     */
+    function get_uninvitable(){
+        
+        $response = array() ;
+        
+        $response[] = $this->owner ;
+        
+        $db->query( "SELECT `user` FROM `group_membership` WHERE `group`='".$this->id."'" ) ;
+        
+        while( ( $user = $db->field() ) != false ){
+             
+            $response[] = $user ;
+        }
+        
+        // blocked by the owner/has blocked the owner
+        
+        $db->query( "SELECT `blocker`, `blockee` from `profile_block`
+                        WHERE `blocker` ='".$this->owner."'
+                           OR `blockee` ='".$this->owner."'" ) ;
+         
+        while( ( $b = $db->assoc() ) != false ){
+        
+            if( $b['blockee'] == $this->id and ! in_array($b['blocker'], $response) ){
+        
+                $response[] =  $b['blocker'] ;
+                
+            } elseif( $b['blocker'] == $this->id and ! in_array($b['blockee'], $response) ) {
+        
+                $response[] =  $b['blockee'];
+            }
+        }
+        
+        return $response ;
+        
+    }
+    
+    
+    
 }
