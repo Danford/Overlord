@@ -17,7 +17,8 @@
         $post->require_true( preg_match('/[A-Z]/', $_POST['password']), 'password', 'Password does not contain an uppercase character.' ) ;
         $post->require_true( preg_match('/[a-z]/', $_POST['password']), 'password', 'Password does not contain a lowercase character.' ) ;
         $post->require_true( preg_match("/[0-9\\\\! '@#$%^&*\\(\\)\\[\\]\\{\\}`~\\.,\\/<>;:+=\\-_]/", $_POST['password']), 'password', 'Password does not contain a number or special character.' ) ;
-      
+        $post->require_true( verify_number( $_POST['zip'] ), 'zip', 'Invalid Zip Code' ) ;
+        
     $post->checkpoint() ;
 
         $post->require_true( $_POST['password'] == $_POST['confirmpassword'], 'password', 'Password confirmation does not match' ) ;
@@ -53,6 +54,13 @@
         $post->require_true( $db->get_field( $usercheck ) == 0 , 'email', 'There is already an account with this e-mail.' ) ;
     
     $post->checkpoint() ;
+    
+        $locationcheck = "SELECT COUNT(*) FROM `location_zip` WHERE `zip`='".$_POST['zip']."'" ;
+        
+        $post->require_true( $db->get_field( $locationcheck ), 'zip', 'Invalid Zip Code.' ) ;
+        
+    $post->checkpoint() ;
+    
         /*
          *  The following options shouldn't be a problem, actually, but these checks are to avoid
          *  sql injection smartasses bypassing the form.
