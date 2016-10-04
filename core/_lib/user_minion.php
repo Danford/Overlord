@@ -19,6 +19,8 @@ class user_minion {
     var $groups_owned ;
     var $groups_administered ;
     var $groups_blocked ;
+    var $timezone ;
+    var $dst ;
     
     function __construct(){
         
@@ -159,7 +161,7 @@ class user_minion {
             
                     for( $i = ( $tokencount - max_login_tokens + 1 ) ; $i > 0 ; $i-- ){
             
-                        $db->update( "DELETE FROM `persistent_tokens` WHERE `id`='".$this->id."' and `timestamp`='".$db->field()."'" ) ;
+                        $db->update( "DELETE FROM `persistent_tokens` WHERE `user_id`='".$this->id."' and `timestamp`='".$db->field()."'" ) ;
             
                     }
                 }
@@ -299,6 +301,22 @@ class user_minion {
 
         $this->load_friends_list() ;
         $this->load_group_membership() ;
+        $this->get_location_info() ;
+    }
+    
+    function get_location_info(){
+        
+        global $db ;
+        
+        $q = "SELECT `timezone`,`dst` FROM `user_location`, `location_zip`
+            WHERE `user_id`='".$this->id."' AND `primary`='1' 
+              AND `user_location`.`zip` = `location_zip`" ;
+        
+        $l = $db->get_assoc($q) ;
+
+        $this->timezone = $l['timezone'] ;
+        $this->dst = $l['dst'] ;
+        
     }
     
     function get_friends_as_array( $offset = 0, $limit = 99999999 ){
