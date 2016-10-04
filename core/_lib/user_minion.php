@@ -288,7 +288,7 @@ class user_minion {
     }
     
     function is_blocked( $user_id ) {    
-        return ( isset( $this->blocked[$user_id] )) ;
+        return ( in_array($user_id, $this->blocked) ) ;
     }
     
     function load_profile(){
@@ -302,6 +302,7 @@ class user_minion {
         $this->load_friends_list() ;
         $this->load_group_membership() ;
         $this->get_location_info() ;
+        $this->get_blocked() ;
     }
     
     function get_location_info(){
@@ -331,11 +332,34 @@ class user_minion {
         
     }
     
-    function get_blocked_as_array(){
+    function get_blocked(){
         
         global $db ;
         
         // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.  
+        
+        $db->query( "SELECT `blocker`, `blockee` from `profile_block`
+                        WHERE `blocker` ='".$this->id."' or `blockee`= '".$this->id."'" ) ;
+        
+        if( $db->count() == 0 ){
+            return false ;
+        } else {
+            
+            while (( $p = $db->assoc() ) != false ){
+                if( $p['blocker'] = $this->id ){                
+                    $blocked[] = $p['blockee'] ;
+                } else {
+                    $blocked[] = $p['blocker'] ;
+                }
+            }
+            
+            $this->blocked = $blocked ;
+            return $blocked ;
+        }
+    } 
+    
+    function get_blocked_list() {
+        // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.
         
         $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `profile`
                         WHERE `blocker` ='".$this->id."' and `blockee`=`profile`.`user_id` " ) ;
@@ -343,22 +367,13 @@ class user_minion {
         if( $db->count() == 0 ){
             return false ;
         } else {
-            
+        
             while (( $p = $db->assoc() ) != false ){
                 $blocked[] = $p ;
             }
-            
+        
             return $blocked ;
         }
-    } /**
-     * Returns a comma-delimited list of the user's friends
-     *
-     * @return string
-     */
-    
-    
-    function is_in_group( $group_id ){
-        return in_array($group_id, $this->groups_in ) ;
     }
     
     /**

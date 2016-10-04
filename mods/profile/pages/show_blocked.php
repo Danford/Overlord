@@ -3,7 +3,7 @@
 /*
  * 
  *  
- *  List of blocked users is just screen name and id, get from $user->get_blocked_as_array() ;
+ *  List of blocked users is just screen name and id, get from $user->get_blocked_list()() ;
  *  
  *  API is 
  *  
@@ -30,7 +30,7 @@ $page->header();
 $form = new form_minion("profile", "blockUser");
 
 ?>
-<pre><?php print_r($user->get_blocked_as_array()); ?></pre>
+<pre><?php print_r($user->get_blocked_list()); ?></pre>
 <div id="upload-photo-form">
 	<?php $form->header(); ?>
 	<p>Privacy:	<?php //$form->select("user", $user->get_friends_as_array()); ?></p>
