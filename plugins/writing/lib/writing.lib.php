@@ -8,7 +8,7 @@ function get_writings( $start = 0, $limit = 999999, $album = null ){
     
     if( verify_number( $start ) and verify_number( $limit ) and ( $album == null or verify_number( $album ) ) ){
         
-        $q = "SELECT `id`,`owner`,`title`,`subtitle`,`privacy`, `timestamp`,`last_updated` FROM `".$oepc[$tier]['writing']['view']."` WHERE " ;
+        $q = "SELECT `id`,`owner`,`title`,`subtitle`,`privacy`, `timestamp`,`copy`,`last_updated` FROM `".$oepc[$tier]['writing']['view']."` WHERE " ;
         $q .= build_api_where_string() ;
         
         $db->query( $q ) ;
