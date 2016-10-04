@@ -8,7 +8,7 @@ function get_writings( $start = 0, $limit = 999999, $album = null ){
     
     if( verify_number( $start ) and verify_number( $limit ) and ( $album == null or verify_number( $album ) ) ){
         
-        $q = "SELECT `id`,`title`,`subtitle`,`privacy`, `timestamp`,`last_updated` FROM `".$oepc[$tier]['writing']['view']."` WHERE " ;
+        $q = "SELECT `id`,`owner`,`title`,`subtitle`,`privacy`, `timestamp`,`last_updated` FROM `".$oepc[$tier]['writing']['view']."` WHERE " ;
         $q .= build_api_where_string() ;
         
         $db->query( $q ) ;
@@ -16,7 +16,8 @@ function get_writings( $start = 0, $limit = 999999, $album = null ){
         $response = [] ;
         
         while( ( $writing = $db->assoc() ) != false ){
-            if( ! $accesslevel < $writing['privacy'] ){
+            if( $accesslevel >= $writing['privacy'] ){
+                $writing['owner'] = new profile_minion( $writing['owner'] , true ) ;
                 $response[] = $writing ;
             }
         }
