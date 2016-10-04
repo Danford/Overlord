@@ -1,7 +1,6 @@
 <?php
 
 $pagedir = $oe_plugins['invitations']."pages/" ;
-
 include( $oe_plugins['invitations']."lib/invite_minion.php" ) ;
 
 $invite = new invite_minion() ;

@@ -88,20 +88,40 @@ class invite_minion {
         global $oepc ;
         global $user ;
         
-        $invited = $this->get_invited() ;
+        $count = 0 ;
+        
+        $uninvitable = array_merge( $this->get_invited(), $this->target->get_blocked() ) ;
+        $invited = array() ;
                 
         if( $oepc[0]['admin'] ){
             
             foreach( $groups as $g ){
                 
-                $group = new group_minion($g) ;
-                
-                $db->query( "SELECT ")   ;     
-                
-                
-                
+                if( verify_number( $g ) ){
+                    $group = new group_minion($g) ;
+                    
+                    if( $group->membership == 2 ){
+                    
+                        if( ! in_array ( $group->owner, $uninvitable ) and ! in_array ( $group->owner, $invited )){
+                            $to_invite[] = $group->owner ;
+                        }
+                        
+                        $db->query( "SELECT `owner` FROM `group_membership` WHERE `group`='".$g."' and `access` !='0'" )   ;
+                        
+                        while( ( $u = $db->field() ) != false ){
+                            if( ! in_array ( $u, $uninvitable ) and ! in_array ( $u, $to_invite )){
+                                $invited[] = $u ;
+                                $db->insert( "INSERT INTO `".$this->table."` SET ".build_api_set_string().",
+                                                `invitee`='".$id."', ".$db->build_set_string_from_array($o) ) ;
+                                $count++ ;                                
+                            }
+                        }
+                    }
+                }                
             }
         }
+        
+        return $count ;
     }
     
     function invite_users( array $users ){
@@ -164,14 +184,14 @@ class invite_minion {
         return $response ;
     }
     
-    function approve_invites( array $invites ){
+    function approve_invites( array $invitees ){
         
         global $oepc ;
         $count = 0 ;
         
         if( $oepc[0]['admin'] ){
             
-            foreach( $invites as $invitee ){
+            foreach( $invitees as $invitee ){
                 
                 if( verify_number( $invitee ) ){
                     
