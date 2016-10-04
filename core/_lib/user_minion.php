@@ -320,7 +320,7 @@ class user_minion {
         // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.  
         
         $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `profile`
-                        WHERE `blocker` ='".$this->id."' and `blockee`=`profile`.`id` " ) ;
+                        WHERE `blocker` ='".$this->id."' and `blockee`=`profile`.`user_id` " ) ;
         
         if( $db->count() == 0 ){
             return false ;
