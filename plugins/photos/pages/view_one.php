@@ -33,5 +33,19 @@
  * 
  */
 
+include(oe_frontend."page_minion.php");
+include(oe_lib."form_minion.php");
+
+$page = new page_minion("Upload Photo");
+
+$page->header();
+
 ?>
-<img src="/profile/<?php print( $oepc[$tier]['id'] ) ; ?>/photo/<?php print( $photo['id'] );?>.png" />
+<article id="photo">
+	<div id="title"><h2><?php echo $photo['title']; ?></h2></div>
+	<div id="photo">
+		<img src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
+	</div>
+	<div id="description"><?php echo $photo['description']; ?></div>
+</article>
+<?php $page->footer(); ?>
