@@ -1,4 +1,7 @@
 <?php
+
+date_default_timezone_set( 'UTC' );
+
 function oe_time( $timestamp='' ) // returns date as YYYY-MM-DD HH:MM:SS
 {
     if( $timestamp == '' )
@@ -7,6 +10,15 @@ function oe_time( $timestamp='' ) // returns date as YYYY-MM-DD HH:MM:SS
     }
 
     return date( 'Y-m-d H:i:s', $timestamp ) ;
+}
+
+
+function friendly_time( $oe_time ){
+
+    $time = strtotime( $oe_time ) ;
+
+    return date( 'l, F jS, Y g:i A', $time );
+
 }
 
 $sql_config[ 'insert' ]['host'] = 'db.catalystpoint.net' ;
@@ -35,7 +47,7 @@ $db = new mysqli_minion($sql_config) ;
         case 'emptysqllog':
             
             $f = @fopen( '../oe_logs/sqlerrors.log', 'w' );
-            fwrite( $f, "LOG CLEARED ".oe_time().PHP_EOL ) ;
+            fwrite( $f, "LOG CLEARED ".friendly_time( oe_time() ).PHP_EOL ) ;
             fclose( $f ) ;
         
         case 'displaysqllog' :

@@ -6,6 +6,8 @@
 	include_once( oe_lib.'mysqli_minion.php' ) ;
 	include_once( $oe_modules['profile']."lib/profile_minion.php" );
 	include_once( oe_lib.'user_minion.php' ) ;
+
+	date_default_timezone_set( 'UTC' );
 	
 	session_start() ;
 	
