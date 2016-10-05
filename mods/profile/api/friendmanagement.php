@@ -13,14 +13,40 @@
             $user->load_friends_list() ;
             
             if( ! $user->is_blocked( $_POST['user'] ) ) {
-                $db->insert( "INSERT INTO `profile_friendship_rq` SET `requestor`='".$user->id."', `requestee`='".$_POST['user']."'" ) ;
                 
-                $post->json_reply( 'SUCCESS' ) ;
-
+                $test = $db->get_assoc( "SELECT `requestor`, `requestee` FROM `profile_friendship_rq`
+                                        WHERE 
+                                        ( `requestor`='".$user->id."' and `requestee`='".$_POST['user']."' )
+                                        OR
+                                        ( `requestee`='".$user->id."' and `requestor`='".$_POST['user']."' )" ) ;
+                
+                                        
+                if( $test == false ){
+                
+                    $db->insert( "INSERT INTO `profile_friendship_rq` 
+                                        SET `requestor`='".$user->id."', `requestee`='".$_POST['user']."'" ) ;
+                    $post->json_reply( 'SUCCESS' ) ;
+                
+                } elseif( $test['requestor'] == $_POST['user'] ) {
+                    
+                    // remove friend request
+                    
+                    $db->update( "DELETE FROM `profile_friendship_rq` WHERE
+                        `requestee`='".$user->id."' AND `requestor`='".$_POST['user']."'" ) ;
+                
+                    // add friendship
+         
+                    $db->insert( "INSERT INTO `profile_friendship` SET 
+                        `friend1`='".$user->id."', `friend2`='".$_POST['user']."', `timestamp`='".oe_time()."'" ) ;
+                    
+                    $post->json_reply( 'SUCCESS', 'Friend added' ) ;
+                } else {
+                    $post->json_reply( 'ERROR', 'Duplicate request' ) ;
+                }
+                
             }
             
             $post->json_reply( 'FAIL' ) ;
-              
             header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
@@ -63,22 +89,6 @@
                 $db->insert( "INSERT INTO `profile_friendship` SET 
                     `friend1`='".$user->id."', `friend2`='".$_POST['user']."', `timestamp`='".oe_time()."'" ) ;
      
-                // add activity
-                
-                $st['user_id'] = $user->id ;
-                $st['ref'] = $_POST['user'] ;
-                $st['type'] = 1 ;
-                $st['timestamp'] = oe_time() ;
-                
-                $db->insert( "INSERT INTO `user_activity` SET ".$db->build_set_string_from_array( $st ) ) ;
-                
-                $st['user_id'] = $_POST['user'] ;
-                $st['ref'] = $user->id ;
-                
-                $db->insert( "INSERT INTO `user_activity` SET ".$db->build_set_string_from_array( $st ) ) ;
-
-                $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='2', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
-                
                 $user->load_friends_list() ;
                 
                 $post->json_reply( 'SUCCESS' ) ;
