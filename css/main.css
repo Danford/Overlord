@@ -52,9 +52,9 @@ content header {
 	color: #000;
 }
 
-/**/
-/* menu styling */
-/**/
+/*																	*/
+/* 							menu styling 							*/
+/*																	*/
 
 nav ul {
 	list-style: none;
@@ -95,9 +95,9 @@ nav li li {
 	font-size: .8em;
 }
 
-/**/
-/* mobile menu styling */
-/**/
+/*																	*/
+/* 						mobile menu styling 						*/
+/*																	*/
 
 @media screen and (min-width: 650px) {
 	nav li {
@@ -138,9 +138,9 @@ nav li li {
 	}
 }
 
-/**/
-/* frame styling */
-/**/
+/*																*/
+/* 							frame styling 						*/
+/*																*/
 
 .sidebar-container {
 	width: 100%;
@@ -166,9 +166,9 @@ nav li li {
 	margin-bottom: 35px;
 }
 
-/**/
-/* profile styling */
-/**/
+/*																*/
+/* 							profile styling						*/
+/*																*/
 
 article#profile {
 	display: -webkit-box;
@@ -212,9 +212,14 @@ article#profile > * {
     text-align: center;
 }
 
-/**/
-/* Form styling */
-/**/
+#main-image input#Submit, #friends input#Submit {
+	margin: 2px 0;
+	width: 100%;
+}
+
+/*																	*/
+/* 							Form styling 							*/
+/*																	*/
 input {
 	border-radius: 10px;
     padding: 3px;
@@ -241,9 +246,9 @@ select:focus {
 	background-color: #DEF7FF;
 }
 
-/**/
-/* Buttons */
-/**/
+/*																		*/
+/* 									Buttons							 	*/
+/*																		*/
 
 input#Submit, input#x {
 	-moz-box-shadow: 0px 10px 14px -7px #3e7327;
@@ -286,8 +291,8 @@ input#Submit:active, input#x:active {
 	top:1px;
 }
 
-/**/
-/* Photo gallery */
+/*																	*/
+/* 								Photo gallery 						*/
 
 article#photos {
 	display: block;
@@ -308,9 +313,9 @@ article#photos {
 	margin: 20px;
 }
 
-/**/
-/* Loader */
-/**/
+/*														*/
+/* 							Loader 						*/
+/*														*/
 
 .cssload-fond{
 	position:relative;
@@ -436,9 +441,9 @@ article#photos {
 	100%{-moz-transform:rotate(720deg) scale(1);}
 }
 
-/**/
-/* Flickity Carousel */
-/**/
+/*																	*/
+/* 							Flickity Carousel 						*/
+/*																	*/
 
 .carousel {
 	overflow: visible;
@@ -459,18 +464,18 @@ article#photos {
 .carousel-cell img {
 }
 
-/* cell number */
-.carousel-cell:before {
+
+/*.carousel-cell:before {
   display: block;
   text-align: center;
   line-height: 200px;
   font-size: 80px;
   color: white;
-}
+}*/
 
-/**/
-/* Modular Objects */
-/**/
+/*																	*/
+/* 							Modular Objects 						*/
+/*																	*/
 
 #city-autocomplete-wrapper {
 	height: 0;

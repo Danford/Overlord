@@ -36,6 +36,7 @@ $photos = get_photos();
 
 function UserInteraction($apiCall, $buttonText)
 {
+	global $profile;
 	$form = new form_minion($apiCall, 'profile');
 	$form->header();
 	$form->hidden('user', $profile->id);
@@ -78,14 +79,17 @@ function UnblockUser()
 	UserInteraction('unblockUser', 'Unblock User');
 }
 
-function PrintUserInteractions()
+function PrintUserInteractions($friend = NULL)
 {
 	global $profile;
 	global $user;
-	
-	if ($profile->id != $user->id)
+
+	if (!isset($friend))
+		$friend = $profile;
+		
+	if ($user->id != $friend->id)
 	{
-		if (!$user->is_friend($profile->id))
+		if (!$user->is_friend($friend->id))
 		{
 			if ($profile->friend_request_status() == "outgoing")
 				CancelRequest();
@@ -100,7 +104,7 @@ function PrintUserInteractions()
 		else
 			RemoveFriend();
 		
-		if (!$user->is_blocked($profile->id))
+		if (!$user->is_blocked($friend->id))
 			BlockUser();
 		else
 			UnblockUser();
@@ -137,7 +141,7 @@ function PrintUserInteractions()
 						<div class="profile-img">
 							<img src="<?php echo $friend->profile_thumbnail(); ?>"/>
 						</div>
-						<div class="button request-friend">Add Friend</div>
+						<?php PrintUserInteractions($friend); ?>
 					</div>						
 					<?php endforeach; ?>
 				</div>
