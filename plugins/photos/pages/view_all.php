@@ -38,6 +38,7 @@
  */
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
+include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
 $page = new page_minion("Upload Photo");
@@ -55,9 +56,7 @@ $photos = get_photos();
 		<a href="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>">
 			<div class="grid-item tile">
 				<div id="title"><?php echo $photo['title']; ?></div>
-				<div id="photo">
-					<img src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
-				</div>
+				<div id="photo"><img src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" /></div>
 				<div id="description"><?php echo $photo['description']; ?></div>
 			</div>
 		</a>
@@ -75,11 +74,6 @@ $grid = $('.grid').isotope({
 	
 	});
 $grid.imagesLoaded().progress( function() {
-	  $grid.isotope('layout');
-	});
-$grid.on( 'hover', '.grid-item', function() {
-	  // change size of item by toggling gigante class
-	  $( this ).toggleClass('grid-item--hover');
 	  $grid.isotope('layout');
 	});
 
