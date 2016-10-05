@@ -1,13 +1,13 @@
 <?php
 
 
-    switch( $_POST["oe_formid"] ){
+    switch( $apiCall ){
         
         case 'addFriend' :
 
             $user->load_friends_list() ;
             
-            if( ! $user->is_blocked( $uri[$pos] ) ) {
+            if( verify_number($_POST['user']) and ! $user->is_blocked( $_POST['user'] ) ) {
                 $db->insert( "INSERT INTO `profile_friendship_rq` SET `requestor`='".$user->id."', `requestee`='".$db->sanitize( $_POST['user'] )."'" ) ;
                 $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$db->sanitize( $_POST['user'] )."', `type`='1', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
                 
@@ -17,7 +17,7 @@
             
             $post->json_reply( 'FAIL' ) ;
               
-            header( 'Location: /profile/'.$db->sanitize( $_POST['user'] ) );
+            header( 'Location: /profile/'.$_POST['user'] );
             die() ;
             
         case 'removeFriend' :
