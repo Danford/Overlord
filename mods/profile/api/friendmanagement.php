@@ -144,9 +144,6 @@
  
                //TODO Wipe out comments, likes
             
-            // add activity for BLOCKED user so that they will have their friend/block list updated
-                
-            $db->insert( "INSERT INTO `user_notification` SET `user_id`='".$_POST['user']."', `type`='0', ref='".$user->id."', `timestamp`='".oe_time()."'") ;
             $user->load_friends_list() ;
          
             $post->json_reply( 'SUCCESS' ) ;
