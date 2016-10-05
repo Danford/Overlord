@@ -70,8 +70,7 @@ class group_minion {
                             $c = $db->get_field( "SELECT COUNT(*) FROM `invitations` 
                                                     WHERE `module`='group' 
                                                     AND `module_item_id`='".$id."' 
-                                                    AND `user`='".$user->id."'
-                                                    AND `type`" ) ;
+                                                    AND `user`='".$user->id."'" ) ;
                                 
                             $this->invited = ( $c > 0 ) ;
                             
@@ -222,6 +221,8 @@ class group_minion {
      */
     function get_uninvitable(){
         
+        global $db ;
+        
         $response = array() ;
         
         $response[] = $this->owner ;
@@ -251,10 +252,41 @@ class group_minion {
             }
         }
         
+        // already invited, or has an invite pending approval
+        
+        $db->query( "SELECT `invitee` FROM `invitations`
+                    WHERE `module`='group'
+                        AND `module_item_id`='".$this->id."'
+                            AND `user`='".$user->id."'" ) ;
+
+        
+        while( ( $i = $db->get_field() ) != false ){
+            
+            if( ! inarray( $i, $response ) ){
+                $response[] = $i ;
+            }
+        }
+        
         return $response ;
         
     }
     
+    function get_blocked(){
+        
+        if( ! is_array( $this->blocked ) ){
+        
+            global $db ;
+            
+            $this->blocked = array() ;
+            
+            $db->query( "SELECT `user` FROM `group_membership` WHERE `group`='".$this->id."' and `access`='0'" ) ;
+ 
+            while( ( $u = $db->field() ) != false ){
+                $this->blocked[] = $u ;
+            }
+        }
+        return $this->blocked ;        
+    }
     
     
 }

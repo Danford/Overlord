@@ -1,6 +1,7 @@
 <?php
     $post->checkbox( 'tos_agree' ) ;
-    $post->hold( 'screen_name', 'email', 'confirmemail', 'birth_month', 'birth_day', 'birth_year', 'tos_agree', 'gender', 'show_age', 'email_notification', 'invite_notification', 'allow_contact', 'zip', 'city' ) ;
+    $post->hold( 'screen_name', 'email', 'confirmemail', 'birth_month', 'birth_day', 'birth_year', 'tos_agree', 'gender', 
+            'show_age', 'email_notification', 'invite_notification', 'allow_contact', 'zip' ) ;
 
     
         $post->require_set( 'screen_name', 'email', 'tos_agree','zip' );
@@ -16,7 +17,8 @@
         $post->require_true( preg_match('/[A-Z]/', $_POST['password']), 'password', 'Password does not contain an uppercase character.' ) ;
         $post->require_true( preg_match('/[a-z]/', $_POST['password']), 'password', 'Password does not contain a lowercase character.' ) ;
         $post->require_true( preg_match("/[0-9\\\\! '@#$%^&*\\(\\)\\[\\]\\{\\}`~\\.,\\/<>;:+=\\-_]/", $_POST['password']), 'password', 'Password does not contain a number or special character.' ) ;
-      
+        $post->require_true( verify_number( $_POST['zip'] ), 'zip', 'Invalid Zip Code' ) ;
+        
     $post->checkpoint() ;
 
         $post->require_true( $_POST['password'] == $_POST['confirmpassword'], 'password', 'Password confirmation does not match' ) ;
@@ -52,6 +54,13 @@
         $post->require_true( $db->get_field( $usercheck ) == 0 , 'email', 'There is already an account with this e-mail.' ) ;
     
     $post->checkpoint() ;
+    
+        $locationcheck = "SELECT COUNT(*) FROM `location_zip` WHERE `zip`='".$_POST['zip']."'" ;
+        
+        $post->require_true( $db->get_field( $locationcheck ), 'zip', 'Invalid Zip Code.' ) ;
+        
+    $post->checkpoint() ;
+    
         /*
          *  The following options shouldn't be a problem, actually, but these checks are to avoid
          *  sql injection smartasses bypassing the form.
@@ -79,7 +88,7 @@
     $a['passhash'] = hash_hmac( "sha256", $_POST['password'], oe_seed ) ;
     
     $set1a = $db->build_set_string_from_post( 'email', 'email_notification', 'invite_notification' ) ;
-    $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender', 'show_age', 'allow_contact','city' ) ;
+    $set1p = $db->build_set_string_from_post( 'screen_name', 'birthdate', 'gender', 'show_age', 'allow_contact' ) ;
     $set2 = $db->build_set_string_from_array( $a ) ;
     
     $b['user_id'] = $db->insert( "INSERT INTO `user_account` SET ".$set1a.", ".$set2 ) ;

@@ -19,6 +19,8 @@ class user_minion {
     var $groups_owned ;
     var $groups_administered ;
     var $groups_blocked ;
+    var $timezone ;
+    var $dst ;
     
     function __construct(){
         
@@ -159,7 +161,7 @@ class user_minion {
             
                     for( $i = ( $tokencount - max_login_tokens + 1 ) ; $i > 0 ; $i-- ){
             
-                        $db->update( "DELETE FROM `persistent_tokens` WHERE `id`='".$this->id."' and `timestamp`='".$db->field()."'" ) ;
+                        $db->update( "DELETE FROM `persistent_tokens` WHERE `user_id`='".$this->id."' and `timestamp`='".$db->field()."'" ) ;
             
                     }
                 }
@@ -286,7 +288,7 @@ class user_minion {
     }
     
     function is_blocked( $user_id ) {    
-        return ( isset( $this->blocked[$user_id] )) ;
+        return ( in_array($user_id, $this->blocked) ) ;
     }
     
     function load_profile(){
@@ -299,6 +301,23 @@ class user_minion {
 
         $this->load_friends_list() ;
         $this->load_group_membership() ;
+        $this->get_location_info() ;
+        $this->get_blocked() ;
+    }
+    
+    function get_location_info(){
+        
+        global $db ;
+        
+        $q = "SELECT `timezone`,`dst` FROM `user_location`, `location_zip`
+            WHERE `user_id`='".$this->id."' AND `primary`='1' 
+              AND `user_location`.`zip` = `location_zip`" ;
+        
+        $l = $db->get_assoc($q) ;
+
+        $this->timezone = $l['timezone'] ;
+        $this->dst = $l['dst'] ;
+        
     }
     
     function get_friends_as_array( $offset = 0, $limit = 99999999 ){
@@ -313,34 +332,48 @@ class user_minion {
         
     }
     
-    function get_blocked_as_array(){
+    function get_blocked(){
         
         global $db ;
         
         // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.  
         
-        $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `profile`
-                        WHERE `blocker` ='".$this->id."' and `blockee`=`profile`.`id` " ) ;
+        $db->query( "SELECT `blocker`, `blockee` from `profile_block`
+                        WHERE `blocker` ='".$this->id."' or `blockee`= '".$this->id."'" ) ;
         
         if( $db->count() == 0 ){
             return false ;
         } else {
             
             while (( $p = $db->assoc() ) != false ){
-                $blocked[] = $p ;
+                if( $p['blocker'] = $this->id ){                
+                    $blocked[] = $p['blockee'] ;
+                } else {
+                    $blocked[] = $p['blocker'] ;
+                }
             }
             
+            $this->blocked = $blocked ;
             return $blocked ;
         }
-    } /**
-     * Returns a comma-delimited list of the user's friends
-     *
-     * @return string
-     */
+    } 
     
-    
-    function is_in_group( $group_id ){
-        return in_array($group_id, $this->groups_in ) ;
+    function get_blocked_list() {
+        // this is a list of people THIS USER has blocked.  They cannot see who has blocked them.
+        
+        $db->query( "SELECT `blocker`, `screen_name` from `profile_block`, `profile`
+                        WHERE `blocker` ='".$this->id."' and `blockee`=`profile`.`user_id` " ) ;
+        
+        if( $db->count() == 0 ){
+            return false ;
+        } else {
+        
+            while (( $p = $db->assoc() ) != false ){
+                $blocked[] = $p ;
+            }
+        
+            return $blocked ;
+        }
     }
     
     /**
