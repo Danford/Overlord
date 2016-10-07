@@ -1,7 +1,7 @@
 <?php 
 
 $baseurl = httproot.'login/' ;
-$postdir = $oe_modules['login'].'post/' ;
+$postdir = $oe_modules['login'].'api/' ;
 
 switch( $apiCall ) {
 
