@@ -309,15 +309,19 @@ class user_minion {
         
         global $db ;
         
-        $q = "SELECT `timezone`,`dst` FROM `user_location`, `location_zip`
+        $q = "SELECT `timezone`.`name` FROM `user_location`, `location_zip`, `timezone`
             WHERE `user_id`='".$this->id."' AND `primary`='1' 
-              AND `user_location`.`zip` = `location_zip`" ;
+              AND `user_location`.`zip` = `location_zip`.`zip`
+              AND `location_zip`.`timezone_id` = `timezone`.`id`" ;
         
-        $l = $db->get_assoc($q) ;
+        $tz = $db->get_field($q) ;
 
-        $this->timezone = $l['timezone'] ;
-        $this->dst = $l['dst'] ;
-        
+        if( $tz == false ){
+            $this->timezone = false ; 
+        } else {
+            $this->timezone = $tz ;
+        }
+            
     }
     
     function get_friends_as_array( $offset = 0, $limit = 99999999 ){
