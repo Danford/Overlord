@@ -309,17 +309,19 @@ class user_minion {
         
         global $db ;
         
-        $q = "SELECT `timezone`.`name` FROM `user_location`, `location_zip`, `timezone`
+        $q = "SELECT `timezone`.`name`, `zip` FROM `user_location`, `location_zip`, `timezone`
             WHERE `user_id`='".$this->id."' AND `primary`='1' 
               AND `user_location`.`zip` = `location_zip`.`zip`
               AND `location_zip`.`timezone_id` = `timezone`.`id`" ;
         
-        $tz = $db->get_field($q) ;
+        $l = $db->get_assoc($q) ;
 
-        if( $tz == false ){
+        if( $l == false ){
             $this->timezone = false ; 
+            $this->zip = false ;
         } else {
-            $this->timezone = $tz ;
+            $this->timezone = $l['name'] ;
+            $this->zip = $l['zip'] ;
         }
             
     }
