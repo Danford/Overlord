@@ -260,7 +260,7 @@ class group_minion {
                             AND `user`='".$user->id."'" ) ;
 
         
-        while( ( $i = $db->get_field() ) != false ){
+        while( ( $i = $db->field() ) != false ){
             
             if( ! inarray( $i, $response ) ){
                 $response[] = $i ;
