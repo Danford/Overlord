@@ -16,6 +16,9 @@ include(oe_lib."form_minion.php");
 
 $page = new page_minion("New Writing");
 
+$page->addjs( '/js/tinymce/tinymce.min.js' ) ;
+$page->addjs( '/js/invoketinymce.js') ;
+
 $page->header();
 $form = new form_minion("write", "writing");
 

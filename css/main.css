@@ -163,7 +163,7 @@ nav li li {
 
 #main {
 	margin: 15px;
-	margin-bottom: 35px;
+	margin-bottom: 0;
 }
 
 /*																*/
@@ -196,8 +196,9 @@ article#profile > * {
 
 #profile #photo-albums {
 	order: 1;
-	height: 160px;
 	margin-right: 15px;
+	padding-bottom: 20px;
+	overflow: hidden;
 }
 
 #profile #main-image img {
@@ -215,6 +216,18 @@ article#profile > * {
 #main-image input#Submit, #friends input#Submit {
 	margin: 2px 0;
 	width: 100%;
+}
+
+.profile-img img {
+	width: 100%;
+}
+
+.grid-item .photo {
+	overflow: visible;
+}
+
+.friend {
+	width: 50%;
 }
 
 /*																	*/
@@ -298,7 +311,7 @@ article#photos {
 	display: block;
 }
 
-.grid-sizer, .grid-item { width: 20%; margin: 7px;}
+.grid-sizer, .grid-item { width: 23%; margin: 1%;}
 .grid-item { transition: all .2s ease-in-out; }
 .grid-item:hover { transform: scale(1.1); z-index: 998; }
 .grid-item img {
@@ -313,13 +326,34 @@ article#photos {
 	margin: 20px;
 }
 
+.grid a {
+	color: black;
+}
+.tile div#title {
+    text-transform: capitalize;
+    text-align: center;
+}
+
+.tile div#description {
+    margin: 4px;
+    margin-top: 8px;
+}
+
+.tile div#full-copy {
+	display: none;
+}
 /*														*/
 /* 							Loader 						*/
 /*														*/
 
+img.loading {
+	display: none;
+}
+
 .cssload-fond{
 	position:relative;
-	margin: auto;
+	width: 100%;
+	margin: 50px 0;	
 }
 
 .cssload-container-general
@@ -462,6 +496,7 @@ article#photos {
 }
 
 .carousel-cell img {
+    width: 100%;
 }
 
 
