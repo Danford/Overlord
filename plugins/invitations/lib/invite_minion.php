@@ -78,7 +78,25 @@ class invite_minion {
             }            
         }
         
-        return $invited ;
+        return $response ;
+    }
+    
+    function get_invited_as_objects() {
+        
+        global $db ;
+        
+        $response = array() ;
+        
+        if( $oepc[0]['admin']){
+         
+            $db->query( "SELECT `invitee` FROM `".$this->table."` WHERE ".build_api_where_string() ) ;
+            
+            while( ( $i = $db->field() ) != false ){
+                $response[] = new profile_minion( $i ) ;
+            }            
+        }
+        
+        return $response ;
     }
     
     
@@ -206,4 +224,26 @@ class invite_minion {
         }        
         return $count ;
     }
+
+    function uninvite( array $users ){
+    
+        global $db ;
+        global $oepc ;
+    
+        $count = 0 ;
+    
+        if( $oepc[0]['admin'] ){
+        
+            foreach( $users as $u ){
+        
+                if( verify_number( $u ) ){
+                
+                $count += $db->update( "DELETE FROM `".$this->table."` 
+                                        WHERE ".build_api_where_string()." AND `invitee`='".$u."'" ) ;
+                }
+            }
+        }
+        return $count ;
+    }
+
 }

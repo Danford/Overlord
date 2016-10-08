@@ -40,5 +40,8 @@ switch( $apiCall ){
         $post->json_reply("SUCCESS", $invite->get_moderatables() ) ;
         die() ;
     
-    
+    case 'uninvite':
+        
+        $post->json_reply("SUCCESS", $invite->uninvite( $_POST['invitees'] ) ) ;
+        $post->return_to_form() ;
 }
