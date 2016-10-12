@@ -12,7 +12,7 @@ $post->require_true( preg_match( '/\d\d\d\d-\d\d-\d\d/', $_POST['birthdate'] ) =
 
 $post->checkpoint() ;
 
-$sp = $db->build_set_string_from_post( 'show_age', 'allow_contact', 'birthdate', 'gender', 'detail','city') ;
+$sp = $db->build_set_string_from_post( 'show_age', 'allow_contact', 'birthdate', 'gender', 'detail','city_id') ;
 $sa = $db->build_set_string_from_post( 'email_notification', 'invite_notification' ) ;
 
 $db->update( "UPDATE `profile` SET ".$sp." WHERE `user_id`='".$user->id."'" ) ;
