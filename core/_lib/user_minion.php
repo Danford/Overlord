@@ -240,6 +240,7 @@ class user_minion {
         $this->groups_in = array() ;
         $this->groups_owned = array() ;
         $this->groups_administered = array() ;
+        $this->groups_blocked = array();
         
         $db->query ( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
         
