@@ -39,7 +39,7 @@ if( verify_number( $uri[$pos] ) ){
     
     $profile = new group_minion( $uri[$pos] ) ;
     
-    if( $profile['id'] != false ){
+    if( $profile->id != false ){
         
         // they at least have permission to see the group profile
         
