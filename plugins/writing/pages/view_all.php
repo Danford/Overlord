@@ -53,14 +53,20 @@ function ImageLoaded(img){
 
 </script>
 <article id="writings">
-	<div class="button-group sort-by-button-group">
-		<button data-sort-by="date">Date</button>
-		<button data-sort-by="title">Title</button>
-		<button data-sort-by="likes">Likes *</button>
-		<button data-sort-by="views">Views *</button>
-		<button data-sort-by="shares">Shares *</button>
-		<button data-sort-by="comments">Comments *</button>
-		<p>* Not yet implemented</p>
+	<div class="sortings">
+		<div class="ui-group">
+			<div class="button-group sort-by-button-group">
+				<button class="button is-checked" data-sort-by="">None</button>
+				<button class="button" data-sort-by="date">Date</button>
+				<button class="button" data-sort-by="title">Title</button>
+				<button class="button" data-sort-by="category">Photo / Writing</button>
+				<button class="button" data-sort-by="likes">Likes *</button>
+				<button class="button" data-sort-by="views">Views *</button>
+				<button class="button" data-sort-by="shares">Shares *</button>
+				<button class="button" data-sort-by="comments">Comments *</button>
+			</div>
+			<p>* Not yet implemented</p>
+		</div>
 	</div>
 	<div class="grid">
 		<div class="grid-sizer"></div>

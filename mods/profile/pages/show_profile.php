@@ -175,7 +175,15 @@ function ImageLoaded(img){
 		<div class="sidebar-container tile">
 			<p id="name"><?php echo $profile->screen_name; ?></p>
 			<div id="main-image">
-				<img src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
+				<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
+				<div align="center" class="cssload-fond">
+					<div class="cssload-container-general">
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
+					</div>
+				</div>
 				<?php PrintUserInteractions(); ?>
 			</div>
 			
@@ -199,7 +207,15 @@ function ImageLoaded(img){
 								<?php echo $friend->screen_name; ?>
 							</div>
 							<div class="profile-img">
-								<img src="<?php echo $friend->profile_picture(); ?>"/>
+								<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
+								<div align="center" class="cssload-fond">
+									<div class="cssload-container-general">
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
+									</div>
+								</div>
 							</div>
 							<?php PrintFriendlistInteractions($friend); ?>
 						</div>
@@ -220,7 +236,15 @@ function ImageLoaded(img){
 								<?php echo $friend->screen_name; ?>
 							</div>
 							<div class="profile-img">
-								<img src="<?php echo $friend->profile_picture(); ?>"/>
+								<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
+								<div align="center" class="cssload-fond">
+									<div class="cssload-container-general">
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
+									</div>
+								</div>
 							</div>
 							<?php PrintFriendlistInteractions($friend); ?>
 						</div>
@@ -234,20 +258,29 @@ function ImageLoaded(img){
 		<p id="about-me"><?php echo $profile->detail; ?></p>
 	</div>
 	<div id="photo-albums" class="tile">
-		<div class="button-group filter-button-group">
-			<button class="button is-checked" data-filter="*">All</button>
-			<button class="button is-checked" data-filter=".photo">Photos</button>
-			<button class="button is-checked" data-filter=".writing">Writings</button>
+		<div class="filters">
+			<div class="ui-group">
+				<div class="button-group js-radio-button-group" data-filter-group="category">
+					<button class="button is-checked" data-filter="">All</button>
+					<button class="button" data-filter=".photo">Photos <span class="filter-count"></span></button>
+					<button class="button" data-filter=".writing">Writings <span class="filter-count"></span></button>
+				</div>
+			</div>
 		</div>
-		<div class="button-group sort-by-button-group">
-			<button data-sort-by="date">Date</button>
-			<button data-sort-by="title">Title</button>
-			<button data-sort-by="category">Photo / Writing</button>
-			<button data-sort-by="likes">Likes *</button>
-			<button data-sort-by="views">Views *</button>
-			<button data-sort-by="shares">Shares *</button>
-			<button data-sort-by="comments">Comments *</button>
-			<p>* Not yet implemented</p>
+		<div class="sortings">
+			<div class="ui-group">
+				<div class="button-group sort-by-button-group">
+					<button class="button is-checked" data-sort-by="">None</button>
+					<button class="button" data-sort-by="date">Date</button>
+					<button class="button" data-sort-by="title">Title</button>
+					<button class="button" data-sort-by="category">Photo / Writing</button>
+					<button class="button" data-sort-by="likes">Likes *</button>
+					<button class="button" data-sort-by="views">Views *</button>
+					<button class="button" data-sort-by="shares">Shares *</button>
+					<button class="button" data-sort-by="comments">Comments *</button>
+				</div>
+				<p>* Not yet implemented</p>
+			</div>
 		</div>
 		<div class="grid">
 			<div class="grid-sizer"></div>
@@ -267,7 +300,7 @@ function ImageLoaded(img){
 								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
 						</div>
 					</div>
-					<div id="description"><?php echo $photos[$i]['description']; ?></div>
+					<div id="description"><p><?php echo $photos[$i]['description']; ?></p></div>
 				</div>
 			</a>
 			<?php endif; ?>
@@ -313,15 +346,31 @@ $grid = $('.grid').isotope({
 	},
 });
 
+var $filterButtons = $('.filters .button');
+
+updateFilterCounts();
+
+// store filter for each group
+var filters = {};
+
 //recalculate grid layout on image load
 $grid.imagesLoaded().progress( function () {
 	$grid.isotope('layout');
 });
 
-//filter items on button click
-$('.filter-button-group').on( 'click', 'button', function() {
-	var filterValue = $(this).attr('data-filter');
-	$grid.isotope({ filter: filterValue });
+
+$('.filters').on( 'click', '.button', function() {
+  var $this = $(this);
+  // get group key
+  var $buttonGroup = $this.parents('.button-group');
+  var filterGroup = $buttonGroup.attr('data-filter-group');
+  // set filter for group
+  filters[ filterGroup ] = $this.attr('data-filter');
+  // combine filters
+  var filterValue = concatValues( filters );
+  // set filter for Isotope
+  $grid.isotope({ filter: filterValue });
+  updateFilterCounts();
 });
 
 //sort items on button click
@@ -329,5 +378,40 @@ $('.sort-by-button-group').on( 'click', 'button', function() {
 	var sortByValue = $(this).attr('data-sort-by');
 	$grid.isotope({ sortBy: sortByValue });
 });
+
+//change is-checked class on buttons
+$('.button-group').each( function( i, buttonGroup ) {
+  var $buttonGroup = $( buttonGroup );
+  $buttonGroup.on( 'click', 'button', function() {
+    $buttonGroup.find('.is-checked').removeClass('is-checked');
+    $( this ).addClass('is-checked');
+  });
+});
+  
+// flatten object by concatting values
+function concatValues( obj ) {
+  var value = '';
+  for ( var prop in obj ) {
+    value += obj[ prop ];
+  }
+  return value;
+}
+
+function updateFilterCounts()  {
+  // get filtered item elements
+  var itemElems = $grid.isotope('getFilteredItemElements');
+  var $itemElems = $( itemElems );
+  $filterButtons.each( function( i, button ) {
+    var $button = $( button );
+    var filterValue = $button.attr('data-filter');
+    if ( !filterValue ) {
+      // do not update 'any' buttons
+      return;
+    }
+    var count = $itemElems.filter( filterValue ).length;
+    $button.find('.filter-count').text( '(' + count +')' );
+  });
+}
+
 </script>
 <?php $page->footer(); ?>
