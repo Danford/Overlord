@@ -26,11 +26,6 @@
 		<?php $form->text_field("screen_name", "width: 250px"); $form->if_error("screen_name", "<br />%%ERROR%%"); ?>
 	</div>
 	<div>
-		<p>Note: Gender identification is completely optional.  Additionally, transgender individuals are
-		not required to select a transgender option; if they so choose they may simply select their gender.</p>
-		<p>Gender: <?php $form->select("gender", $option); $form->if_error("gender", '<br />%%ERROR%%'); ?></p>
-	</div>
-	<div>
 		Birthdate: <?php $form->date_input("birth", 1900, (date("Y") - 18)); $form->if_error("birth", '<br />%%ERROR%%'); ?>
 	</div>
 	<div>
@@ -43,17 +38,7 @@
 		<p>Confirm Password: <?php $form->pass_field("confirmpassword", "width: 400px"); $form->if_error("password", "<br />%%ERROR%%"); ?></p>
 	</div>
 	<div>
-		<p>Zip: <?php $form->text_field( "zip", "width: 100px"); $form->if_error("zip", "<br />%%ERROR%%"); ?></p>
-	    <p>City (Optional):</p>
-	    <input type="hidden" name="city" id="city" value="">
-	    <div id="city-input">
-	    <input type="text" name="city-input" id="city-input" autocomplete="off" value="" style="width: 300px">
-		    <div id="city-autocomplete-wrapper">
-			    <div id="city-autocomplete">
-			    
-			    </div>
-			</div>
-	    </div>
+		<p>Zip: <?php $form->text_field( "zip", "width: 100px"); $form->if_error("zip", "<br />%%ERROR%%"); ?></p>	    
 	</div>
 	<div>	
 		<p>Show Age in Profile?
@@ -76,4 +61,25 @@
 	<?php $form->plain_button('Submit', 'x', '', 'onclick="validate()"'); ?>
 </div>
 	<?php $form->footer(); ?>
-	
+
+<?php 
+/*
+ * Removed per cat's request but kept this just in case.
+  	<div>
+		<p>Note: Gender identification is completely optional.  Additionally, transgender individuals are
+		not required to select a transgender option; if they so choose they may simply select their gender.</p>
+		<p>Gender: <?php $form->select("gender", $option); $form->if_error("gender", '<br />%%ERROR%%'); ?></p>
+	</div>
+
+	<p>City (Optional):</p>
+    <input type="hidden" name="city" id="city" value="">
+    <div id="city-input">
+    <input type="text" name="city-input" id="city-input" autocomplete="off" value="" style="width: 300px">
+	    <div id="city-autocomplete-wrapper">
+		    <div id="city-autocomplete">
+		    
+		    </div>
+		</div>
+    </div>
+ */
+?>

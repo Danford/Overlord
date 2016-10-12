@@ -72,6 +72,9 @@ function DisplayAutocompleteLocationOptions(response) {
 }
 
 $(document).ready(function() {
+	/*
+	 * Removed per request but keeping code just in case and for eidt profile implementation 
+
 	$('input#zip').change(function() {
 		SetLocationFromZip($(this).val());
 	});
@@ -87,6 +90,8 @@ $(document).ready(function() {
 			$('#city-autocomplete').hide();
 		}, 150);
 	});
+	
+	*/
 		/*var predDropDown = $('<div class="zip-autocomplete"></div>').insertAfter($(this));
 		
 		predDropDown.empty();
