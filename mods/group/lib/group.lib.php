@@ -1,6 +1,9 @@
 <?php
 
 function get_my_groups(){
+    
+    global $db ;
+    
     $ownedgroups = array() ;
 
     $db->query( "SELECT `id`, `name`, `short`, `avatar` FROM `group` WHERE `owner`='".$user->id."'" ) ;
