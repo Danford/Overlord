@@ -10,6 +10,7 @@
     
     $oe_modules[ 'profile' ] = oe_mod.'profile/' ;
 	$oe_modules[ 'location' ] = oe_mod.'location/' ;
+	$oe_modules[ 'group' ] = oe_mod.'group/' ;
     
 // plugins
 
