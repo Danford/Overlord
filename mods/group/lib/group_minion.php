@@ -23,7 +23,7 @@ class group_minion {
                 global $db ;
                 global $user ;
                 
-                $q = "SELECT `name`, `owner`, `privacy`, `short`, `avatar`, `group`, `city` as `city_id`" ;
+                $q = "SELECT `name`, `owner`, `privacy`, `short`, `avatar`, `city` as `city_id`" ;
                 
                 if( $min != false ){ $q .= ", `detail`" ; }
                 
