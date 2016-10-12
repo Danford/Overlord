@@ -168,7 +168,7 @@ class form_minion
     function header()
     {    
     
-        print( '<form name="'.$this->form_id.'" id="'.$this->form_id.'" method="'.$this->method.'" action="'.$this->form_action.'"' );
+        print( '<form name="'.$this->api_call.'" id="'.$this->api_call.'" method="'.$this->method.'" action="'.$this->form_action.'"' );
         
         if( isset( $this->type ) and ( $this->type == "file" ) )
 		{
