@@ -38,7 +38,6 @@
  */
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
-include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
 $page = new page_minion("Upload Photo");
@@ -49,14 +48,49 @@ $page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
 
 $photos = get_photos();
 ?>
+<script type="text/javascript">
+//
+//Executed by onload from html for images loaded in grid.
+//
+
+function ImageLoaded(img){
+	var $img = $(img);
+		$img.removeClass('loading');
+	$img.parent().find('.cssload-fond').css('display', 'none');
+
+	if (typeof $grid != 'undefined')
+		$grid.isotope('layout');
+};
+
+</script>
 <article id="photos">
+	<div class="button-group sort-by-button-group">
+		<button data-sort-by="date">Date</button>
+		<button data-sort-by="title">Title</button>
+		<button data-sort-by="likes">Likes *</button>
+		<button data-sort-by="views">Views *</button>
+		<button data-sort-by="shares">Shares *</button>
+		<button data-sort-by="comments">Comments *</button>
+		<p>* Not yet implemented</p>
+	</div>
 	<div class="grid">
 		<div class="grid-sizer"></div>
 		<?php foreach ($photos as $photo) : ?>
+		<?php $date = new DateTime($photo['timestamp']); ?>
 		<a href="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>">
-			<div class="grid-item tile">
-				<div id="title"><?php echo $photo['title']; ?></div>
-				<div id="photo"><img src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" /></div>
+			<div class="grid-item tile photo" data-date="<?php echo $date->getTimestamp(); ?>">
+				<div id="title"><h2><?php echo $photo['title']; ?></h2></div>
+				<div id="photo">
+					<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
+					<div align="center" class="cssload-fond">
+						<div class="cssload-container-general">
+								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
+						</div>
+					</div>
+				</div>
 				<div id="description"><?php echo $photo['description']; ?></div>
 			</div>
 		</a>
@@ -64,18 +98,32 @@ $photos = get_photos();
 	</div>
 </article>
 <script>
+//load isotope grid
 $grid = $('.grid').isotope({
-	  // options
-	  itemSelector: '.grid-item',
-	  percentPosition: true,
-	  masonry: {
-	    columnWidth: '.grid-sizer'
-	  }
-	
-	});
-$grid.imagesLoaded().progress( function() {
-	  $grid.isotope('layout');
-	});
+	// options
+	itemSelector: '.grid-item',
+	percentPosition: true,
 
+	getSortData: {
+		title: '#title',
+		date: '[data-date]',
+		category: '[data-category]'
+	},
+	
+	masonry: {
+		columnWidth: '.grid-sizer'
+	}
+});
+
+//recalculate grid layout on image load
+$grid.imagesLoaded().progress( function() {
+	$grid.isotope('layout');
+});
+
+//sort items on button click
+$('.sort-by-button-group').on( 'click', 'button', function() {
+  var sortByValue = $(this).attr('data-sort-by');
+  $grid.isotope({ sortBy: sortByValue });
+});
 </script>
 <?php $page->footer(); ?>
