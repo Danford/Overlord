@@ -31,5 +31,5 @@ if( $apiCall == "edit "){
 $i = $db->insert( "INSERT INTO `group` SET ".$db->build_set_string_from_post('name','short','detail','privacy','city') ) ;
 
 $post->json_reply("SUCCESS", [ 'id' => $i ]) ;
-header( "Location:  ".str_replace( "create", $i, $_SERVER['HTTP_REFERER'] ) ) ;
+header( "Location:  ".str_replace( "create", $i."/invitations", $_SERVER['HTTP_REFERER'] ) ) ;
 die() ;

@@ -257,10 +257,11 @@ class group_minion {
         $db->query( "SELECT `invitee` FROM `invitations`
                     WHERE `module`='group'
                         AND `module_item_id`='".$this->id."'
-                            AND `user`='".$user->id."'" ) ;
+                        AND `user`='".$user->id."'
+                        AND `expired` = '0'" ) ;
 
         
-        while( ( $i = $db->get_field() ) != false ){
+        while( ( $i = $db->field() ) != false ){
             
             if( ! inarray( $i, $response ) ){
                 $response[] = $i ;
@@ -268,7 +269,6 @@ class group_minion {
         }
         
         return $response ;
-        
     }
     
     function get_blocked(){
