@@ -199,13 +199,13 @@ class post_minion
 
 					$prefill[ $hold ] = $_POST[ $hold ] ;
 
-					$_SESSION["oe_form"][$_POST["api_call"]]["data"]  = $prefill ;
+					$_SESSION["oe_form"][$_POST["oe_call"]]["data"]  = $prefill ;
 
 				}
 
 			}
 
-			$_SESSION["oe_form"][$_POST["api_call"]]["error"] = $this->form_error ;
+			$_SESSION["oe_form"][$_POST["oe_call"]]["error"] = $this->form_error ;
 
 			$this->return_to_form() ;
 			die() ;

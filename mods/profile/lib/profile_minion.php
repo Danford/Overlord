@@ -25,13 +25,18 @@ class profile_minion {
             $this->name = false ;
         } else {
             $q = "SELECT `screen_name`, `gender`, `avatar`, `birthdate`, 
-                        `show_age`,`allow_contact`,`city` as `city_id`";
+                        `show_age`,`allow_contact`, `city_id`";
                         
             if( $min != true ){ $q .=  ", `detail`" ; }
             
-            $q .= "     FROM `profile`
+            $q .= "     FROM `profile`, `user_account`
                         WHERE 
-                            `profile`.`user_id`='".$this->id."'" ;
+                            `profile`.`user_id`='".$this->id."'
+                        AND
+                            `profile`.`user_id`=`user_account`.`user_id`
+                        AND
+                            `user_account`.`status` = '1' ;
+                            " ;
          
             $info = $db->get_assoc( $q );
             

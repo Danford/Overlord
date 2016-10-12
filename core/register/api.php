@@ -77,11 +77,6 @@
          *  sql injection smartasses bypassing the form.
          */
     
-        if( preg_match( "/[0-".count($gender)."]/", $_POST['gender'] ) == 0 ) {
-            
-            die( "Stop That." ) ;
-        }
-    
         foreach( array( 'show_age', 'email_notification', 'invite_notification', 'allow_contact' ) as $field ) {
             
             if( $_POST[$field] != 0 and $_POST[$field] != 1 ) {
@@ -115,10 +110,10 @@
     include( oe_config."email.conf.php" ) ;
     
     $mailer->to( $_POST['email'] ) ;
-    $mailer->subject = $oe_email['reg']['subject'] ;  // this is in /core/_conf/email.conf
-    $mailer->from = $oe_email['reg']['address'] ;
+    $mailer->subject = $oe_mail['reg']['subject'] ;  // this is in /core/_conf/email.conf
+    $mailer->from = $oe_mail['reg']['address'] ;
     
-    $mailer->body = str_replace( array( '%%USERID%%','%%KEY%%'), array( $b['user_id'], $b['confirmation_key']), $oe_email['reg']['message']) ;
+    $mailer->body = str_replace( array( '%%USERID%%','%%KEY%%'), array( $b['user_id'], $b['confirmation_key']), $oe_mail['reg']['message']) ;
     
     if ( $mailer->send() ) {
     
