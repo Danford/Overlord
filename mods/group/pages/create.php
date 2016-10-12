@@ -13,4 +13,35 @@
  *          city    - int, optional
  *                    used for searching, does not limit membership
  *                    
- */                echo 'create.php' ;  
+ */
+
+include(oe_frontend."page_minion.php");
+include(oe_lib."form_minion.php");
+
+$page = new page_minion("Create Group");
+
+$page->addjs('/js/tinymce/tinymce.min.js');
+$page->addjs('/js/invoketinymce.js');
+
+$page->header();
+$form = new form_minion("create", "group");
+
+global $privacyoptions;
+?>
+
+<div id="upload-photo-form">
+	<?php $form->header(); ?>
+	<p>Name: <?php $form->text_field("name"); ?></p>
+	<p>Description: <?php $form->text_field("short"); ?></p>
+	<p>Detail:</p>
+	<p><?php $form->textarea_field("detail"); ?></p>
+	<p>Privacy:	<?php $form->select("privacy", $privacyoptions); ?></p>
+	
+	<p>City: Todo</p>
+	<?php $form->submit_button("Create Group"); ?>
+</div>
+
+<?php 
+	$form->footer(); // it's not just cosmetic, it does session cleanup.
+    $page->footer();
+?>

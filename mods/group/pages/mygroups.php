@@ -29,3 +29,7 @@
      */
 
 echo 'mygroups.php' ;
+
+?>
+
+<pre><?php print_r($groups); ?></pre>
