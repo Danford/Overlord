@@ -55,7 +55,7 @@ class group_minion {
                             $membership = 0 ;
                         }
                     }
-                    
+                    $db->log_error('58 - '.$membership ) ;
                     if( $membership != false )
                     {
                         // they aren't blocked
@@ -99,6 +99,8 @@ class group_minion {
                             // if we didn't make it all the way here,
                             // then no data will be populated and
                             // the engine will know it's a bad match.
+                            
+                            $this->id = $id ;
                             
                             foreach( $g as $key => $val ){
                                 $this->$key = $val ;

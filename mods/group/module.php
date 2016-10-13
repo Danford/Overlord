@@ -1,7 +1,7 @@
 <?php
 
 $privacylevel = 1 ;
-$privacyoptions = [ 2 => 'Members Only' ] ;
+$privacyoptions = [ 1 => 'Public', 2=> 'Closed', 3 => 'Secret' ] ;
 
 if( $privacylevel > 0 ){ $user->require_login() ; }
 

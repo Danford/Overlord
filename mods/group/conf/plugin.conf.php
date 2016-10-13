@@ -16,6 +16,7 @@ if( ! isset( $group ) ){
 }
 
 $tier = 0 ;
+$privacyoptions = [ 2 => 'Members Only' ] ;
 
 $oepc[0] = [ 'type' => 'group', 'id' => $group->id ] ;
 
