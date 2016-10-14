@@ -55,7 +55,7 @@ class group_minion {
                             $membership = 0 ;
                         }
                     }
-                    $db->log_error('58 - '.$membership ) ;
+                    
                     if( $membership != false )
                     {
                         // they aren't blocked
@@ -224,6 +224,7 @@ class group_minion {
     function get_uninvitable(){
         
         global $db ;
+        global $user ;
         
         $response = array() ;
         
@@ -231,9 +232,9 @@ class group_minion {
         
         $db->query( "SELECT `user` FROM `group_membership` WHERE `group`='".$this->id."'" ) ;
         
-        while( ( $user = $db->field() ) != false ){
+        while( ( $u = $db->field() ) != false ){
              
-            $response[] = $user ;
+            $response[] = $u ;
         }
         
         // blocked by the owner/has blocked the owner
@@ -259,7 +260,7 @@ class group_minion {
         $db->query( "SELECT `invitee` FROM `invitations`
                     WHERE `module`='group'
                         AND `module_item_id`='".$this->id."'
-                        AND `user`='".$user->id."'
+                        AND `invitee`='".$user->id."'
                         AND `expired` = '0'" ) ;
 
         

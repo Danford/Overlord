@@ -63,7 +63,7 @@ if( verify_number( $uri[$pos] ) ){
                 
             }
             
-            if( $user->id = $group->owner and $uri[$pos] == "edit" ){
+            if( $user->id == $group->owner and $uri[$pos] == "edit" ){
                     
                     include( $pagedir."edit.php" ) ;
                     die() ;
