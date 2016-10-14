@@ -14,6 +14,12 @@ $post->require_true( strlen( $_POST['short']) < 256, 'name', 'Short Description 
 if( $apiCall == "edit "){
     
     $post->require_true( $_POST['privacy'] >= $group->privacy, 'privacy', 'You cannot lower the security of a group.' ) ;
+} else {
+    
+    $x = $db->get_field( "SELECT COUNT(*) FROM `group` WHERE `name`='".$db->sanitize($_POST['name'])."'") ;
+    
+    $post->require_true( $x == 0 , 'name', 'There already exists a group with this name.' ) ;    
+    
 }
 
 $post->checkpoint() ;
@@ -29,6 +35,8 @@ if( $apiCall == "edit "){
 }
 
 $i = $db->insert( "INSERT INTO `group` SET ".$db->build_set_string_from_post('name','short','detail','privacy','city').", `owner`='".$user->id."'" ) ;
+
+$user->load_group_membership() ;
 
 $post->json_reply("SUCCESS", [ 'id' => $i ]) ;
 header( "Location:  ".str_replace( "create", $i."/invitations", $_SERVER['HTTP_REFERER'] ) ) ;

@@ -51,7 +51,8 @@ switch( $apiCall ) {
                                 WHERE `module`='group' 
                                   AND `module_item_id`='".$group->id."'
                                   AND `invitee`='".$user->id."'" ) ;
-            
+
+            $user->load_group_membership() ;
             $post->json_reply("SUCCESS") ;
             $post->return_to_form() ; // they should have come from the group profile
         }
@@ -64,6 +65,7 @@ switch( $apiCall ) {
             
             $db->update( "DELETE FROM `group_membership` WHERE `group`='".$group->id."' AND `user`='".$user->id."'" ) ;
 
+            $user->load_group_membership() ;
             $post->json_reply("SUCCESS") ;
             
             // send them back to their list of groups
