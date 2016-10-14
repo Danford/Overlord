@@ -14,10 +14,10 @@ $post->require_true( strlen( $_POST['short']) < 256, 'name', 'Short Description 
 if( $apiCall == "edit "){
     
     $post->require_true( $_POST['privacy'] >= $group->privacy, 'privacy', 'You cannot lower the security of a group.' ) ;
+
 } else {
     
     $x = $db->get_field( "SELECT COUNT(*) FROM `group` WHERE `name`='".$db->sanitize($_POST['name'])."'") ;
-    
     $post->require_true( $x == 0 , 'name', 'There already exists a group with this name.' ) ;    
     
 }
