@@ -31,4 +31,4 @@
  *    }
  *   
  * 
- */ echo 'profile.php' ;
+ */ print_r( $group ) ;

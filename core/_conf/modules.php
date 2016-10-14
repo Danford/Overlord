@@ -19,3 +19,4 @@
     $oe_plugins[ 'like' ] = oe_plugin."like/" ;
     $oe_plugins[ 'thread' ] = oe_plugin."thread/" ;
     $oe_plugins[ 'writing' ] = oe_plugin."writing/" ;
+    $oe_plugins[ 'invitations' ] = oe_plugin."invitations/" ;

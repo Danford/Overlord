@@ -239,8 +239,8 @@ class group_minion {
         // blocked by the owner/has blocked the owner
         
         $db->query( "SELECT `blocker`, `blockee` from `profile_block`
-                        WHERE `blocker` ='".$this->owner."'
-                           OR `blockee` ='".$this->owner."'" ) ;
+                        WHERE `blocker` ='".$this->owner->id."'
+                           OR `blockee` ='".$this->owner->id."'" ) ;
          
         while( ( $b = $db->assoc() ) != false ){
         

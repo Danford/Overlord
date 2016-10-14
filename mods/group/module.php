@@ -37,9 +37,9 @@ if( verify_number( $uri[$pos] ) ){
     
     include_once $oe_modules['group']."lib/group_minion.php" ;
     
-    $profile = new group_minion( $uri[$pos] ) ;
+    $group = new group_minion( $uri[$pos] ) ;
     
-    if( $profile->id != false ){
+    if( $group->id != false ){
         
         // they at least have permission to see the group profile
         
@@ -72,9 +72,9 @@ if( verify_number( $uri[$pos] ) ){
             
             // check for a plugin 
             
-            if( isset( $oe_plugin[$uri[$pos] ] ) ){
+            if( isset( $oe_plugins[$uri[$pos] ] ) ){
             
-                include( $oe_module['group']."conf/plugin.conf.php" ) ;
+                include( $oe_modules['group']."conf/plugin.conf.php" ) ;
                 
                 $accesslevel = 2 ; // all group content is members only
             
@@ -82,11 +82,11 @@ if( verify_number( $uri[$pos] ) ){
             
                     $pos++;
             
-                    include( $oe_plugin[$uri[$pos - 1]]."plugin.php" ) ;
+                    include( $oe_plugins[$uri[$pos - 1]]."plugin.php" ) ;
             
                     // does not die() to allow for bombing out to the main 404.
                 }
             }
         }
     }
-}
+} 
