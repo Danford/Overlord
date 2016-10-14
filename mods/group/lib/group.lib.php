@@ -3,13 +3,14 @@
 function get_my_groups(){
     
     global $db ;
+    global $user ;
     
     $ownedgroups = array() ;
 
     $db->query( "SELECT `id`, `name`, `short`, `avatar` FROM `group` WHERE `owner`='".$user->id."'" ) ;
-
+    
     while( ( $g = $db->assoc() ) != false ){
-        $ownedgroups[] = $g ;
+        $ownedgroups[] = $g ; 
     }
  
     $admingroups = array() ;
@@ -18,7 +19,6 @@ function get_my_groups(){
     $db->query("SELECT `id`, `name`, `short`, `avatar`, `access` 
                                 FROM `group_membership`, `group` 
                                 WHERE `group_membership`.`user`='".$user->id."'
-                                AND `group_membership`.`group` = '".$group->id."'
                                 AND `group_membership`.`group` = `group`.`id`
                                 AND `access` != 0
                                 ORDER BY ACCESS DESC") ;
@@ -32,6 +32,6 @@ function get_my_groups(){
             $admingroups[] = $g ;
         }
     }
-    
+        
     return ['owned' => $ownedgroups, 'admin' => $admingroups , 'member' => $membergroups ]  ;
 }

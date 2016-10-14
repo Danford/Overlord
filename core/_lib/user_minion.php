@@ -310,7 +310,7 @@ class user_minion {
         
         global $db ;
         
-        $q = "SELECT `timezone`.`name`, `zip` FROM `user_location`, `location_zip`, `timezone`
+        $q = "SELECT `timezone`.`name`, `location_zip`.`zip` FROM `user_location`, `location_zip`, `timezone`
             WHERE `user_id`='".$this->id."' AND `primary`='1' 
               AND `user_location`.`zip` = `location_zip`.`zip`
               AND `location_zip`.`timezone_id` = `timezone`.`id`" ;
