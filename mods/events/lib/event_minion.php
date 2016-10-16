@@ -1,12 +1,13 @@
 <?php
 
 class event_minion {
-        
+            
         var $id ;
         var $title ;
         var $privacy ;
         var $blocked ;
         var $invited ;
+        var $rsvp_list ;
         var $owner ;
         var $subtitle ;
         var $detail ;
@@ -20,6 +21,8 @@ class event_minion {
         global $user ;
         global $db ;
         global $eventmode ;
+        
+        $this->id = $id ;
         
         if( verify_number( $id ) ){
             
@@ -50,80 +53,81 @@ class event_minion {
                 
                 /* determine if user is owner, member, admin, or blocked */
                     
-                    if( $user->is_blocked( $event['owner'] ) ){
+                if( $user->is_blocked( $event['owner'] ) ){
+                    
+                    $membership = false ; // cannot see an event whose owner is blocked
+                    
+                } elseif( $event['owner'] == $user->id ){
+         
+                    $membership = 2 ; // admin
+                    
+                } else {
+                    
+                    if( $eventmode == "plugin" ){
+                    
+                        /*
+                         *  At the moment, the plugin aspect only applies to groups.
+                         *  Since group events automatically invite all members,
+                         *  the permissions of the group apply to this event
+                         *  
+                         */
                         
-                        $membership = false ; // cannot see an event whose owner is blocked
+                        global $group ;
                         
-                    } elseif( $event['owner'] == $user->id ){
-             
-                        $membership = 2 ; // admin
+                        $membership = $group->membership ;
                         
                     } else {
                         
-                        if( $mode == "plugin" ){
+                        /*
+                         *  This is a standalone event, not dependent on a group.
+                         *  "membership" is determined by invitation.
+                         *  
+                         */
                         
-                            /*
-                             *  At the moment, the plugin aspect only applies to groups.
-                             *  Since group events automatically invite all members,
-                             *  the permissions of the group apply to this event
-                             *  
-                             */
-                            
-                            global $group ;
-                            
-                            $membership = $group->membership ;
-                            
-                        } else {
-                            
-                            /*
-                             *  This is a standalone event, not dependent on a group.
-                             *  "membership" is determined by invitation.
-                             *  
-                             */
-                            
-                            
-                            
-                            
-                        }
+                       if( $this->is_invited() ){
+                           $membership = 1 ;
+                       } else {
+                           $membership = 0 ;
+                       }
                     }
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                }
+            
+                if( $membership > 0 or $event['privacy'] < 3 ){
+                    
+                    foreach( $event as $key => $val ){
+                        $this->$key = $val ;
+                    }
+                    
+                    $this->owner = new profile_minion( $this->owner, true ) ;
+                } else {
+                    $this->id = false ;
+                }                
                 
             } else {
                 $this->id = false ; 
             }
-            
         }
-        
-        
     }
     
     function get_rsvp(){
         
-        if( ! is_array( $this->invited ) ){
+        if( ! is_array( $this->rsvp_list ) ){
         
             global $db ;
             
             $invited = array() ;
             
-            $db->query( "SELECT `user` FROM `event_rsvp` WHERE `event`='".$this->id."' AND `rsvp` > 0" ) ;
+            $db->query( "SELECT `user`,`rsvp` FROM `event_rsvp` WHERE `event`='".$this->id."' AND `rsvp` > 0" ) ;
         
-            while( ( $i = $db->field() ) ){
-                $invited[] = new profile_minion($i) ;
+            while( ( $i = $db->assoc() ) ){
+                $rsvp[ $i['user'] ] = [ `rsvp` => $i['rsvp'] , 'profile' => new profile_minion($i) ] ;
             }
             
-            $this->invited = $invited ;
+            $this->rsvp_list = $rsvp ;
             
         }
         
-        return $this->invited ;
+        return $this->rsvp_list ;
         
     }
     
@@ -152,7 +156,7 @@ class event_minion {
             
         }
         
-        return $this->invited ;
+        return $this->blocked ;
         
     }
     
@@ -160,7 +164,7 @@ class event_minion {
         
         global $user ;
         global $db ;
-        global $mode ;
+        global $eventmode ;
         
         
         /*
@@ -174,7 +178,7 @@ class event_minion {
          */
         $q = "SELECT `level` FROM `invitations` WHERE " ;
         
-        if( $mode = 'module'){
+        if( $eventmode = 'module'){
             
             $q .= "`module`='event' AND `module_item_id`='".$this->id."'" ;
             
@@ -183,6 +187,19 @@ class event_minion {
             $q .= build_api_where_string() ;
         }
         
+        $q .= " AND `expired` = '0'" ;
+        
         $i = $db->get_field( $q ) ;
+        
+        if( $i == 0 ){
+            return true ;
+        } else {
+            
+            /* check for RSVP, since the invitation would have been deleted */
+            
+            $q = "SELECT COUNT(*) FROM `event_rsvp` WHERE `user`='".$user->id."' AND `event`='".$this->id."' AND `rsvp` > 0" ;
+            
+            return( $db->get_field($q) > 0 ) ;
+        }
     }
 }
