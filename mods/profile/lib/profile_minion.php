@@ -177,6 +177,9 @@ class profile_minion {
     function get_groups(){
         
         global $db ;
+        global $oe_modules ;
+        
+        include_once $oe_modules['group'].'lib/group_minion.php';
         
         $grouplist = array() ;
         
