@@ -2,117 +2,106 @@
 
 class group_minion {
     
-        var $id = false ;
-        var $name ;
-        var $owner ;
-        var $short ;
-        var $detail ;
-        var $privacy ;
-        var $avatar ;
-        var $city_id ;
-        var $invited ;
-        var $membership ;
-        var $blocked ;
-        var $table = 'groups' ;     // this needs to be customisable
-        var $view = 'groups' ;      // but for now it's hardcoded here.
-    
-        function __construct( $id, $min = false ){
+    var $id = false ;
+    var $name ;
+    var $owner ;
+    var $short ;
+    var $detail ;
+    var $privacy ;
+    var $avatar ;
+    var $city_id ;
+    var $invited ;
+    var $membership ;
+    var $blocked ;
+    var $table = 'groups' ;     // this needs to be customisable
+    var $view = 'groups' ;      // but for now it's hardcoded here.
+  
+    function __construct( $id, $min = false ){
+        
+        if( verify_number( $id ) ){
+
+            $this->id = $id ;
             
-            if( verify_number( $id ) ){
+            global $db ;
+            global $user ;
+            
+            $q = "SELECT `name`, `owner`, `privacy`, `short`, `avatar`, `city` as `city_id`" ;
+            
+            if( $min != false ){ $q .= ", `detail`" ; }
+            
+            $q .= " FROM `group` WHERE `id`='".$id."'" ;
+            
+            $g = $db->get_assoc( $q ) ;
+            
+            if( $g != false ){
                 
-                global $db ;
-                global $user ;
+                /* determine if user is owner, member, admin, or blocked */
                 
-                $q = "SELECT `name`, `owner`, `privacy`, `short`, `avatar`, `city` as `city_id`" ;
-                
-                if( $min != false ){ $q .= ", `detail`" ; }
-                
-                $q .= " FROM `group` WHERE `id`='".$id."'" ;
-                
-                $g = $db->get_assoc( $q ) ;
-                
-                if( $g != false ){
+                if( $user->is_blocked( $g['owner'] ) ){
                     
-                    /* determine if user is owner, member, admin, or blocked */
+                    $membership = false ; // cannot see a group whose owner is blocked
                     
-                    if( $user->is_blocked( $g['owner'] ) ){
-                        
-                        $membership = false ; // cannot see a group whose owner is blocked
-                        
-                    } elseif( $g['owner'] == $user->id ){
-             
+                } elseif( $g['owner'] == $user->id ){
+         
+                    $membership = 2 ; // admin
+                    
+                } else {
+                    
+                    if( in_array($this->id, $user->groups_administered ) ){
                         $membership = 2 ; // admin
+                    } elseif( in_array($this->id, $user->groups_in ) ) {
+                        $membership = 1 ;
+                    } elseif( in_array($this->id, $user->groups_blocked ) ) {
+                        $membership = false ;
+                    } else {
+                        $membership = 0 ;
+                    }
+                }
+                
+                if( $membership != false ) {
+                    // they aren't blocked
+                    
+                    $this->membership = $membership ;
+                    
+                    if( $membership == 0 and $g['privacy'] > 1 ){
+                    
+                        // if it's not a public group, and they're not a member, 
+                        // we need to know if they've been invited.
+                        
+                        $c = $db->get_field( "SELECT COUNT(*) FROM `invitations` 
+                                                WHERE `module`='group' 
+                                                AND `module_item_id`='".$id."' 
+                                                AND `user`='".$user->id."'" ) ;
+                            
+                        $this->invited = ( $c > 0 ) ;
+                        
+                    }
+                    
+                    if( $membership > 0 or $g['privacy'] < 3 or $this->invited == true ){
+                        
+                        /*
+                         *      if they are members, or the group is not secret,
+                         *      or they've been invited
+                         *      then they can access the basic group information
+                         *      this object represents.
+                         *      
+                         */
+                        
+                        foreach( $g as $key => $val ){
+                            $this->$key = $val ;
+                        }
+                        
+                        $this->owner = new profile_minion( $this->owner, true ) ;
                         
                     } else {
                         
-                        if( in_array($this->id, $user->groups_administered ) ){
-                            $membership = 2 ; // admin
-                        } elseif( in_array($this->id, $user->groups_in ) ) {
-                            $membership = 1 ;
-                        } elseif( in_array($this->id, $user->groups_blocked ) ) {
-                            $membership = false ;
-                        } else {
-                            $membership = 0 ;
-                        }
-                    }
-                    
-                    if( $membership != false )
-                    {
-                        // they aren't blocked
+                        $this->id = false ;
                         
-                        $this->membership = $membership ;
-                        
-                        if( $membership == 0 and $g['privacy'] > 1 ){
-                        
-                            // if it's not a public group, and they're not a member, 
-                            // we need to know if they've been invited.
-                            
-                            $c = $db->get_field( "SELECT COUNT(*) FROM `invitations` 
-                                                    WHERE `module`='group' 
-                                                    AND `module_item_id`='".$id."' 
-                                                    AND `user`='".$user->id."'" ) ;
-                                
-                            $this->invited = ( $c > 0 ) ;
-                            
-                        }
-                        
-                        if( $membership > 0 or $g['privacy'] < 3 or $this->invited == true ){
-                            
-                            /*
-                             *      if they are members, or the group is not secret,
-                             *      or they've been invited
-                             *      then they can access the basic group information
-                             *      this object represents.
-                             *      
-                             */
-                            
-                            $view = true ;
-                            
-                        } else {
-                            
-                            $view = false ;
-                            
-                        }
-                        
-                        if( $view ){
-                         
-                            // if we didn't make it all the way here,
-                            // then no data will be populated and
-                            // the engine will know it's a bad match.
-                            
-                            $this->id = $id ;
-                            
-                            foreach( $g as $key => $val ){
-                                $this->$key = $val ;
-                            }
-                            
-                            $this->owner = new profile_minion( $this->owner, true ) ;
-
-                        }
                     }
                 }
             }
         }
+    }   
     
     
     function city_name(){
