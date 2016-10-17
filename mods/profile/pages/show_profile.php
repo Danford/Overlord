@@ -27,13 +27,6 @@ include($oe_plugins['photo']."lib/photo.lib.php");
 include($oe_plugins['writing']."conf/conf.php");
 include($oe_plugins['writing']."lib/writing.lib.php");
 
-$page = new page_minion("Profile");
-
-$page->header();
-
-$page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
-$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
-
 function UserInteraction($apiCall, $buttonText)
 {
 	global $profile;
@@ -134,6 +127,13 @@ function get_words($sentence, $count = 10) {
 	return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
 }
 
+$page = new page_minion("Profile");
+
+$page->header();
+
+$page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
+$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
+
 $friends = $profile->get_friends_as_array(0, 9);
 
 $mutualFriends = array();
@@ -149,6 +149,8 @@ $photosLen = count($photos);
 
 $writings = get_writings(0, 15);
 $writingsLen = count($writings);
+
+$groups = $profile->get_groups();
 
 $loopLength = $photosLen;
 if ($loopLength < $writingsLen)
@@ -171,24 +173,15 @@ function ImageLoaded(img){
 
 </script>
 <article id="profile">
-	<div id="left-sidebar">
-		<div class="sidebar-container tile">
+	<div class="grid">
+		<div class="grid-sizer"></div>
+	
+		<div class="stamp stamp--left tile">
 			<p id="name"><?php echo $profile->screen_name; ?></p>
-			<div id="main-image">
-				<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
-				<div align="center" class="cssload-fond">
-					<div class="cssload-container-general">
-							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-					</div>
-				</div>
-				<?php PrintUserInteractions(); ?>
-			</div>
-			
+			<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
+			<?php PrintUserInteractions(); ?>
 		</div>
-		<div class="sidebar-container tile">
+		<div class="stamp stamp--left tile">
 			<div id="details">
 				<p id="age">Age: <?php echo $profile->age; ?></p>
 				<p id="location">City: <?php echo $profile->city_name() ; ?></p>
@@ -196,7 +189,7 @@ function ImageLoaded(img){
 			</div>
 		</div>
 		<?php if ($user->id != $profile->id) : ?>
-		<div class="sidebar-container tile">
+		<div class="stamp stamp--left tile">
 			<div id="mutual-friends">
 				<a href="/profile/<?php echo $profile->id; ?>/friends/"><div id="head">Mutual Friends - <?php echo count($mutualFriends); ?></div></a>
 				<div id="body">
@@ -206,17 +199,7 @@ function ImageLoaded(img){
 							<div class="name">
 								<?php echo $friend->screen_name; ?>
 							</div>
-							<div class="profile-img">
-								<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
-								<div align="center" class="cssload-fond">
-									<div class="cssload-container-general">
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-									</div>
-								</div>
-							</div>
+							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
 							<?php PrintFriendlistInteractions($friend); ?>
 						</div>
 					</a>		
@@ -225,7 +208,7 @@ function ImageLoaded(img){
 			</div>
 		</div>
 		<?php endif; ?>
-		<div class="sidebar-container tile">
+		<div class="stamp stamp--left tile">
 			<div id="friends">
 				<a href="/profile/<?php echo $profile->id; ?>/friends/"><div id="head">Friends - <?php echo $profile->get_friends_count(); ?></div></a>
 				<div id="body">
@@ -235,17 +218,7 @@ function ImageLoaded(img){
 							<div class="name">
 								<?php echo $friend->screen_name; ?>
 							</div>
-							<div class="profile-img">
-								<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
-								<div align="center" class="cssload-fond">
-									<div class="cssload-container-general">
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-											<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-									</div>
-								</div>
-							</div>
+							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
 							<?php PrintFriendlistInteractions($friend); ?>
 						</div>
 					</a>		
@@ -253,22 +226,19 @@ function ImageLoaded(img){
 				</div>
 			</div>
 		</div>
-	</div>
-	<div id="main" class="tile">
-		<p id="about-me"><?php echo $profile->detail; ?></p>
-	</div>
-	<div id="photo-albums" class="tile">
-		<div class="filters">
-			<div class="ui-group">
+		<div id="about-me" class="grid-item grid-item--large tile flex-main">
+			<p><?php echo $profile->detail; ?></p>
+		</div>
+		<div class="stamp stamp--top tile">
+			<div class="ui-group filters">
 				<div class="button-group js-radio-button-group" data-filter-group="category">
 					<button class="button is-checked" data-filter="">All</button>
 					<button class="button" data-filter=".photo">Photos <span class="filter-count"></span></button>
 					<button class="button" data-filter=".writing">Writings <span class="filter-count"></span></button>
+					<button class="button" data-filter=".group">Groups <span class="filter-count"></span></button>
 				</div>
 			</div>
-		</div>
-		<div class="sortings">
-			<div class="ui-group">
+			<div class="ui-group sortings">
 				<div class="button-group sort-by-button-group">
 					<button class="button is-checked" data-sort-by="">None</button>
 					<button class="button" data-sort-by="date">Date</button>
@@ -282,59 +252,44 @@ function ImageLoaded(img){
 				<p>* Not yet implemented</p>
 			</div>
 		</div>
-		<div class="grid">
-			<div class="grid-sizer"></div>
-			<?php for ($i = 0; $i < $loopLength; $i++) : ?>
-			<?php if ($i < $photosLen) : ?>
-			<?php $date = new DateTime($photos[$i]['timestamp']); ?>
-			
-			<a href="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>">
-				<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?>">
-					<div id="title"><h3><?php echo $photos[$i]['title']; ?></h2></div>
-					<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>.png" />
-					<div align="center" class="cssload-fond">
-						<div class="cssload-container-general">
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-						</div>
-					</div>
-					<div id="description"><p><?php echo $photos[$i]['description']; ?></p></div>
-				</div>
-			</a>
-			<?php endif; ?>
-			<?php if ($i < $writingsLen) : ?>
-			<?php $date = new DateTime($writings[$i]['last_updated']); ?>
-			<a href="/profile/<?php echo $writings[$i]['owner']->id; ?>/writing/<?php echo $writings[$i]['id']; ?>">
-				<div class="grid-item tile writing" data-category="writing" data-date="<?php echo $date->getTimestamp(); ?>">
-					<div id="title"><h3><?php echo $writings[$i]['title']; ?></h2></div>
-					<div id="subtitle"><h4><?php echo $writings[$i]['subtitle']; ?></h3></div>
-					<div id="photo">
-						<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
-						<div align="center" class="cssload-fond">
-							<div class="cssload-container-general">
-									<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-									<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-									<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-									<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-							</div>
-						</div>
-					</div>
-					<div id="excerpt"><?php echo get_words($writings[$i]['copy'], 55); ?></div>
-				</div>
-			</a>
-			<?php endif; ?>
-			<?php endfor; ?>
-		</div>
+		<?php for ($i = 0; $i < $loopLength; $i++) : ?>
+		<?php if ($i < $photosLen) : ?>
+		<?php $date = new DateTime($photos[$i]['timestamp']); ?>
+		
+		<a href="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>">
+			<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?>">
+				<div id="title"><h3><?php echo $photos[$i]['title']; ?></h2></div>
+				<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>.png" />
+				<div id="description"><p><?php echo $photos[$i]['description']; ?></p></div>
+			</div>
+		</a>
+		<?php endif; ?>
+		<?php if ($i < $writingsLen) : ?>
+		<?php $date = new DateTime($writings[$i]['last_updated']); ?>
+		<a href="/profile/<?php echo $writings[$i]['owner']->id; ?>/writing/<?php echo $writings[$i]['id']; ?>">
+			<div class="grid-item tile writing" data-category="writing" data-date="<?php echo $date->getTimestamp(); ?>">
+				<div id="title"><h3><?php echo $writings[$i]['title']; ?></h2></div>
+				<div id="subtitle"><h4><?php echo $writings[$i]['subtitle']; ?></h3></div>
+				<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
+				<div id="excerpt"><?php echo get_words($writings[$i]['copy'], 55); ?></div>
+			</div>
+		</a>
+		<?php endif; ?>
+		<?php endfor; ?>
 	</div>
 </article>
 <script>
+
+// add css loading spinner after all tile images with the loading class
+$('.tile > img.loading').after("<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>");
+
 $grid = $('.grid').isotope({
 	// options
 	itemSelector: '.grid-item',
+	stamp: '.stamp',
+	
 	percentPosition: true,
-
+	stager: 30,
 	getSortData: {
 		title: '#title',
 		date: '[data-date]',
@@ -357,7 +312,6 @@ var filters = {};
 $grid.imagesLoaded().progress( function () {
 	$grid.isotope('layout');
 });
-
 
 $('.filters').on( 'click', '.button', function() {
   var $this = $(this);

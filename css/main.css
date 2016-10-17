@@ -28,14 +28,8 @@ footer {
 }
 
 content {
-	display: block;
-	background-color: #eee;
-	padding-left: 15px;
-	max-width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
-	overflow: hidden;
-	padding-bottom: 30px;
+  width: 100%;
+  height: 100%;
 }
 
 div#content-wrapper {
@@ -43,7 +37,7 @@ div#content-wrapper {
 	background-color: #eee;	
 	border-bottom-right-radius: 75px;
 	margin-bottom: 15px;
-	overflow: auto;	
+	overflow: hidden;	
 	box-shadow: 0 4px 8px 0 rgba(254, 254, 254, 0.4), 0 6px 20px 0 rgba(254, 254, 254, 0.39);
 }
 
@@ -138,65 +132,16 @@ nav li li {
 	}
 }
 
-/*																*/
-/* 							frame styling 						*/
-/*																*/
-
-.sidebar-container {
-	width: 100%;
-	margin-top: 15px;
-}
-
-.sidebar-container p {
-    margin: 6px 0px 6px 0px;
-}
-
-.tile {
-	border: #ddd solid 1px;
-    border-radius: 7px;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    overflow: auto;
-    padding: 6px;
-	background-color: #eee;
-	margin-top: 15px;
-}
-
 #main {
-	margin: 15px;
-	margin-bottom: 0;
+  height: 100%;
+  width: 100%;
 }
 
 /*																*/
 /* 							profile styling						*/
 /*																*/
 
-article#profile {
-	display: -webkit-box;
-	display: -moz-box;
-	display: -ms-flexbox;
-	display: -webkit-flex;
-	display: flex;
-	-webkit-flex-flow: row wrap;
-	flex-flow: row wrap;
-}
-
-article#profile > * {
-  flex: 1 100%;
-}
-
-#profile #main {
-	flex: 3 0px;
-	order: 0;
-}
-
-#profile #left-sidebar {
-	flex: 1 0px;
-	order: 0;
-}
-
 #profile #photo-albums {
-	order: 1;
-	margin-right: 15px;
 	padding-bottom: 20px;
 	overflow: hidden;
 }
@@ -358,34 +303,73 @@ input#Submit:active, input#x:active {
 }
 
 /*																	*/
-/* 								Photo gallery 						*/
+/* 								Isotope Styles 						*/
 
-article#photos {
-	display: block;
+.tile {
+	border: #ddd solid 1px;
+    border-radius: 7px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    overflow: hidden;
+	background-color: #eee;
+	margin: 7px;
 }
 
-.grid-sizer, .grid-item { width: 23%; margin: 1%; overflow: hidden;}
-.grid-item img{ transition: all .2s ease-in-out; }
-.grid-item:hover img { transform: scale(1.1); z-index: 998; }
-.grid-item img {
+.tile > img.expand{
+	transition: all .2s ease-in-out;
+}
+.tile:hover > img.expand {
+	transform: scale(1.1);
+}
+.tile > img {
   display: block;
   width: 100%;
+}
+
+.tile > img::after {
+	content: '<div align="center" class="cssload-fond"><div class="cssload-container-general"><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div></div></div>';
+	
+}
+
+.grid {
+	position: relative;
+}
+
+.grid-sizer, .grid-item {
+	width: 23%;
+	margin: 1%;
+	overflow: hidden;
+}
+
+.grid-item--large {
+	width: 48%;
 }
 
 .grid-item #excerpt, .grid-item #description {
 	margin-top: 10px;
 }
 
-.grid:after {
-	content: '';
-	display: block;
-	clear: both;
-	margin: 20px;
-}
-
 .grid a {
 	color: black;
 }
+
+.stamp {
+	position: absolute;
+	margin: 1%;
+	overflow: hidden;	
+}
+
+.stamp--left {
+	position: relative;
+	left: 0;
+	width: 23%;
+}
+
+.stamp--top {
+	top: 0;
+	left: 25%;
+	width: 73%;
+}
+
 .tile div#title {
     text-transform: capitalize;
     text-align: center;

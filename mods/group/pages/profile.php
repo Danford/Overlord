@@ -31,4 +31,17 @@
  *    }
  *   
  * 
- */ print_r( $group ) ;
+ */
+
+include(oe_frontend."page_minion.php");
+
+$page = new page_minion("My Groups");
+
+$page->header();
+
+
+?>
+
+<pre><?php print_r($group); ?></pre>
+
+<?php $page->footer(); ?>
