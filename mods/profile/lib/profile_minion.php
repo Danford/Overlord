@@ -172,5 +172,40 @@ class profile_minion {
         return $db->get_field( "SELECT COUNT(*) FROM `profile_friendship` WHERE 
                                         `profile_friendship`.`friend1` ='".$this->id."' OR
                                         `profile_friendship`.`friend2` ='".$this->id."'" ) ;
-    }    
+    }
+    
+    function get_groups(){
+        
+        global $db ;
+        
+        $grouplist = array() ;
+        
+        $db->query( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
+        
+        while( ( $g = $db->field() ) != false ){
+            
+            $group = new group_minion($g, true ) ;
+            
+            if( $group->id != false ){
+                $grouplist[] = $group ;
+            }
+            
+        }
+        
+        $db->query( "SELECT `group` FROM `group_membership` WHERE 
+                        `user`='".$this->id."'
+                        AND `access` > 0
+                        ORDER BY `access` DESC" ) ;
+        
+        while( ( $g = $db->field() ) != false ){
+            
+            $group = new group_minion($g, true ) ;
+            
+            if( $group->id != false ){
+                $grouplist[] = $group ;
+            }
+            
+        }
+        
+    }
 }
