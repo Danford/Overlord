@@ -209,6 +209,6 @@ class profile_minion {
             }
             
         }
-        
+        return $grouplist;
     }
 }

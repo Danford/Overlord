@@ -15,8 +15,11 @@ if( $uri[$pos] == 'edit' ){
     $form = new form_minion( 'uploadPhoto', 'photo');
 }
 
-$page = new page_minion($pagetitle);
-$page->header();
+if (!isset($_GET['ajax']))
+{
+	$page = new page_minion($pagetitle);
+	$page->header();
+}
 
 $form->has_file();
 $form->if_error('photo', 'photoerror') ;
@@ -38,7 +41,7 @@ global $privacyoptions;
 	<p>Title: <?php $form->text_field("title" ); ?></p>
 	<p>Description: <?php $form->text_field("description" ); ?></p>
 	<p>Make Avatar <?php $form->checkbox("parentavatar") ; ?></p>
-	<?php $form->submit_button( $pagetitle ); ?>
+	<div class="button" onclick="UploadImage()">Upload</div>
 			
 	<p>Album: 
 		<select name="album">
@@ -53,8 +56,22 @@ global $privacyoptions;
 	<p>Album Description: <input name="new_album_description" type="text"/></p>
 	<input name="albumavatar" title="Album Avatar" type="checkbox"/>
 </div>
+<script>
+function UploadImage() {
+	jsonRequest(OE_API.photo.name, OE_API.photo.func.upload, {photo: $('input#photo').val(), privacy: $('select#privacy').val(), title: $('input#title').val(), description: $('input#description').val(), parentavatar: $('input#parentavatar').val()}, SetLocation);
+}
 
+function SetLocation(response) {
+	$('#upload-photo-form').append(response);
+}
+
+</script>
 <?php 
-	$form->footer(); // it's not just cosmetic, it does session cleanup.
+
+$form->footer(); // it's not just cosmetic, it does session cleanup.
+
+if (!isset($_GET['ajax']))
+{
     $page->footer();
+}
 ?>

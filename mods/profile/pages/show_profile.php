@@ -127,12 +127,26 @@ function get_words($sentence, $count = 10) {
 	return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
 }
 
+function LoadImage($profileId, $id)
+{
+	if ($id != "")
+	{
+		echo '<img class="loading" onload="ImageLoaded(this)" src="/profile/'. $profileId .'/photo/'. $id .'.png"/>';
+	}
+	else
+	{
+		echo '<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />';
+	}
+}
+
 $page = new page_minion("Profile");
 
 $page->header();
 
-$page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
-$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
+$page->addjs(oe_js . "isotope.pkgd.min.js");
+$page->addjs(oe_js . "imagesloaded.pkgd.js");
+$page->addjs(oe_js . "tinymce/tinymce.min.js");
+$page->addjs(oe_js . "invoketinymce.js");
 
 $friends = $profile->get_friends_as_array(0, 9);
 
@@ -151,6 +165,7 @@ $writings = get_writings(0, 15);
 $writingsLen = count($writings);
 
 $groups = $profile->get_groups();
+$groupsLen = count($groups);
 
 $loopLength = $photosLen;
 if ($loopLength < $writingsLen)
@@ -165,7 +180,7 @@ if ($loopLength < $writingsLen)
 function ImageLoaded(img){
 	var $img = $(img);
 		$img.removeClass('loading');
-	$img.parent().find('.cssload-fond').css('display', 'none');
+	$img.parent().find('.cssload-fond').toggleClass('hidden');
 
 	if (typeof $grid != 'undefined')
 		$grid.isotope('layout');
@@ -178,14 +193,22 @@ function ImageLoaded(img){
 	
 		<div class="stamp stamp--left tile">
 			<p id="name"><?php echo $profile->screen_name; ?></p>
-			<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $profile->id .'/photo/'. $profile->avatar; ?>.png"/>
+			<?php LoadImage($profile->id, $profile->avatar); ?>
 			<?php PrintUserInteractions(); ?>
 		</div>
 		<div class="stamp stamp--left tile">
 			<div id="details">
 				<p id="age">Age: <?php echo $profile->age; ?></p>
+				<?php if ($profile->city_name() == "") : ?>
+				<p id="location">City: Not Listed</p>
+				<?php else : ?>
 				<p id="location">City: <?php echo $profile->city_name() ; ?></p>
-				<p id="gender">Gender: <?php echo $gender[$profile->gender]['label']; ?></p>
+				<?php endif; ?>
+				<?php if ($gender[$profile->gender]['label'] == "") : ?>
+				<p id="gender">Gender: Not Listed</p>
+				<?php else : ?>
+				<p id="gender">Gender: <?php echo $gender[$profile->gender]['label'] ; ?></p>
+				<?php endif; ?>
 			</div>
 		</div>
 		<?php if ($user->id != $profile->id) : ?>
@@ -227,7 +250,14 @@ function ImageLoaded(img){
 			</div>
 		</div>
 		<div id="about-me" class="grid-item grid-item--large tile flex-main">
+			<?php if ($profile->detail == "" && $profile->id == $user->id) : ?>
+			<p>This profile doesn't yet have an "About Me" section. Add it by editing your profile.<p>
+			<a href="/profile/"><div class="button">EditProfile</div></a>
+			<?php elseif ($profile->detail == "") : ?>
+			<p>This user has not yet provided anything for the "About Me" section of thier profile.</p>
+			<?php else : ?>
 			<p><?php echo $profile->detail; ?></p>
+			<?php endif; ?>
 		</div>
 		<div class="stamp stamp--top tile">
 			<div class="ui-group filters">
@@ -251,27 +281,40 @@ function ImageLoaded(img){
 				</div>
 				<p>* Not yet implemented</p>
 			</div>
+			<?php if ($user->id == $profile->id) : ?>
+			<div>
+				<button class="button" onclick='AddTile("Upload Photo", "/profile/<?php echo $profile->id ?>/photo/upload/");'>Upload Photo</button>
+				<button class="button" onclick='AddTile("Create Writing", "/profile/<?php echo $profile->id ?>/writing/write/");'>Create Writing</button>
+				<button class="button" onclick='AddTile("Create Group", "/group/create");'>Create Group</button>
+			</div>
+			<?php endif; ?>
 		</div>
 		<?php for ($i = 0; $i < $loopLength; $i++) : ?>
 		<?php if ($i < $photosLen) : ?>
 		<?php $date = new DateTime($photos[$i]['timestamp']); ?>
 		
-		<a href="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>">
-			<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?>">
-				<div id="title"><h3><?php echo $photos[$i]['title']; ?></h2></div>
-				<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>.png" />
-				<div id="description"><p><?php echo $photos[$i]['description']; ?></p></div>
-			</div>
-		</a>
+		<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?>">
+			<div id="title"><h3><?php echo $photos[$i]['title']; ?></h2></div>
+			<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>.png" />
+			<div id="description"><p><?php echo $photos[$i]['description']; ?></p></div>
+		</div>
 		<?php endif; ?>
 		<?php if ($i < $writingsLen) : ?>
 		<?php $date = new DateTime($writings[$i]['last_updated']); ?>
-		<a href="/profile/<?php echo $writings[$i]['owner']->id; ?>/writing/<?php echo $writings[$i]['id']; ?>">
-			<div class="grid-item tile writing" data-category="writing" data-date="<?php echo $date->getTimestamp(); ?>">
-				<div id="title"><h3><?php echo $writings[$i]['title']; ?></h2></div>
-				<div id="subtitle"><h4><?php echo $writings[$i]['subtitle']; ?></h3></div>
+		<div class="grid-item tile writing" data-category="writing" data-date="<?php echo $date->getTimestamp(); ?>">
+			<div id="title"><h3><?php echo $writings[$i]['title']; ?></h2></div>
+			<div id="subtitle"><h4><?php echo $writings[$i]['subtitle']; ?></h3></div>
+			<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
+			<div id="excerpt"><?php echo get_words($writings[$i]['copy'], 55); ?></div>
+			<div id="full" class="hidden"><?php echo $writings[$i]['copy']; ?></div>
+		</div>
+		<?php endif; ?>
+		<?php if ($i < $groupsLen) : ?>
+		<a href="/group/<?php echo $groups[$i]->id; ?>/">
+			<div class="grid-item tile group" data-category="group">
+				<div id="title"><h3><?php echo $groups[$i]->name; ?></h2></div>
 				<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
-				<div id="excerpt"><?php echo get_words($writings[$i]['copy'], 55); ?></div>
+				<div id="excerpt"><?php echo get_words($groups[$i]->detail, 55); ?></div>
 			</div>
 		</a>
 		<?php endif; ?>
@@ -300,6 +343,8 @@ $grid = $('.grid').isotope({
 		columnWidth: '.grid-sizer'
 	},
 });
+
+var $selectedTile = null;
 
 var $filterButtons = $('.filters .button');
 
@@ -338,10 +383,51 @@ $('.button-group').each( function( i, buttonGroup ) {
   var $buttonGroup = $( buttonGroup );
   $buttonGroup.on( 'click', 'button', function() {
     $buttonGroup.find('.is-checked').removeClass('is-checked');
-    $( this ).addClass('is-checked');
+    $(this).addClass('is-checked');
   });
 });
-  
+
+$('.tile').click(function () {
+	if ($selectedTile != null && $selectedTile != $(this)) {
+		if ($selectedTile.hasClass('photo')) {
+			OnPhotoClick($selectedTile);
+		} else if ($selectedTile.hasClass('writing')) {
+			OnWritingClick($selectedTile);
+		} else if ($selectedTile.hasClass('group')) {
+			OnGroupClick($selectedTile);
+		}
+	}
+
+	if ($selectedTile != $(this)) {
+		if ($(this).hasClass('photo')) {
+			OnPhotoClick($(this));
+		} else if ($(this).hasClass('writing')) {
+			OnWritingClick($(this));
+		} else if ($(this).hasClass('group')) {
+			OnGroupClick($(this));
+		}
+
+		$grid.isotope('layout');
+	}
+
+	$selectedTile = $(this);
+});
+
+function OnPhotoClick($photo) {
+	$photo.toggleClass('grid-item--large');
+}
+
+function OnWritingClick($writing) {
+	$writing.toggleClass('grid-item--large');
+	$writing.children('#excerpt').toggleClass('hidden');
+	$writing.children('#full').toggleClass('hidden');
+	$grid.isotope('layout');
+}
+
+function OnGroupClick($group) {
+	
+}
+
 // flatten object by concatting values
 function concatValues( obj ) {
   var value = '';
@@ -365,6 +451,31 @@ function updateFilterCounts()  {
     var count = $itemElems.filter( filterValue ).length;
     $button.find('.filter-count').text( '(' + count +')' );
   });
+}
+
+var requestProcessing = false;
+function AddTile(name, url) {
+	requestProcessing = true;
+	$newTile = $('<div id="'+ name +'" class="grid-item grid-item--large tile"><h2>'+ name +'</h2><div align="center" class="cssload-fond"><div class="cssload-container-general"><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div></div></div></div>');
+	$('.grid').prepend($newTile).isotope('reloadItems').isotope({ sortBy: 'original-order' });
+
+	var jqxhr = $.get(url + "?ajax", function() {
+		
+	})
+	.done(function(data) {
+		$newTile.append(data);
+	})
+	.fail(function() {
+		$newTile.append("Error ajax failed...")
+	})
+	.always(function() {
+		$newTile.find('.cssload-fond').toggleClass('hidden');
+		$grid.isotope('layout');
+	});
+}
+
+function FillTile(response) {
+	$newTile.append(response);
 }
 
 </script>

@@ -10,7 +10,8 @@ const API_STATUS_VALUES = { success: "SUCCESS", error: "ERROR" };
 
 const OE_API = {
 	location: {name: "location", func: { getCityFromZip: "getCityFromZip", getCityByName: "getCityByName" }},
-	group: {name: "group", func: { getCityFromZip: "getCityFromZip" }}
+	group: {name: "group", func: { getCityFromZip: "getCityFromZip" }},
+	photo: {name: "photo", func: { upload: "upload"}},
 };
 
 function jsonRequest(api, formid, requestVariables, onSuccess) {
@@ -41,6 +42,7 @@ function jsonRequest(api, formid, requestVariables, onSuccess) {
 	return response;
 }
 
+/*
 function SetLocationFromZip(zipCode) {
 	jsonRequest(OE_API.location.name, OE_API.location.func.getCityFromZip, {zip: zipCode}, SetLocation);
 }
@@ -72,8 +74,9 @@ function DisplayAutocompleteLocationOptions(response) {
 }
 
 $(document).ready(function() {
-	/*
+	*//*
 	 * Removed per request but keeping code just in case and for eidt profile implementation 
+	 *//*
 
 	$('input#zip').change(function() {
 		SetLocationFromZip($(this).val());
@@ -91,14 +94,16 @@ $(document).ready(function() {
 		}, 150);
 	});
 	
-	*/
-		/*var predDropDown = $('<div class="zip-autocomplete"></div>').insertAfter($(this));
-		
-		predDropDown.empty();
-		$.each(predictions, function(i, prediction) {
-			predDropDown.append('<div>' + prediction.city + ', ' + prediction.state + '</div>');
-		});
-		
-		predDropDown.show();*/
+  	*//*
+	var predDropDown = $('<div class="zip-autocomplete"></div>').insertAfter($(this));
+	
+	predDropDown.empty();
+	$.each(predictions, function(i, prediction) {
+		predDropDown.append('<div>' + prediction.city + ', ' + prediction.state + '</div>');
+	});
+	
+	predDropDown.show();
+	*//*
 		
 });
+*/
