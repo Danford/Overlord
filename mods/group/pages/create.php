@@ -18,12 +18,16 @@
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
 
-$page = new page_minion("Create Group");
+if (!isset($_GET['ajax']))
+{
+	$page = new page_minion("Create Group");
+	
+	$page->addjs('/js/tinymce/tinymce.min.js');
+	$page->addjs('/js/invoketinymce.js');
+	
+	$page->header();
+}
 
-$page->addjs('/js/tinymce/tinymce.min.js');
-$page->addjs('/js/invoketinymce.js');
-
-$page->header();
 $form = new form_minion("create", "group");
 
 global $privacyoptions;
@@ -43,5 +47,21 @@ global $privacyoptions;
 
 <?php 
 	$form->footer(); // it's not just cosmetic, it does session cleanup.
+if (!isset($_GET['ajax']))
+{
     $page->footer();
+}
+else
+{
+?>
+<script>
+$(function() {
+	tinymce.remove();
+	tinymce.init({selector:'textarea'});
+	
+	$('.grid').isotope('layout');
+});
+</script>
+<?php
+}
 ?>

@@ -389,12 +389,18 @@ $('.button-group').each( function( i, buttonGroup ) {
 
 $('.tile').click(function () {
 	if ($selectedTile != null && $selectedTile != $(this)) {
-		if ($selectedTile.hasClass('photo')) {
-			OnPhotoClick($selectedTile);
-		} else if ($selectedTile.hasClass('writing')) {
-			OnWritingClick($selectedTile);
-		} else if ($selectedTile.hasClass('group')) {
-			OnGroupClick($selectedTile);
+
+		if ($selectedTile.hasClass('destructable'))
+			$selectedTile.remove();
+		else
+		{		
+			if ($selectedTile.hasClass('photo')) {
+				OnPhotoClick($selectedTile);
+			} else if ($selectedTile.hasClass('writing')) {
+				OnWritingClick($selectedTile);
+			} else if ($selectedTile.hasClass('group')) {
+				OnGroupClick($selectedTile);
+			}
 		}
 	}
 
@@ -455,10 +461,17 @@ function updateFilterCounts()  {
 
 var requestProcessing = false;
 function AddTile(name, url) {
+
+	// do not allow multiple request to process at the same time.
+	if (requestProcessing == true)
+		return;
+
 	requestProcessing = true;
-	$newTile = $('<div id="'+ name +'" class="grid-item grid-item--large tile"><h2>'+ name +'</h2><div align="center" class="cssload-fond"><div class="cssload-container-general"><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div></div></div></div>');
+	$newTile = $('<div id="'+ name +'" class="grid-item grid-item--large tile destructable"><h2>'+ name +'</h2><div align="center" class="cssload-fond"><div class="cssload-container-general"><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div></div></div></div>');
 	$('.grid').prepend($newTile).isotope('reloadItems').isotope({ sortBy: 'original-order' });
 
+	$newTile.trigger('click');
+	
 	var jqxhr = $.get(url + "?ajax", function() {
 		
 	})
@@ -471,6 +484,8 @@ function AddTile(name, url) {
 	.always(function() {
 		$newTile.find('.cssload-fond').toggleClass('hidden');
 		$grid.isotope('layout');
+		$selectedTile = $newTile;
+		requestProcessing = false;
 	});
 }
 
