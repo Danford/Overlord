@@ -19,7 +19,8 @@ $page->addjs( '/js/invoketinymce.js') ;
 $page->header() ;
 $form->header() ;
 
-$form->fill_from_db( $db, "SELECT `gender`,`birthdate`,`detail`, `allow_contact`, `show_age`,`email_notification`,`invite_notification`
+$form->fill_from_db( $db, "SELECT `gender`,`birthdate`,`detail`, `allow_contact`, `show_age`,`email_notification`,
+                            `invite_notification`, `city_id`
                             FROM `profile`, `user_account` WHERE `profile`.`user_id`='".$user->id."' 
                                 AND `profile`.`user_id` = `user_account`.`user_id`" ) ;
 
