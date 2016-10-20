@@ -50,10 +50,12 @@ else
 {
 ?>
 <script>
-tinymce.remove();
-tinymce.init({selector:'textarea'});
-
-$('.grid').isotope('layout');
+$(function() {
+	tinymce.remove();
+	tinymce.init({selector:'textarea'});
+	
+	$('.grid').isotope('layout');
+});
 </script>
 <?php
 }
