@@ -58,6 +58,7 @@
  * 
  */
 
+include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
 
 include($oe_plugins['comment']."conf/conf.php");
@@ -87,6 +88,15 @@ $comments = get_comments();
 			<div id="excerpt"><?php echo $comment['detail']; ?></div>
 		</div>
 		<?php endforeach; ?>
+		
+		<?php $form = new form_minion("addComment", "comment"); ?>
+		<?php $form->header(); ?>
+		<div class="grid-item--full grid-item tile">
+			<div id="comment"><?php $form->textarea_field("comment"); ?></div>
+			
+			<?php $form->submit_button("Submit Comment"); ?>
+		</div>
+		<?php $form->footer(); ?>
 	</div>
 </article>
 <?php $page->footer(); ?>
