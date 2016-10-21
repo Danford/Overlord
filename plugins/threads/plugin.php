@@ -42,12 +42,12 @@ if( verify_number( $uri[$pos] ) ){
         } else { $page = 1 ; }
 
         $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `creator`, `edited`
-                        ( SELECT COUNT(*) FROM `comments` 
-                            WHERE module`='".$oepc[$tier]['type']."' 
+                        ( SELECT COUNT(*) FROM `comment` 
+                            WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
                               AND `plug`='thread'
                               AND `plug_item_id`= `thread`.`id` ) as `msgcount`
-                    FROM `threads`
+                    FROM `thread`
                     WHERE ".build_api_where_string()."
                       AND `id`='".$thread_id."'" ) ;
         
@@ -60,7 +60,7 @@ if( verify_number( $uri[$pos] ) ){
     } elseif( $uri[$pos] == 'edit' ) {
         
         $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `creator`
-                    FROM `threads`
+                    FROM `thread`
                     WHERE ".build_api_where_string()."
                       AND `id`='".$thread_id."'" );
         
