@@ -39,6 +39,9 @@ include(oe_frontend."page_minion.php");
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
+include($oe_plugins['thread']."conf/plugin.conf.php");
+include($oe_plugins['comment']."lib/comment.lib.php");
+ 
 include($oe_plugins['writing']."conf/conf.php");
 include($oe_plugins['writing']."lib/writing.lib.php");
 function get_words($sentence, $count = 10) {
@@ -114,7 +117,7 @@ function ImageLoaded(img){
 		</div>
 		<div class="stamp stamp--left tile">
 			<div id="members">
-				<a href="/group/<?php echo $group->id; ?>/friends/"><div id="head">Members - <?php echo count($members); ?></div></a>
+				<a href="/group/<?php echo $group->id; ?>/members/"><div id="head">Members - <?php echo count($members); ?></div></a>
 				<div id="body">
 					<?php foreach ($memberGroups as $groupName => $members) : ?>
 					<?php foreach ($members as $member) : ?>
