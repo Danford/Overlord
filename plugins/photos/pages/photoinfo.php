@@ -41,8 +41,10 @@ global $privacyoptions;
 	<p>Title: <?php $form->text_field("title" ); ?></p>
 	<p>Description: <?php $form->text_field("description" ); ?></p>
 	<p>Make Avatar <?php $form->checkbox("parentavatar") ; ?></p>
+	<?php $form->submit_button(); ?>		
+	<?php /*
 	<div class="button" onclick="UploadImage()">Upload</div>
-			
+	
 	<p>Album: 
 		<select name="album">
 			<option value="None">None</option>
@@ -55,6 +57,9 @@ global $privacyoptions;
 	<p>Album Title: <input name="new_album_title" type="text"/></p>
 	<p>Album Description: <input name="new_album_description" type="text"/></p>
 	<input name="albumavatar" title="Album Avatar" type="checkbox"/>
+	*/
+	?>
+	
 </div>
 <script>
 function UploadImage() {
