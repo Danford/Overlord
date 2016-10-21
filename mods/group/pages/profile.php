@@ -39,11 +39,12 @@ include(oe_frontend."page_minion.php");
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
+include($oe_plugins['writing']."conf/conf.php");
+include($oe_plugins['writing']."lib/writing.lib.php");
+
 include($oe_plugins['thread']."conf/conf.php");
 include($oe_plugins['thread']."lib/thread.lib.php");
 
-include($oe_plugins['writing']."conf/conf.php");
-include($oe_plugins['writing']."lib/writing.lib.php");
 function get_words($sentence, $count = 10) {
 	return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
 }
@@ -86,6 +87,7 @@ if ($loopLength < $writingsLen)
 	$loopLength = $writingsLen;
 
 	?>
+<pre><?php print_r($threads); ?></pre>
 <script type="text/javascript">
 //
 //Executed by onload from html for images loaded in grid.
@@ -195,10 +197,14 @@ function ImageLoaded(img){
 		</div>
 		<?php endif; ?>
 		<?php endfor; ?>
+		<div class="grid-item--large grid-item tile">
+			<p>Threads should be printed here but the array is empty!</p>
+			<a href="/group/<?php echo $group->id; ?>/thread/"><div class="button">View Threads</div></a>
+		</div>
 		<?php foreach ($threads as $thread) : ?>
 		<?php $date = new DateTime($thread['edited']); ?>
 		<a href="/group/<? echo $group->id; ?>/thread/<?php echo $thread['id']; ?>/">
-			<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">
+			<div class="grid-item--large grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">
 				<div id="title"><h2><?php echo $thread['title']; ?></h2></div>
 				<div id="date-updated"><?php echo $thread['edited']; ?></div>
 				<div id="excerpt"><?php echo $thread['detail']; ?></div>

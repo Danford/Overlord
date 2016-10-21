@@ -72,26 +72,43 @@ $page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
 $page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
 $page->js_minion->addFile(oe_js . "isotope.js");
 
+$page->addjs('/js/tinymce/tinymce.min.js');
+$page->addjs('/js/invoketinymce.js');
+
 $comments = get_comments();
 
 ?>
-<pre><?php print_r($thread); ?></pre>
-<pre><?php print_r($comments); ?></pre>
-
 <article id="thread">
 	<div class="grid">
 		<div class="grid-sizer--full grid-sizer"></div>
+		
+		<?php $date = new DateTime($thread['edited']); ?>
+		<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">	
+			<div id="comment-owner" style="float: left;">
+				<p><?php echo $thread['owner']->name; ?></p>
+				<img src="/profile/<?php echo $thread['owner']->id; ?>/photo/thumb/<?php echo $thread['owner']->avatar; ?>.png"/>
+				<p><?php echo $thread['owner']->city_name(); ?></p>
+			</div>
+			<div id="date-updated"><?php echo $thread['edited']; ?></div>
+			<div id="excerpt"><?php echo $thread['detail']; ?></div>
+		</div>
+		
 		<?php foreach ($comments as $comment) : ?>
 		<?php $date = new DateTime($comment['edited']); ?>
 		<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">
+			<div id="comment-owner" style="float: left;">
+				<p><?php echo $comment['owner']->name; ?></p>
+				<img src="/profile/<?php echo $comment['owner']->id; ?>/photo/thumb/<?php echo $comment['owner']->avatar; ?>.png"/>
+				<p><?php echo $comment['owner']->city_name(); ?></p>
+			</div>
 			<div id="date-updated"><?php echo $comment['edited']; ?></div>
-			<div id="excerpt"><?php echo $comment['detail']; ?></div>
+			<div id="excerpt"><?php echo $comment['comment']; ?></div>
 		</div>
 		<?php endforeach; ?>
 		
 		<?php $form = new form_minion("addComment", "comment"); ?>
 		<?php $form->header(); ?>
-		<div class="grid-item--full grid-item tile">
+		<div class="grid-item--full grid-item tile" style="height: 250px;">
 			<div id="comment"><?php $form->textarea_field("comment"); ?></div>
 			
 			<?php $form->submit_button("Submit Comment"); ?>
@@ -99,4 +116,13 @@ $comments = get_comments();
 		<?php $form->footer(); ?>
 	</div>
 </article>
+<script>
+tinymce.init({
+    setup : function(ed) {
+        ed.onInit.add(function(ed) {
+        	$('.grid').isotope('layout');
+        });
+    }
+});
+</script>
 <?php $page->footer(); ?>

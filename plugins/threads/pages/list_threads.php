@@ -69,6 +69,7 @@ $threads = get_threads();
 			</div>
 		</a>
 		<?php endforeach; ?>
-	</div>
+	</div>	
+	<a href="/group/<?php echo $group->id; ?>/thread/create/"><div class="button">New Thread</div></a>
 </article>
 <?php $page->footer(); ?>

@@ -36,7 +36,7 @@ global $privacyoptions;
 <div id="create-group-form">
 	<?php $form->header(); ?>
 	<p>Name: <?php $form->text_field("title"); ?></p>
-	<p>Description: <?php $form->text_field("detail"); ?></p>
+	<p><?php $form->textarea_field("detail"); ?></p>
 	<?php if ($group->membership == 2) : ?>
 	<p>Sticky: <?php $form->checkbox("sticky"); ?></p>
 	<p>Locked: <?php $form->checkbox("locked"); ?></p>
