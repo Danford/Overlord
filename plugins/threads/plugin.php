@@ -41,7 +41,7 @@ if( verify_number( $uri[$pos] ) ){
     
         } else { $page = 1 ; }
 
-        $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `owner`, `edited`
+        $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `owner`, `edited`, 
                         ( SELECT COUNT(*) FROM `comment` 
                             WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
