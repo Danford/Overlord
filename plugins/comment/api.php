@@ -22,7 +22,7 @@ switch( $apiCall ){
             
             $cid = $db->insert( "INSERT INTO `comment` SET ".$db->build_set_string_from_array($o) ) ;
             
-            verify_update($oepc[$tier]['comment']['view'], $cid ) ;
+            verify_update(`comment`, $cid ) ;
             
             $post->json_reply( "SUCCESS", [ 'id' => $cid ] ) ;
             
