@@ -21,7 +21,7 @@ $o['detail'] = process_user_supplied_html( $_POST['detail'] ) ;
 if( $apiCall == 'edit' ){
     
 
-    $db->update( "UPDATE `".$oepc[$tier]['thread']['table']."` 
+    $db->update( "UPDATE `thread` 
                         SET ".$db->build_set_string_from_array($o)." 
                       WHERE ".build_api_where_string()." 
                         AND `thread_id`='".$_POST['thread_id']."'" ) ;
@@ -35,7 +35,7 @@ if( $apiCall == 'edit' ){
     $o['owner'] = $user->id ;
     $o['created'] = oe_time();
     
-    $id = $db->insert( "INSERT INTO `".$oepc[$tier]['thread']['table']."` SET ".build_api_set_string().",".$db->build_set_string_from_array($o) ) ;
+    $id = $db->insert( "INSERT INTO `thread` SET ".build_api_set_string().",".$db->build_set_string_from_array($o) ) ;
     
     $post->json_reply("SUCCESS", ['id' => $id ] ) ;
     header( 'Location: '.str_replace('create', $id, $_SERVER['HTTP_REFERER']) ) ;
