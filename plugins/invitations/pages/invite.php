@@ -1,7 +1,4 @@
 <?php
- 
-    echo( 'you reached invite.php.' ) ;
-    
     /*
      *  
      *  You've got $invitables
@@ -15,3 +12,7 @@
      * 
      * 
      */
+
+?>
+
+<pre><?php print_r($invitables); ?></pre>

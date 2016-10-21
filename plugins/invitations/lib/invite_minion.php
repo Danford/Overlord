@@ -180,6 +180,7 @@ class invite_minion {
     function get_moderatables(){
         
         global $oepc ;
+        global $db ;
         
         $response = array() ;
         
