@@ -195,6 +195,16 @@ function ImageLoaded(img){
 		</div>
 		<?php endif; ?>
 		<?php endfor; ?>
+		<?php foreach ($threads as $thread) : ?>
+		<?php $date = new DateTime($thread['edited']); ?>
+		<a href="/group/<? echo $group->id; ?>/thread/<?php echo $thread['id']; ?>/">
+			<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">
+				<div id="title"><h2><?php echo $thread['title']; ?></h2></div>
+				<div id="date-updated"><?php echo $thread['edited']; ?></div>
+				<div id="excerpt"><?php echo $thread['detail']; ?></div>
+			</div>
+		</a>
+		<?php endforeach; ?>
 	</div>
 </article>
 <?php $page->footer(); ?>

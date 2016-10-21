@@ -58,8 +58,35 @@
  * 
  */
 
-echo 'show_thread.php';
+include(oe_frontend."page_minion.php");
+
+include($oe_plugins['comment']."conf/conf.php");
+include($oe_plugins['comment']."lib/comment.lib.php");
+
+$page = new page_minion("Group Threads");
+
+$page->header();
+
+$page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
+$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
+$page->js_minion->addFile(oe_js . "isotope.js");
+
+$comments = get_comments();
 
 ?>
-
 <pre><?php print_r($thread); ?></pre>
+<pre><?php print_r($comments); ?></pre>
+
+<article id="thread">
+	<div class="grid">
+		<div class="grid-sizer--full grid-sizer"></div>
+		<?php foreach ($comments as $comment) : ?>
+		<?php $date = new DateTime($comment['edited']); ?>
+		<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">
+			<div id="date-updated"><?php echo $comment['edited']; ?></div>
+			<div id="excerpt"><?php echo $comment['detail']; ?></div>
+		</div>
+		<?php endforeach; ?>
+	</div>
+</article>
+<?php $page->footer(); ?>
