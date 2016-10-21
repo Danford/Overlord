@@ -41,7 +41,7 @@ if( verify_number( $uri[$pos] ) ){
     
         } else { $page = 1 ; }
 
-        $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `creator`, `edited`
+        $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `owner`, `edited`
                         ( SELECT COUNT(*) FROM `comment` 
                             WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
@@ -59,7 +59,7 @@ if( verify_number( $uri[$pos] ) ){
         }
     } elseif( $uri[$pos] == 'edit' ) {
         
-        $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `creator`
+        $thread = $db->get_assoc( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `owner`
                     FROM `thread`
                     WHERE ".build_api_where_string()."
                       AND `id`='".$thread_id."'" );
