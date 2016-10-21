@@ -77,7 +77,7 @@ switch( $apiCall ){
         
         $q = "SELECT `owner` FROM `comment` 
                 WHERE `id`='".$_POST['comment_id']."'
-                AND `module` = '".$basemodule."' AND `module_id`='".$basemoduleID."'" ;
+                AND `module` = '".$basemodule."' AND `module_item_id`='".$basemoduleID."'" ;
         
         if( $tier > 0 ){
             $q .= "AND `plug`='".$lastplug."' and `lastplug`='".$lastplugID."'" ;
