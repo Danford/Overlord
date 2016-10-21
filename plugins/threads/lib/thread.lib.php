@@ -10,12 +10,12 @@ function get_threads( $start = 0, $limit = 9999999 ){
     $response = array();
     
     $db->query( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `creator`, `edited`,
-                        ( SELECT COUNT(*) FROM `comments` 
+                        ( SELECT COUNT(*) FROM `comment` 
                             WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
                               AND `plug`='thread'
                               AND `plug_item_id`= `thread`.`id` ) as `msgcount`,
-                        ( SELECT MAX(`timestamp`) FROM `comments` 
+                        ( SELECT MAX(`timestamp`) FROM `comment` 
                             WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
                               AND `plug`='thread'
