@@ -39,9 +39,9 @@ include(oe_frontend."page_minion.php");
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
-include($oe_plugins['thread']."conf/plugin.conf.php");
-include($oe_plugins['comment']."lib/comment.lib.php");
- 
+include($oe_plugins['thread']."conf/conf.php");
+include($oe_plugins['thread']."lib/thread.lib.php");
+
 include($oe_plugins['writing']."conf/conf.php");
 include($oe_plugins['writing']."lib/writing.lib.php");
 function get_words($sentence, $count = 10) {
@@ -77,6 +77,9 @@ $photosLen = count($photos);
 
 $writings = get_writings(0, 15);
 $writingsLen = count($writings);
+
+$threads = get_threads(0, 15);
+$threadsLen = count($threads);
 
 $loopLength = $photosLen;
 if ($loopLength < $writingsLen)

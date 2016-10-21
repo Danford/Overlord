@@ -22,3 +22,11 @@
  *              
  *              
  */
+
+echo 'list_threads.php';
+
+$threads = get_threads();
+
+?>
+
+<pre><?php print_r($threads); ?></pre>

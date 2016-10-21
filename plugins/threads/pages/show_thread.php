@@ -57,3 +57,5 @@
  * 
  * 
  */
+
+echo 'show_thread.php';
