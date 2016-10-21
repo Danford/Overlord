@@ -20,7 +20,7 @@ switch( $apiCall ){
                 $o['plug_id'] = $lastplugID ;
             }
             
-            $cid = $db->insert( "INSERT INTO `".$oepc[$tier]['comment']['table']."` SET ".$db->build_set_string_from_array($o) ) ;
+            $cid = $db->insert( "INSERT INTO `comment` SET ".$db->build_set_string_from_array($o) ) ;
             
             verify_update($oepc[$tier]['comment']['view'], $cid ) ;
             
@@ -32,7 +32,7 @@ switch( $apiCall ){
                 
                 // pagination
                 
-                $q = "SELECT COUNT(*) FROM ".$oepc[$tier]['comment']['view']."
+                $q = "SELECT COUNT(*) FROM comment
                            WHERE `module`='".$basemodule."' 
                              AND `module_id`='".$basemoduleID."'" ;
                 
