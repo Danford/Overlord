@@ -9,7 +9,7 @@ function get_comments( $start = 0, $stop = 9999999 ){
     
     if( verify_number( $start ) and verify_number( $stop ) ){
     
-        $q = "SELECT `id`, `comment`, `owner` FROM `".$oepc[$tier]['comment']['view']."`
+        $q = "SELECT `id`, `comment`, `owner` FROM `comment`
                         WHERE `module`='".$oepc[0]['type']."'
                           AND `module_id`='".$oepc[0]['id']."'" ;
         
