@@ -16,7 +16,7 @@ function get_threads( $start = 0, $limit = 9999999 ){
                               AND `plug`='thread'
                               AND `plug_item_id`= `thread`.`id` ) as `msgcount`,
                         ( SELECT MAX(`timestamp`) FROM `comments` 
-                            WHERE module`='".$oepc[$tier]['type']."' 
+                            WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
                               AND `plug`='thread'
                               AND `plug_item_id`= `thread`.`id` ) as `last_updated`
