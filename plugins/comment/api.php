@@ -10,7 +10,7 @@ switch( $apiCall ){
             
             $o['owner'] = $user->id ;
             $o['module'] = $basemodule ;
-            $o['module_id'] = $basemoduleID ;
+            $o['module_item_id'] = $basemoduleID ;
             $o['comment'] = process_user_supplied_html( $_POST['comment'] ) ;
             $o['ip'] = get_client_ip() ;
             $o['timestamp'] = oe_time() ;
