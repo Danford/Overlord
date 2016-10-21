@@ -22,7 +22,7 @@ function get_threads( $start = 0, $limit = 9999999 ){
                               AND `plug_item_id`= `thread`.`id` ) as `last_updated`
                     FROM `thread`
                     WHERE ".build_api_where_string()."
-                    ORDER BY `sticky` DESC, `updated` DESC
+                    ORDER BY `sticky` DESC, `last_updated` DESC
                     LIMIT ".$start.", ".$limit ) ;
     
     while( ( $thread = $db->assoc() ) != false ){
