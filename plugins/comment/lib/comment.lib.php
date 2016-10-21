@@ -19,7 +19,7 @@ function get_comments( $start = 0, $stop = 9999999 ){
                    AND `plug_id`='".$oepc[$tier]['id']."'" ;
         }
         
-        $db->query( $q." LIMIT ".$start.", ".$end ) ;
+        $db->query( $q." LIMIT ".$start.", ".$stop ) ;
         
         $response = array() ;
         
