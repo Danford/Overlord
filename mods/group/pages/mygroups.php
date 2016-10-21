@@ -36,6 +36,7 @@ $page->header();
 
 $page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
 $page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
+$page->js_minion->addFile(oe_js . "isotope.js");
 
 ?>
 <script type="text/javascript">
@@ -105,30 +106,4 @@ function ImageLoaded(img){
 		<?php endforeach; ?>
 	</div>
 </article>
-<script>
-$grid = $('.grid').isotope({
-	// options
-	itemSelector: '.grid-item',
-	percentPosition: true,
-	
-	getSortData: {
-		title: '#title',
-		date: '[data-date]',
-	},
-			
-	masonry: {
-		columnWidth: '.grid-sizer'
-	},
-});
-	
-$grid.imagesLoaded().progress( function() {
-	$grid.isotope('layout');
-});
-
-//sort items on button click
-$('.sort-by-button-group').on( 'click', 'button', function() {
-	var sortByValue = $(this).attr('data-sort-by');
-	$grid.isotope({ sortBy: sortByValue });
-});
-</script>
 <?php $page->footer(); ?>
