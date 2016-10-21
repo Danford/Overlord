@@ -24,7 +24,7 @@ switch( $apiCall ){
             
             verify_update($oepc[$tier]['comment']['view'], $cid ) ;
             
-            $post->reply( "SUCCESS", [ 'id' => $cid ] ) ;
+            $post->json_reply( "SUCCESS", [ 'id' => $cid ] ) ;
             
             if( $oepc[$tier]['comment']['page'] == false ) {
                 $post->return_to_form() ; 
