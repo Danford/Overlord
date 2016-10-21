@@ -32,9 +32,9 @@ switch( $apiCall ){
                 
                 // pagination
                 
-                $q = "SELECT COUNT(*) FROM comment
+                $q = "SELECT COUNT(*) FROM `comment`
                            WHERE `module`='".$basemodule."' 
-                             AND `module_id`='".$basemoduleID."'" ;
+                             AND `module_item_id`='".$basemoduleID."'" ;
                 
                 if( $$tier > 0 ){
                     $q .= " AND `plug`='".$lastplug."'
@@ -75,7 +75,7 @@ switch( $apiCall ){
         }
         
         
-        $q = "SELECT `owner` FROM `.$oepc[$tier]['comment']['view'].` 
+        $q = "SELECT `owner` FROM `comment` 
                 WHERE `id`='".$_POST['comment_id']."'
                 AND `module` = '".$basemodule."' AND `module_id`='".$basemoduleID."'" ;
         
@@ -86,7 +86,7 @@ switch( $apiCall ){
         $owner = $db->get_assoc( $q ) ;
 
         if( $owner != false and ( $oepc[0]['admin'] or $owner == $user->id )){
-            $db->update( "DELETE FROM `.$oepc[$tier]['comment']['table'].` WHERE `id`='".$_POST['comment_id']."'" ) ;
+            $db->update( "DELETE FROM `comment` WHERE `id`='".$_POST['comment_id']."'" ) ;
         
             $post->json_reply( "SUCCESS" ) ;
             $post->return_to_form() ;
