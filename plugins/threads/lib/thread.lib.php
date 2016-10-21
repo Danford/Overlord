@@ -20,7 +20,7 @@ function get_threads( $start = 0, $limit = 9999999 ){
                               AND `module_item_id`='".$oepc[$tier]['id']."'
                               AND `plug`='thread'
                               AND `plug_item_id`= `thread`.`id` ) as `last_updated`
-                    FROM `threads`
+                    FROM `thread`
                     WHERE ".build_api_where_string()."
                     ORDER BY `sticky` DESC, `updated` DESC
                     LIMIT ".$start.", ".$limit ) ;
