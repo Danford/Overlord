@@ -5,6 +5,7 @@ function get_comments( $start = 0, $stop = 9999999 ){
  
     global $oepc ;
     global $tier ;
+    global $db ;
     
     if( verify_number( $start ) and verify_number( $stop ) ){
     
