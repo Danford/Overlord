@@ -35,7 +35,7 @@ $oepc[0]['admin'] = ( $group->membership == 2 ) ;
  *
  *  In the case of profile, it's the same as above, but I'm commenting here. */
 
-$oepc[0]['plugins'] = [ 'photo', 'writing', 'threads', 'albums', 'invitations' ] ;
+$oepc[0]['plugins'] = [ 'photo', 'writing', 'thread', 'albums', 'invitations' ] ;
 
 /* What plugins will we try to load??
  * Again, this could vary depending on whether it is being invoked
