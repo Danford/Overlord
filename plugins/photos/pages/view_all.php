@@ -86,15 +86,13 @@ function ImageLoaded(img){
 		<a href="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>">
 			<div class="grid-item tile photo" data-date="<?php echo $date->getTimestamp(); ?>">
 				<div id="title"><h2><?php echo $photo['title']; ?></h2></div>
-				<div id="photo">
-					<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
-					<div align="center" class="cssload-fond">
-						<div class="cssload-container-general">
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-						</div>
+				<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
+				<div align="center" class="cssload-fond">
+					<div class="cssload-container-general">
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
 					</div>
 				</div>
 				<div id="description"><?php echo $photo['description']; ?></div>

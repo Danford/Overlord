@@ -76,15 +76,13 @@ function ImageLoaded(img){
 			<div class="grid-item tile" data-date="<?php echo $date->getTimestamp(); ?>">
 				<div id="title"><h2><?php echo $writing['title']; ?></h2></div>
 				<div id="subtitle"><h3><?php echo $writing['subtitle']; ?></h3></div>
-				<div id="photo">
-					<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
-					<div align="center" class="cssload-fond">
-						<div class="cssload-container-general">
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-						</div>
+				<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
+				<div align="center" class="cssload-fond">
+					<div class="cssload-container-general">
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
 					</div>
 				</div>
 				<div id="date-updated"><?php echo $writing['last_updated']; ?></div>

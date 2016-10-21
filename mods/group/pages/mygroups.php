@@ -83,19 +83,17 @@ function ImageLoaded(img){
 		<a href="/group/<?php echo $group['id']; ?>/">
 			<div class="grid-item tile" data-updated="<?php //echo $date->getTimestamp(); ?>">
 				<div id="title"><h2><?php echo $group['name']; ?></h2></div>
-				<div id="photo">
-					<?php if ($group['avatar'] == 0) : ?>
-					<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
-					<?php else : ?>
-					<p>Not sure where to get group avatar image from.</p>
-					<?php endif; ?>
-					<div align="center" class="cssload-fond">
-						<div class="cssload-container-general">
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
-								<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
-						</div>
+				<?php if ($group['avatar'] == 0) : ?>
+				<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
+				<?php else : ?>
+				<p>Not sure where to get group avatar image from.</p>
+				<?php endif; ?>
+				<div align="center" class="cssload-fond">
+					<div class="cssload-container-general">
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div>
+							<div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div>
 					</div>
 				</div>
 				<div id="date-updated"><?php //echo $writing['last_updated']; ?></div>
