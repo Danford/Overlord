@@ -59,3 +59,7 @@
  */
 
 echo 'show_thread.php';
+
+?>
+
+<pre><?php print_r($thread); ?></pre>

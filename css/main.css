@@ -344,6 +344,10 @@ input#Submit:active, input#x:active {
 	overflow: hidden;
 }
 
+.grid-sizer--full, .grid-item--full {
+	width: 100%;
+}
+
 .grid-item--large {
 	width: 48%;
 }
@@ -405,6 +409,10 @@ input#Submit:active, input#x:active {
 	.grid-item--large {
 		width: 64%;
 	}
+
+	.grid-sizer--full, .grid-item--full {
+		width: 100%;
+	}	
 }
 
 /*														*/
