@@ -11,7 +11,7 @@ function get_comments( $start = 0, $stop = 9999999 ){
     
         $q = "SELECT `id`, `comment`, `owner` FROM `comment`
                         WHERE `module`='".$oepc[0]['type']."'
-                          AND `module_id`='".$oepc[0]['id']."'" ;
+                          AND `module_item_id`='".$oepc[0]['id']."'" ;
         
         if( $tier > 0 ){
             
