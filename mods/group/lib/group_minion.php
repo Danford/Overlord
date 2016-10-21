@@ -131,7 +131,7 @@ class group_minion {
         
         $q = "SELECT `user`,`access` FROM `group_membership` WHERE `group`='".$this->id."'" ;
         
-        $output['owner'] = $this->owner  ;
+        $output['owner'] = array( $this->owner ) ;
         $output['admins'] = array() ;
         $output['members'] = array() ;
         

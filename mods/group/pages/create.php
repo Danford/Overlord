@@ -33,7 +33,7 @@ $form = new form_minion("create", "group");
 global $privacyoptions;
 ?>
 
-<div id="upload-photo-form">
+<div id="create-group-form">
 	<?php $form->header(); ?>
 	<p>Name: <?php $form->text_field("name"); ?></p>
 	<p>Description: <?php $form->text_field("short"); ?></p>

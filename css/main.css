@@ -387,6 +387,26 @@ input#Submit:active, input#x:active {
 .tile div#full-copy {
 	display: none;
 }
+
+@media only screen and (max-width: 650px) {
+	.stamp--left {
+		width: 31%;
+	}
+	
+	.stamp--top {
+		left: 33%;
+		width: 64%;
+	}
+	
+	.grid-sizer, .grid-item {
+		width: 31%;
+	}
+	
+	.grid-item--large {
+		width: 64%;
+	}
+}
+
 /*														*/
 /* 							Loader 						*/
 /*														*/

@@ -36,7 +36,8 @@ function jsonRequest(api, formid, requestVariables, onSuccess) {
 	}, "json")
 		.fail(function() {
 			console.log("jsonRequest failed api:" + api + ", formid:" + formid);
-			console.log(requestVariables);
+			console.log(postVariables);
+			console.log(result);
 		});
 	
 	return response;

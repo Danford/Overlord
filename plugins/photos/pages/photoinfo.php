@@ -58,7 +58,7 @@ global $privacyoptions;
 </div>
 <script>
 function UploadImage() {
-	jsonRequest(OE_API.photo.name, OE_API.photo.func.upload, {photo: $('input#photo').val(), privacy: $('select#privacy').val(), title: $('input#title').val(), description: $('input#description').val(), parentavatar: $('input#parentavatar').val()}, SetLocation);
+	jsonRequest(OE_API.photo.name, OE_API.photo.func.upload, {oe_module: 'profile', oe_module_id: '<?php echo $user->id; ?>', photo: $('input#photo').val(), privacy: $('select#privacy').val(), title: $('input#title').val(), description: $('input#description').val(), parentavatar: $('input#parentavatar').prop('checked')}, SetLocation);
 }
 
 function SetLocation(response) {

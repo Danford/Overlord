@@ -40,7 +40,7 @@ class page_minion {
         }
     }
     
-    function addjs( $js ) {
+    function addjs( $js, $footer = false ) {
         
         if( $js != '' ) {
             if( is_array( $js ) ) {

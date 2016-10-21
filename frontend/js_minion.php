@@ -13,16 +13,21 @@ require_once( oe_frontend . 'html/tags/script.php' ) ;
 class js_minion extends serveable_minion {
     var $html_minion ;
     var $jsFiles ;
+    var $jsFooterFiles ;
     var $jsRaw ;
 
     function __construct( $html_minion ) {
         $this->html_minion = $html_minion ;
         $this->jsFiles = array() ;
+        $this->jsFooterFiles = array() ;
         $this->jsRaw = array() ;
     }
 
-    function addFile( $path ) {
-        $this->jsFiles[] = $path ;
+    function addFile( $path, $footer = false ) {
+        if ( $footer == false )
+        	$this->jsFiles[] = $path ;
+        else
+        	$this->jsFooterFiles[] = $path ;
     }
 
     function addRaw( $raw ) {
@@ -34,6 +39,10 @@ class js_minion extends serveable_minion {
             $this->html_minion->head->AddElement( new Script( $file ) ) ;
         }
 
+        foreach ( $this->jsFooterFiles as $file ) {
+        	$this->html_minion->footer->AddElement( new Script( $file ) ) ;
+        }
+        
         if ( count( $this->jsRaw ) > 0 ) {
             foreach ($this->jsRaw as $raw) {
                 $this->html_minion->head->AddElement( new Script( null, $raw ) ) ;
