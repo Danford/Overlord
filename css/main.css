@@ -345,7 +345,7 @@ input#Submit:active, input#x:active {
 }
 
 .grid-sizer--full, .grid-item--full {
-	width: 100%;
+	width: 98%;
 }
 
 .grid-item--large {
@@ -612,4 +612,21 @@ img.loading {
     border: black solid 1px;
     border-right: 0;
     border-left: 0;
+}
+
+/*																	*/
+/*							Thread Styling							*/
+/*																	*/
+
+#comment-owner {
+	padding-right: 20px;
+}
+
+#comment-owner p {
+	padding: 0;
+	margin: 0;
+}
+
+#comment {
+	margin-top: 40px;
 }

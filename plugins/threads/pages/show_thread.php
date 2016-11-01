@@ -87,10 +87,13 @@ $comments = get_comments();
 			<div id="comment-owner" style="float: left;">
 				<p><?php echo $thread['owner']->name; ?></p>
 				<img src="/profile/<?php echo $thread['owner']->id; ?>/photo/thumb/<?php echo $thread['owner']->avatar; ?>.png"/>
-				<p><?php echo $thread['owner']->city_name(); ?></p>
+				<p>City: <?php echo $thread['owner']->city_name(); ?></p>
+				<?php if ($thread['owner']->show_age == 1) : ?>
+				<p>Age: <?php echo $thread['owner']->age; ?>
+				<?php endif; ?>
 			</div>
 			<div id="date-updated"><?php echo $thread['edited']; ?></div>
-			<div id="excerpt"><?php echo $thread['detail']; ?></div>
+			<div id="comment"><?php echo $thread['detail']; ?></div>
 		</div>
 		
 		<?php foreach ($comments as $comment) : ?>
@@ -99,21 +102,24 @@ $comments = get_comments();
 			<div id="comment-owner" style="float: left;">
 				<p><?php echo $comment['owner']->name; ?></p>
 				<img src="/profile/<?php echo $comment['owner']->id; ?>/photo/thumb/<?php echo $comment['owner']->avatar; ?>.png"/>
-				<p><?php echo $comment['owner']->city_name(); ?></p>
+				<p>City: <?php echo $thread['owner']->city_name(); ?></p>
+				<?php if ($thread['owner']->show_age == 1) : ?>
+				<p>Age: <?php echo $thread['owner']->age; ?>
+				<?php endif; ?>
 			</div>
 			<div id="date-updated"><?php echo $comment['edited']; ?></div>
-			<div id="excerpt"><?php echo $comment['comment']; ?></div>
+			<div id="comment"><?php echo $comment['comment']; ?></div>
 		</div>
 		<?php endforeach; ?>
 		
-		<?php $form = new form_minion("addComment", "comment"); ?>
-		<?php $form->header(); ?>
 		<div class="grid-item--full grid-item tile" style="height: 250px;">
-			<div id="comment"><?php $form->textarea_field("comment"); ?></div>
 			
+			<?php $form = new form_minion("addComment", "comment"); ?>
+			<?php $form->header(); ?>
+			<?php $form->textarea_field("comment"); ?>
 			<?php $form->submit_button("Submit Comment"); ?>
+			<?php $form->footer(); ?>
 		</div>
-		<?php $form->footer(); ?>
 	</div>
 </article>
 <script>
