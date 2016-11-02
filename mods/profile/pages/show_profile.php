@@ -27,8 +27,19 @@ include($oe_plugins['photo']."lib/photo.lib.php");
 
 include($oe_plugins['writing']."conf/conf.php");
 include($oe_plugins['writing']."lib/writing.lib.php");
-function get_words($sentence, $count = 10) {
+function get_words($sentence, $count = 150) {
 	return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
+}
+
+function print_words($sentence, $count = 150) {
+	$words = explode(' ', $sentence);
+	
+	$limited_words = array_slice($words, 0, $count);
+	echo implode(' ', $limited_words);
+	
+	if (count($words > $count))
+		return true;
+	return false;
 }
 
 function LoadImage($profileId, $id)
@@ -154,14 +165,19 @@ function ImageLoaded(img){
 				</div>
 			</div>
 		</div>
-		<div id="about-me" class="grid-item grid-item--large tile flex-main">
+		<div id="about-me" class="grid-item grid-item--large tile about-me">
 			<?php if ($profile->detail == "" && $profile->id == $user->id) : ?>
 			<p>This profile doesn't yet have an "About Me" section. Add it by editing your profile.<p>
 			<a href="/profile/"><div class="button">EditProfile</div></a>
 			<?php elseif ($profile->detail == "") : ?>
 			<p>This user has not yet provided anything for the "About Me" section of thier profile.</p>
 			<?php else : ?>
-			<p><?php echo $profile->detail; ?></p>
+			<div id="excerpt">
+				<?php if (print_words($profile->detail, 200)) : ?>
+				<p>Click to read more.</p>
+				<?php endif; ?>
+			</div>
+			<div id="full" class="hidden"><?php echo $profile->detail; ?></div>
 			<?php endif; ?>
 		</div>
 		<div class="stamp stamp--top tile">

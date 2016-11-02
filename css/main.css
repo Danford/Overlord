@@ -352,6 +352,10 @@ input#Submit:active, input#x:active {
 	width: 48%;
 }
 
+.grid-item--x-large {
+	width: 73%;
+}
+
 .grid-item #excerpt, .grid-item #description {
 	margin-top: 10px;
 }
@@ -410,8 +414,11 @@ input#Submit:active, input#x:active {
 		width: 64%;
 	}
 
+	.grid-item--x-large {
+		width: 64%;
+	}	
 	.grid-sizer--full, .grid-item--full {
-		width: 100%;
+		width: 98%;
 	}	
 }
 

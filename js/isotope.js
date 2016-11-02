@@ -19,7 +19,15 @@ function OnWritingClick($writing) {
 }
 
 function OnGroupClick($group) {
-	
+
+}
+
+function OnAboutMeClick($aboutme) {
+	$aboutme.toggleClass('grid-item--large');
+	$aboutme.toggleClass('grid-item--x-large');
+	$aboutme.children('#excerpt').toggleClass('hidden');
+	$aboutme.children('#full').toggleClass('hidden');
+	$grid.isotope('layout');
 }
 
 // flatten object by concatting values
@@ -155,6 +163,8 @@ $(function() {
 					OnWritingClick($selectedTile);
 				} else if ($selectedTile.hasClass('group')) {
 					OnGroupClick($selectedTile);
+				} else if ($selectedTile.hasClass('about-me')) {
+					OnAboutMeClick($selectedTile);
 				}
 			}
 		}
@@ -166,7 +176,10 @@ $(function() {
 				OnWritingClick($(this));
 			} else if ($(this).hasClass('group')) {
 				OnGroupClick($(this));
+			} else if ($(this).hasClass('about-me')) {
+				OnAboutMeClick($(this));
 			}
+			
 	
 			$grid.isotope('layout');
 		}
