@@ -34,9 +34,7 @@ switch( $uri[$pos ]){
 // anything else should specify the group number
 
 if( verify_number( $uri[$pos] ) ){
-    
-    include_once $oe_modules['group']."lib/group_minion.php" ;
-    
+        
     $group = new group_minion( $uri[$pos] ) ;
     
     if( $group->id != false ){

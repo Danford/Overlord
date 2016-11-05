@@ -5,8 +5,6 @@ if( ! isset( $group ) ){
     // this is being accessed via a plugin API
     // it goes here to let the plugin ignore what kind of
     // plug it's plugging
-
-    include( $oe_modules['group']."/lib/group_minion.php" ) ; 
     
     $group = new group_minion( $basemoduleID ) ;
 

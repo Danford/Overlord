@@ -17,50 +17,24 @@ class invite_minion {
         $this->target = $oepc[$tier]['invitations']['parentObject'] ;
     }
     
-    function get_invitable_ids(){
+    function get_invitables(){
         
-        if( ! is_array( $this->invitables ) ){
+        global $user ;
         
-            global $user ;
-            
-            $nix = $this->target->get_uninvitable() ;
-            
-            $people = array() ;
-            
-            foreach( $user->friends as $friend ){                
-                if( ! in_array( $friend, $nix ) ){
-                    $people[] = $friend ;
-                }                
-            }
-            
+        if( ! is_array($this->invitables ) ){
+        
+            $people = $user->get_friends_as_array() ;
             $groups = array() ;
             
             foreach( $user->groups_administered as $group ){
-                $groups[] = $group ;
+                $groups[] = new group_minion( $group, true ) ;
             }
             
             $this->invitables = [ 'people' => $people , 'groups' => $groups ] ;
+        
         }
         
         return $this->invitables ;
-    }
-    
-    function get_invitables(){
-        
-        $i = $this->get_invitable_ids() ;
-        
-        $people = array() ;
-        $groups = array() ;
-        
-        foreach( $i['people'] as $person ) {
-            $people[] = new profile_minion($person ) ;
-        }
-        
-        foreach( $i['groups'] as $group ){
-            $groups[] = $group ;
-        }
-        
-        return [ 'people' => $people , 'groups' => $groups ] ;
     }
     
     function get_invited() {

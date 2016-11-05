@@ -10,7 +10,6 @@ $pagedir = $oe_modules['group']."api/" ;
 
 if( isset( $_POST['group_id'] )){
     
-   include $oe_modules['group']."lib/group_minion.php" ;
    $group = new group_minion($_POST['group_id']) ;
    if( $group->id == false ){
        $post->json_reply("FAIL") ;

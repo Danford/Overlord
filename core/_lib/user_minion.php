@@ -327,12 +327,12 @@ class user_minion {
             
     }
     
-    function get_friends_as_array( $offset = 0, $limit = 99999999 ){
+    function get_friends_as_array(){
     
         $array_list == array() ;
         
-        foreach( $this->friends as $friend ){
-            $array_list = new profile_minion( $friend );
+        foreach( $this->friends as $friend => $null ){
+            $array_list[] = new profile_minion( $friend , true );
         }
         
         return $array_list ;

@@ -5,6 +5,7 @@
 	include_once( oe_lib.'oe_lib.php' ) ;
 	include_once( oe_lib.'mysqli_minion.php' ) ;
 	include_once( $oe_modules['profile']."lib/profile_minion.php" );
+	include_once( $oe_modules['group']."lib/group_minion.php" );
 	include_once( oe_lib.'user_minion.php' ) ;
 
 	date_default_timezone_set( 'UTC' );
@@ -39,7 +40,7 @@
 	    $postmodule = $_POST['oe_api'] ;
 	    
 	    if( ! isset( $_POST["oe_call"] ) ){
-	        $post->json_reply( "FAIL" ) ;
+	        $post->json_reply( "FAIL2" ) ;
 	        die('2');
 	    }
 
@@ -58,7 +59,7 @@
 	        
 	        if( ! isset( $_POST['oe_module'] ) or ! isset( $_POST['oe_module_id'] ) ){
 	        
-	            $post->json_reply("FAIL") ;
+	            $post->json_reply("FAIL3") ;
 	            die('4');
 	        }
 	        
@@ -78,7 +79,7 @@
 	        // check for Bobby Tables in the module/plug data
 
 	        if( ! verify_number( $_POST['oe_module_id'] ) or ! verify_number( $_POST['oe_plug_id'] )){
-	            $post->json_reply( "FAIL");
+	            $post->json_reply( "FAIL4");
 	            die('5');
 	        }
 	        

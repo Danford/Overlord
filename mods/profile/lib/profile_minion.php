@@ -178,9 +178,7 @@ class profile_minion {
         
         global $db ;
         global $oe_modules ;
-        
-        include_once $oe_modules['group'].'lib/group_minion.php';
-        
+                
         $grouplist = array() ;
         
         $db->query( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
