@@ -16,15 +16,14 @@ function get_comments( $start = 0, $stop = 9999999 ){
         if( $tier > 0 ){
             
             $q .= "AND `plug`='".$oepc[$tier]['type']."'
-                   AND `plug_id`='".$oepc[$tier]['id']."'" ;
+                   AND `plug_item_id`='".$oepc[$tier]['id']."'" ;
         }
         
-        $db->query( $q." LIMIT ".$start.", ".$stop ) ;
+        $q .= " LIMIT ".$start.", ".$stop;
         
-        $response = array() ;
+        $db->query($q);
         
-        while( ( $comment = $db->assoc() ) != false ){
-                
+        while(($comment = $db->assoc()) != false){
             $comment["owner"] = new profile_minion($comment["owner"], true );
             $response[] = $comment ;
         }

@@ -112,7 +112,7 @@ function ImageLoaded(img){
 			<p id="name"><?php echo $group->name; ?></p>
 			<?php LoadImage($group->id, $group->avatar); ?>
 			<?php if ($group->check_membership($user->id) <= 1): ?>
-			<a href="<?php echo $group-id; ?>/edit"><div class="button">Edit Group</div></a>
+			<a href="edit"><div class="button">Edit Group</div></a>
 			<?php endif; ?>
 			<?php if ($group->check_membership($user->id) <= 2): ?>
 			<a href="/group/<?php echo $group->id; ?>/invitations/"><div class="button">Invite</div></a>

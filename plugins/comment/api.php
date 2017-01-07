@@ -17,13 +17,13 @@ switch( $apiCall ){
             
             if( $tier > 0 ){
                 $o['plug'] = $lastplug ;
-                $o['plug_id'] = $lastplugID ;
+                $o['plug_item_id'] = $lastplugID ;
             }
+            $q = "INSERT INTO `comment` SET ".$db->build_set_string_from_array($o);
+
+            $cid = $db->insert( $q ) ;
             
-            $cid = $db->insert( "INSERT INTO `comment` SET ".$db->build_set_string_from_array($o) ) ;
-            
-            verify_update(`comment`, $cid ) ;
-            
+            verify_update('comment', $cid ) ;
             $post->json_reply( "SUCCESS", [ 'id' => $cid ] ) ;
             
             if( $oepc[$tier]['comment']['page'] == false ) {
@@ -38,7 +38,7 @@ switch( $apiCall ){
                 
                 if( $$tier > 0 ){
                     $q .= " AND `plug`='".$lastplug."'
-                            AND `plug_id`='".$lastplugID."'" ;
+                            AND `plug_item_id`='".$lastplugID."'" ;
                 }
                 
                 $c = $db->get_field( $q ) ;

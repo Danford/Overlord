@@ -96,10 +96,11 @@
 	            // anything above the module level is either a plugin or
 	            // a module acting as a plugin.
 	        
-    	        if( file_exists( $oe_plugins[$basemodule]."conf/plugin.conf.php" ) ){
-    	            include( $oe_plugins[$basemodule]."conf/plugin.conf.php" ) ;
+    	        if( file_exists( $oe_plugins[$lastplug]."conf/plugin.conf.php" ) ){
+    	            include( $oe_plugins[$lastplug]."conf/plugin.conf.php" ) ;
     	        } else {
     	            $post->json_reply("FAIL" ) ;
+    	            printVarible($lastplug);
     	            die('7');
     	        }
     	            

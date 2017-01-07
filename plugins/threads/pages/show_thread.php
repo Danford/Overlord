@@ -61,6 +61,11 @@
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
 
+// without this oepc is wrong and comments show the same for every thread.
+// I thought this should be getting automatically called but I have no idea.
+// where that code is located.
+include($oe_plugins['thread']."conf/plugin.conf.php");
+
 include($oe_plugins['comment']."conf/conf.php");
 include($oe_plugins['comment']."lib/comment.lib.php");
 
@@ -76,7 +81,6 @@ $page->addjs('/js/tinymce/tinymce.min.js');
 $page->addjs('/js/invoketinymce.js');
 
 $comments = get_comments();
-
 ?>
 <article id="thread">
 	<div class="grid">
@@ -98,7 +102,7 @@ $comments = get_comments();
 		
 		<?php foreach ($comments as $comment) : ?>
 		<?php $date = new DateTime($comment['edited']); ?>
-		<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">
+		<div class="grid-item grid-item--full tile" data-updated="<?php echo $date->getTimestamp(); ?>">
 			<div id="comment-owner" style="float: left;">
 				<p><?php echo $comment['owner']->name; ?></p>
 				<img src="/profile/<?php echo $comment['owner']->id; ?>/photo/thumb/<?php echo $comment['owner']->avatar; ?>.png"/>
@@ -113,12 +117,12 @@ $comments = get_comments();
 		<?php endforeach; ?>
 		
 		<div class="grid-item--full grid-item tile" style="height: 250px;">
-			
 			<?php $form = new form_minion("addComment", "comment"); ?>
 			<?php $form->header(); ?>
 			<?php $form->textarea_field("comment"); ?>
 			<?php $form->submit_button("Submit Comment"); ?>
 			<?php $form->footer(); ?>
+
 		</div>
 	</div>
 </article>

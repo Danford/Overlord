@@ -71,7 +71,10 @@ class mysqli_minion {
         
         $f = @fopen( $this->log, 'a' ) ;
         fwrite( $f, oe_time()." ".$error.PHP_EOL ) ;
-        fclose( $f ) ;       
+        
+        // provide a call stack for difficult errors.
+        //fwrite( $f, print_r( debug_backtrace(), true ) ) ;
+        fclose( $f ) ;
         
     }
     

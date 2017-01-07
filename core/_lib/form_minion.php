@@ -196,12 +196,10 @@ class form_minion
     	}
     	
     	if( $tier > 0 ){
-    	    
-    	    $this->hidden( "oe_plug", $oepc[$tier]['plug'] ) ;
+    	    $this->hidden( "oe_plug", $oepc[$tier]['type'] ) ;
     	    $this->hidden( "oe_plug_id", $oepc[$tier]['id'] ) ;
     	    	
     	}
-    	
     
 	} // end header()
 

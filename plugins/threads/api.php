@@ -95,7 +95,15 @@ switch( $apiCall ){
         $post->json_reply('FAIL') ;
         die();
     
-    
+    case 'addComment':
+    	
+    	if( ! $oepc[0]['contributor'] ){
+    		$post->json_reply('FAIL') ;
+    		die();
+    	}
+    	
+    	include $oe_plugins['comment']."api.php" ;
+    	die();
     
     
     
