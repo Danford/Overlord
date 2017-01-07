@@ -2,11 +2,10 @@
 
 
 abstract class GroupPermissions {
-	const Owner = 4;
-	const Moderator = 3;
-	const Member = 2;
-	const Guest = 1;
-	const Block = 0;
+	const Owner = 2;
+	const Admin = 2;
+	const Member = 1;
+	const Guest = 0;
 }
 
 class user_minion {
@@ -251,6 +250,7 @@ class user_minion {
         $db->query ( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
         
         while( ( $group_id = $db->field() ) != false ){
+        	
             $this->groups[$group_id] = $group_id;
             $this->groupPermmisions[$group_id] = GroupPermissions::Owner;
         }
@@ -259,17 +259,18 @@ class user_minion {
         
         $db->query( $query ) ;
         while( ( $group = $db->assoc() ) != false ){
-            
+        	$group_id = $group['group'];
+        	
             if( $group['access'] == 0 ){
-            	$this->groups[$group_id] = $group['group'];
-            	$this->groupPermmisions[$group_id] = GroupPermissions::Block;
+            	$this->groups[$group_id] = $group_id;
+            	$this->groupPermmisions[$group_id] = GroupPermissions::Guest;
             } else {
 
-                $this->groups[$group_id] = $group['group'];
+                $this->groups[$group_id] = $group_id;
                 $this->groupPermmisions[$group_id] = GroupPermissions::Member;
                 
                 if( $group['access'] > 1 ){
-                    $this->groups[$group_id] = $group['group'];
+                    $this->groups[$group_id] = $group_id;
                     $this->groupPermmisions[$group_id] = GroupPermissions::Moderator;                    
                 }
             }
