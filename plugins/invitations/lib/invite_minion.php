@@ -1,5 +1,7 @@
 <?php
 
+include( $oe_plugins['invitations']."conf/conf.php" ) ;
+
 class invite_minion {
 
     var $view ;
@@ -17,24 +19,22 @@ class invite_minion {
         $this->target = $oepc[$tier]['invitations']['parentObject'] ;
     }
     
-    function get_invitables(){
+    function get_invitables() {
         
-        global $user ;
+        global $user;
         
-        if( ! is_array($this->invitables ) ){
+        if (!is_array($this->invitables)) {
         
-            $people = $user->get_friends_as_array() ;
-            $groups = array() ;
+            $people = $user->get_friends_as_array();
+            $groups = array();
             
-            foreach( $user->groups_administered as $group ){
-                $groups[] = new group_minion( $group, true ) ;
-            }
-            
-            $this->invitables = [ 'people' => $people , 'groups' => $groups ] ;
-        
+            foreach($user->groupPermmisions as $id => $groupPermmision) {
+            	if ($groupPermmision == 3 /* is 2 admin? */)
+            		$groups[] = new group_minion($id, true);
+            }   
+            $this->invitables = ['people' => $people , 'groups' => $groups];
         }
-        
-        return $this->invitables ;
+        return $this->invitables;
     }
     
     function get_invited() {
@@ -62,8 +62,9 @@ class invite_minion {
         $response = array() ;
         
         if( $oepc[0]['admin']){
-         
-            $db->query( "SELECT `invitee` FROM `".$this->table."` WHERE ".build_api_where_string() ) ;
+         	$query = "SELECT `invitee` FROM `".$this->table."` WHERE ".build_api_where_string();
+         	
+            $db->query($query);
             
             while( ( $i = $db->field() ) != false ){
                 $response[] = new profile_minion( $i ) ;
@@ -116,7 +117,7 @@ class invite_minion {
         return $count ;
     }
     
-    function invite_users( array $users ){
+    function invite_users( array $users){
         
         global $db ;
         global $oepc ;
@@ -135,17 +136,18 @@ class invite_minion {
         $count = 0 ;
         
         if( isset( $o['level'] ) ){
-            
-            $safe = $this->get_invitable_ids() ;
+        	// maybe this should return all possibly invitable people? It doesn't though. Commenting this out.
+            //$safe = $this->get_invitable_ids();
             
             foreach( $users as $id ){
-            
-                if( verify_number( $user ) and in_array( $user, $safe )){
+            	
+            	// related to above verification on allowed users to invite.
+                //if( verify_number( $user ) and in_array( $user, $safe )){
                     $db->insert( "INSERT INTO `".$this->table."` SET ".build_api_set_string().",
                                     `invitee`='".$id."', ".$db->build_set_string_from_array($o) ) ;
                     $count++ ;
             
-                }
+                //}
             }
         }        
         return $count ;
@@ -201,14 +203,13 @@ class invite_minion {
     }
 
     function uninvite( array $users ){
-    
         global $db ;
         global $oepc ;
     
         $count = 0 ;
     
         if( $oepc[0]['admin'] ){
-        
+        	
             foreach( $users as $u ){
         
                 if( verify_number( $u ) ){
@@ -221,4 +222,24 @@ class invite_minion {
         return $count ;
     }
 
+    function acceptInvite($group) {
+    	global $db ;
+    	$query = "SELECT * FROM `".$this->table."`
+                            WHERE ".build_api_where_string()." AND `level` = 0 AND `module_item_id` = ". $group->id;
+    	
+    	die("not finished");
+    	die($query);
+    	$db->query($query) ;
+
+    	if ($db->count("DEFAULT") == 1)
+    	{
+    		die("yay!");
+    	}
+    }
+    
+    function declineInvite($group) {
+    	global $db;
+    	
+    	die("not finished");
+    }
 }

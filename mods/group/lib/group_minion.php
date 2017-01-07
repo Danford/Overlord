@@ -33,37 +33,36 @@ class group_minion {
             
             $g = $db->get_assoc( $q ) ;
             
+            $this->name = $g['name'];
+            $this->owner = $g['owner'];
+            $this->privacy = $g['privacy'];
+            $this->short = $g['short'];
+            $this->avatar = $g['avatar'];
+            $this->city = $g['city'];
+            
+            // blocked, city, city_id, detail, and invited still appear to be empty in array and require furthure implementation.
+            
             if( $g != false ){
                 
                 /* determine if user is owner, member, admin, or blocked */
                 
                 if( $user->is_blocked( $g['owner'] ) ){
                     
-                    $membership = false ; // cannot see a group whose owner is blocked
+                    $this->membership = false ; // cannot see a group whose owner is blocked
                     
                 } elseif( $g['owner'] == $user->id ){
          
-                    $membership = 2 ; // admin
+                    $this->membership = 2 ; // admin
                     
                 } else {
                     
-                    if( in_array($this->id, $user->groups_administered ) ){
-                        $membership = 2 ; // admin
-                    } elseif( in_array($this->id, $user->groups_in ) ) {
-                        $membership = 1 ;
-                    } elseif( in_array($this->id, $user->groups_blocked ) ) {
-                        $membership = false ;
-                    } else {
-                        $membership = 0 ;
-                    }
+                	$this->membership = $user->get_group_membership($this->id);
                 }
                 
-                if( $membership != false ) {
+                if( $this->membership != false ) {
                     // they aren't blocked
                     
-                    $this->membership = $membership ;
-                    
-                    if( $membership == 0 and $g['privacy'] > 1 ){
+                    if( $this->membership == 0 and $g['privacy'] > 1 ){
                     
                         // if it's not a public group, and they're not a member, 
                         // we need to know if they've been invited.
@@ -77,7 +76,7 @@ class group_minion {
                         
                     }
                     
-                    if( $membership > 0 or $g['privacy'] < 3 or $this->invited == true ){
+                    if( $this->membership > 0 or $g['privacy'] < 3 or $this->invited == true ){
                         
                         /*
                          *      if they are members, or the group is not secret,
@@ -186,7 +185,7 @@ class group_minion {
         global $db ;
         
         $c = $db->get_field( "SELECT `access` FROM `group_membership` WHERE `group`='".$this->id."' AND `user`='".$id."'" ) ;
-                
+        
         return $c ;
         
     }
@@ -280,5 +279,16 @@ class group_minion {
         return $this->blocked ;        
     }
     
+    function is_invited($userId){
+    	global $db;
+    	
+    	$query = "SELECT `invitee` FROM `invitations`
+		           	WHERE `module`='group'
+		        	AND `module_item_id`='". $this->id ."'
+		           	AND `invitee`='". $userId ."'
+		            AND `expired` = '0'";
+
+    	return $db->get_field($query) == $userId;
+    }
     
 }

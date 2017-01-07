@@ -181,6 +181,7 @@ class profile_minion {
                 
         $grouplist = array() ;
         
+        // why whould we split this up into two queries? We could just set a value for owner with group_membership and load all groups into one array.
         $db->query( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
         
         while( ( $g = $db->field() ) != false ){
@@ -208,5 +209,20 @@ class profile_minion {
             
         }
         return $grouplist;
+    }
+    
+    /**
+     * Returns a boolen with true if the user belongs to a group
+     *
+     * @return boolen
+     */
+    function is_in_group($group_id) {
+    	$groups = $this->get_groups();
+    	foreach ($groups as $group) {
+    		
+    		if ($group->id == $group_id)
+    			return true;
+    	}
+    	return false;
     }
 }

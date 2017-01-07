@@ -101,7 +101,6 @@ function ImageLoaded(img){
 	if (typeof $grid != 'undefined')
 		$grid.isotope('layout');
 };
-
 </script>
 <article id="profile">
 	<div class="grid">
@@ -110,7 +109,8 @@ function ImageLoaded(img){
 		<div class="stamp stamp--left tile">
 			<p id="name"><?php echo $profile->screen_name; ?></p>
 			<?php LoadImage($profile->id, $profile->avatar); ?>
-			<?php PrintUserInteractions(); ?>
+			<?php $friendInteractions = new FriendInteractions($profile); ?>
+			<?php $friendInteractions->PrintUserInteractions(); ?>
 		</div>
 		<div class="stamp stamp--left tile">
 			<div id="details">
@@ -158,7 +158,8 @@ function ImageLoaded(img){
 								<?php echo $friend->screen_name; ?>
 							</div>
 							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
-							<?php PrintFriendlistInteractions($friend); ?>
+							<?php $friendInteractions = new FriendInteractions($friend); ?>
+							<?php $friendInteractions->PrintFriendlistInteractions($friend); ?>
 						</div>
 					</a>		
 					<?php endforeach; ?>

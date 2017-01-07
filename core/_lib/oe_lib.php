@@ -103,6 +103,11 @@ function debug( $string ) {
 
 }
 
+function printVarible($anything) {
+	echo "<pre>";
+	print_r($anything);
+	echo "</pre>";
+}
 
 function security_report( $string ) {
 

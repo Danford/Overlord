@@ -15,7 +15,7 @@ class Element extends serveable_minion
     
     protected $parent;
     
-    public function AddElement(Element $newElement)
+    public function AddElement(ElementTag $newElement)
     {
         $newElement->SetParent($this);
         $this->elements[] = $newElement;
@@ -71,6 +71,7 @@ class ElementTag extends Element
     {
         parent::__construct();
 
+        $this->fields = array();
         $this->tag = $tag;
         $this->closeTag = $closeTag;
         $this->isBufferOpen = false;
@@ -93,6 +94,13 @@ class ElementTag extends Element
      */
     public function AddField($name, $value)
     {
+    	foreach ($this->fields as $field) {
+    		if ($field->name == $name) {
+    			$field->value = $value;
+    			return;
+    		}
+    	}
+    	
         $this->fields[] = new Field($name, $value);
     }
 

@@ -4,8 +4,8 @@ require_once(oe_frontend."serveable_minion.php");
 
 class Field extends serveable_minion
 {
-    private $name;
-    private $value;
+    public $name;
+    public $value;
 
     function __construct($fieldName, $fieldValue)
     {

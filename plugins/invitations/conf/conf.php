@@ -6,7 +6,7 @@ $default['table'] = 'invitations' ;
 $default['view'] = 'invitations' ;
 
 foreach( $default as $setting => $value ){
-    if( isset( $oepc[$tier]['invitations'][$setting] ) ){
+    if( !isset( $oepc[$tier]['invitations'][$setting] ) ){
         $oepc[$tier]['invitations'][$setting] = $value ;
     }
 }

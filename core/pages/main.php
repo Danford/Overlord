@@ -1,32 +1,106 @@
 <?php
 	   
-include( oe_frontend."page_minion.php" ) ;
+include(oe_frontend."page_minion.php");
+include(oe_frontend."html/modules/isotope.php");
+include(oe_frontend."html/modules/invite_tile.php");
 
-$page= new page_minion( "Main Page" ) ;
+include($oe_plugins['photo']."conf/conf.php");
+include($oe_plugins['photo']."lib/photo.lib.php");
 
-$logged = $user->is_logged_in() ;
+include($oe_plugins['writing']."conf/conf.php");
+include($oe_plugins['writing']."lib/writing.lib.php");
 
+include($oe_plugins['invitations']."api.php");
+
+function get_words($sentence, $count = 150) {
+	return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
+}
+
+$wall_photos = $user->get_wall_content_photos();
+$wall_writings = $user->get_wall_content_writing();
+$invintations = $invite->get_invited_as_objects();
+
+$page= new page_minion("Main Page");
+
+$page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
+$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
+$page->js_minion->addFile(oe_js . "isotope.js", true);
 $page->header();
-
-    // this page will eventually check to see if the user is logged in, then redirect them to their dashwall
-
 ?>
+<script type="text/javascript">
+//
+//Executed by onload from html for images loaded in grid.
+//
 
+function ImageLoaded(img){
+	var $img = $(img);
+		$img.removeClass('loading');
+	$img.parent().find('.cssload-fond').toggleClass('hidden');
 
-<?php  if( $logged ) {
-    
-    print( 'Hello '.$user->name.'!  <a href="/logout">Log Out</a>' ) ;
-    
+	if (typeof $grid != 'undefined')
+		$grid.isotope('layout');
+};
+
+</script>
+<?php 
+$isotope = new Isotope($page->html_minion);
+
+if( $user->is_logged_in() ) {
+	$requestProfiles = $user->get_friend_request();
+	
+	foreach ($requestProfiles as $profile) {
+		$tileContent = new InviteTileProfile($profile);
+		
+		$isotope->AddTile($tileContent)->SetStampLeft();
+	}
+	
+	$groupRequest = $user->get_group_request();
+	 
+	foreach ($groupRequest as $group) {
+		$tileContent = new InviteTileGroup($group);
+		
+		$isotope->AddTile($tileContent)->SetStampLeft();
+	}
+	
+	foreach ($wall_photos as $photo) {
+		$date = new DateTime($photo['timestamp']);
+		$phototile = new GridTile("photo", GridOption::None, array("data-date" => $date->getTimestamp()));
+		$phototile->AddTag("div", array("id" => "title"))->AddTag("h3")->AddContent($photo['title']);
+		$phototile->AddElement(new Img("/profile/". $photo['owner'] ."/photo/". $photo['id'] .".png", "loading", NULL, NULL, array("onload" => "ImageLoaded(this)")));
+		$phototile->AddTag("p")->AddContent($photo['description']);
+		$isotope->AddTile($phototile, "photo");
+	}
+	
+	foreach ($wall_writings as $writing) {
+		$date = new DateTime($photo['timestamp']);
+		$writingtile = new GridTile("writing", GridOption::None, array("data-date" => $date->getTimestamp()));
+		$writingtile->AddTag("div", array("id" => "title"))->AddTag("h3")->AddContent($writing['title']);
+		$writingtile->AddTag("div", array("id" => "subtitle"))->AddTag("h4")->AddContent($writing['subtitle']);
+		$writingtile->AddElement(new Img("/images/noavatar.png", "loading", NULL, NULL, array("onload" => "ImageLoaded(this)")));
+	
+		$excerpt = get_words($writing['copy'], 55);
+		$writingtile->AddTag("div", array("id" => "excerpt"))->AddContent($excerpt);
+		$writingtile->AddTag("div", array("id" => "full", "class" => "hidden"))->AddContent($writing['copy']);
+		$isotope->AddTile($writingtile, "writing");
+	}
+
+	//$tile->SetStampLeft();
+
+	print( 'Hello '.$user->name.'!  <a href="/logout">Log Out</a>' ) ;
 }
 else {
-
-    print( 'Welcome to our site! 
-        <br /><br /> 
-        <a href="/register/">Register</a> or
-        <a href="/login/">Sign In</a>  or
-        <a href="/login/passwordresetrequest">Reset Your Password</a>') ;
-    
+	// add welcome register / login tile.
+	$welcome = new ElementTag("div");
+	$welcome->AddTag("t1", array("class" => ""))->AddContent("Welcome to Overlord. You've found the right website. Just keep looking.");
+	$welcome->AddTag("div", array("class" => "button", "style" => "width:50%;"))->AddTag("p")->AddContent("Get started!");
+	$welcome->AddTag("div", array("class" => "button", "style" => "width:50%"))->AddTag("p")->AddContent("Sign In");
+	$tile = $isotope->AddTile($welcome, "welcome")->SetLarge();
 }
 
 
-$page->footer(); ?>
+$page->html_minion->content->AddElement($isotope);
+
+$isotope->AddTileString($isotope->GetSortingButtonsElement($isotope->gridCategories), NULL, GridOption::StampTop);
+
+$page->footer(); 
+?>

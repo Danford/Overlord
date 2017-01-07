@@ -1,6 +1,14 @@
 <?php
 
 
+abstract class GroupPermissions {
+	const Owner = 4;
+	const Moderator = 3;
+	const Member = 2;
+	const Guest = 1;
+	const Block = 0;
+}
+
 class user_minion {
     
     /*
@@ -15,16 +23,16 @@ class user_minion {
     var $error ;
     var $last_login ;
     var $avatar ;
-    var $groups_in ;
-    var $groups_owned ;
-    var $groups_administered ;
-    var $groups_blocked ;
+    
+    var $groups;
+    var $groupPermmisions;
+    
     var $timezone ;
     var $dst ;
     
     function __construct(){
-        
-        $this->friends = array() ;;
+
+        $this->friends = array();
         
         // if there is a valid login token, log user in
         
@@ -234,38 +242,35 @@ class user_minion {
      */
     
     function load_group_membership(){
-        
+
         global $db ;
         
-        $this->groups_in = array() ;
-        $this->groups_owned = array() ;
-        $this->groups_administered = array() ;
-        $this->groups_blocked = array();
+        $this->groups = array();
+        $this->groupPermmisions = array();
         
         $db->query ( "SELECT `id` FROM `group` WHERE `owner`='".$this->id."'" ) ;
         
         while( ( $group_id = $db->field() ) != false ){
-            $this->groups_in[] = $group_id ;
-            $this->groups_owned[] = $group_id ;
-            $this->groups_administered[] = $group_id ;
+            $this->groups[$group_id] = $group_id;
+            $this->groupPermmisions[$group_id] = GroupPermissions::Owner;
         }
         
         $query = "SELECT `group`,`access` FROM `group_membership` WHERE `user`='".$this->id."'" ;
         
         $db->query( $query ) ;
-        
         while( ( $group = $db->assoc() ) != false ){
             
             if( $group['access'] == 0 ){
-                
-                $this->groups_blocked[] = $group['group'] ;
-            
+            	$this->groups[$group_id] = $group['group'];
+            	$this->groupPermmisions[$group_id] = GroupPermissions::Block;
             } else {
-            
-                $this->groups_in[] = $group['group'] ;
+
+                $this->groups[$group_id] = $group['group'];
+                $this->groupPermmisions[$group_id] = GroupPermissions::Member;
                 
                 if( $group['access'] > 1 ){
-                    $this->groups_administered = $group['group'] ;
+                    $this->groups[$group_id] = $group['group'];
+                    $this->groupPermmisions[$group_id] = GroupPermissions::Moderator;                    
                 }
             }
         }
@@ -393,7 +398,7 @@ class user_minion {
     function group_list(){
         
         $list = '' ;
-        foreach( $this->groups_in as $group_id ){
+        foreach( $this->groups as $group_id ){
             $list .= $group_id.',' ;
         }
         return substr( $list, 0, -1 );
@@ -411,5 +416,118 @@ class user_minion {
             $list .= $id.',' ;
         }
         return substr( $list, 0, -1 );
+    }
+    
+    /**
+     * Returns a boolen with true if the user belongs to a group
+     * 
+     * @return boolen
+     */
+    function is_in_group($group_id) {
+    	foreach ($this->groups as $group_id) {
+    		if ($group_id == $group_id)
+    			return true;
+    	}
+    	return false;
+    }
+    
+    function get_group_membership($group_id) {
+    	return $this->groupPermmisions[$group_id];
+    }
+    
+    /**
+     * Loads content for user wall
+     * 
+     * @return array of tiles
+     */
+    function get_wall_content_photos() {	
+    	global $db;
+    	 
+    	$query = "SELECT * FROM `photo` WHERE `privacy` = 1 ";
+    	
+    	if (count($this->friends) > 0) {
+    		$query .= "OR (";
+
+    		foreach ($this->friends as $id => $friend) {
+    			$query .= "(owner = ". $id ." AND privacy < 2) OR";
+    		}
+
+    		$query = substr($query, 0, strlen($query) - 3);
+    		$query .= ")";
+    	}
+    		
+    	$query .= " ORDER BY `timestamp` DESC";
+    	$db->query($query) ;
+
+    	$photos = array();
+    	
+    	while( ( $f = $db->assoc() ) != false ){
+    		$photos[] = $f;
+    	}
+    	
+    	return $photos;
+    }
+    
+    function get_wall_content_writing() {
+    	global $db;
+    	
+    	$query = "SELECT * FROM `writing` WHERE `privacy` = 1 ";
+    	
+    	if (count($this->friends) > 0) {
+    		$query .= "OR (";
+    	
+    		foreach ($this->friends as $id => $friend) {
+    			$query .= "(owner = ". $id ." AND privacy < 2) OR";
+    		}
+    	
+    		$query = substr($query, 0, strlen($query) - 3);
+    		$query .= ")";
+    	}
+    	
+    	$query .= " ORDER BY `timestamp` DESC";
+    	$db->query($query) ;
+    	
+    	$writings = array();
+    	 
+    	while( ( $f = $db->assoc() ) != false ){
+    		$writings[] = $f;
+    	}
+    	 
+    	return $writings;
+    }
+    
+    function get_wall_content_groups() {
+    	
+    }
+    
+    function get_friend_request() {
+    	global $db;
+    	
+    	$query = "SELECT * FROM `profile_friendship_rq` WHERE `requestee` = ". $this->id;
+    	
+    	$db->query($query) ;
+    	
+    	$requestProfiles = array() ;
+    	
+    	while( ( $f = $db->assoc() ) != false ){
+    		$requestProfiles[] = new profile_minion($f['requestor'], true);
+    	}
+    	
+    	return $requestProfiles;
+    }
+    
+    function get_group_request() {
+    	global $db;
+    	 
+    	$query = "SELECT * FROM `invitations` WHERE `invitee` = ". $this->id ." AND `level` = 0";
+    	$db->query($query) ;
+    	 
+    	$requestGroups = array() ;
+    	 
+    	while( ( $f = $db->assoc() ) != false ){
+    		$requestGroups[] = new group_minion($f['invitor'], true);
+    	}
+    	 
+    	return $requestGroups;
     }
 }

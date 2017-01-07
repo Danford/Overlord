@@ -329,11 +329,6 @@ input#Submit:active, input#x:active {
   width: 100%;
 }
 
-.tile > img::after {
-	content: '<div align="center" class="cssload-fond"><div class="cssload-container-general"><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div></div></div>';
-	
-}
-
 .grid {
 	position: relative;
 }
@@ -382,6 +377,13 @@ input#Submit:active, input#x:active {
 	width: 73%;
 }
 
+.stamp--top-sec {
+	position: relative;
+	top: 0;
+	left: 25%;
+	width: 73%;
+}
+
 .tile div#title {
     text-transform: capitalize;
     text-align: center;
@@ -420,6 +422,36 @@ input#Submit:active, input#x:active {
 	.grid-sizer--full, .grid-item--full {
 		width: 98%;
 	}	
+}
+
+
+/*																	*/
+/* 								Isotope Styles 						*/
+/*								for main page						*/
+.grid-item.welcome {
+	
+}
+
+.grid-item.welcome t1 {
+	font-size: 2em;
+	vertical-align: middle;
+	text-align: center;
+	display: block;
+	text-shadow: -2px 4px 13px black;
+}
+
+.grid-item.welcome .button:hover {
+	background-color: #9ed263;
+}
+
+.grid-item.welcome .button p {
+    text-align: center;
+    font-weight: 900;
+    text-shadow: 5px 4px 12px black;
+}
+
+.grid-item.photo img {
+    width: 100%;
 }
 
 /*														*/

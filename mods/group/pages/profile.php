@@ -87,7 +87,6 @@ if ($loopLength < $writingsLen)
 	$loopLength = $writingsLen;
 
 	?>
-<pre><?php print_r($threads); ?></pre>
 <script type="text/javascript">
 //
 //Executed by onload from html for images loaded in grid.
@@ -110,6 +109,12 @@ function ImageLoaded(img){
 		<div class="stamp stamp--left tile">
 			<p id="name"><?php echo $group->name; ?></p>
 			<?php LoadImage($group->id, $group->avatar); ?>
+			<?php if ($group->check_membership($user->id) <= 1): ?>
+			<a href="<?php echo $group-id; ?>/edit"><div class="button">Edit Group</div></a>
+			<?php endif; ?>
+			<?php if ($group->check_membership($user->id) <= 2): ?>
+			<a href="/group/<?php echo $group->id; ?>/invitations/"><div class="button">Invite</div></a>
+			<?php endif; ?>
 		</div>
 		<div class="stamp stamp--left tile">
 			<div id="details">
@@ -121,10 +126,12 @@ function ImageLoaded(img){
 			</div>
 		</div>
 		<div class="stamp stamp--left tile">
+			<?php foreach ($memberGroups as $groupName => $members) : ?>
+			<?php if (count($members) == 0) continue; ?>
 			<div id="members">
-				<a href="/group/<?php echo $group->id; ?>/members/"><div id="head">Members - <?php echo count($members); ?></div></a>
+				<a href="/group/<?php echo $group->id; ?>/members/"><div id="head"><?php echo $groupName; ?> - <?php echo count($members); ?></div></a>
 				<div id="body">
-					<?php foreach ($memberGroups as $groupName => $members) : ?>
+				
 					<?php foreach ($members as $member) : ?>
 					<a href="/profile/<?php echo $member->id; ?>/">
 						<div class="member tile">
@@ -136,16 +143,15 @@ function ImageLoaded(img){
 						</div>
 					</a>		
 					<?php endforeach; ?>
-					<?php endforeach; ?>
 				</div>
 			</div>
+			<?php endforeach; ?>
 		</div>
 		<div id="about-me" class="grid-item grid-item--large tile flex-main">
 			<?php if ($group->short == "" && $members['owner'][0]->id == $user->id) : ?>
-			<p>This profile doesn't yet have an "About Me" section. Add it by editing your profile.<p>
-			<a href="/profile/"><div class="button">EditProfile</div></a>
+			<p>This group doesn't yet have an "About Me" section. Add it by editing your group.<p>
 			<?php elseif ($group->short == "") : ?>
-			<p>This user has not yet provided anything for the "About Me" section of thier profile.</p>
+			<p>This group has not yet provided anything for the "About Me" section of thier profile.</p>
 			<?php else : ?>
 			<p><?php echo $group->short; ?></p>
 			<?php endif; ?>
@@ -198,6 +204,8 @@ function ImageLoaded(img){
 		<?php endif; ?>
 		<?php endfor; ?>
 		<div class="grid-item--large grid-item tile">
+			
+			<pre><?php print_r($threads); ?></pre>
 			<p>Threads should be printed here but the array is empty!</p>
 			<a href="/group/<?php echo $group->id; ?>/thread/"><div class="button">View Threads</div></a>
 		</div>

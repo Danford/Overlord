@@ -116,9 +116,8 @@
             die() ;
             
         case 'cancelFriendrq' :
-            
             $result = $db->update( "DELETE FROM `profile_friendship_rq` WHERE
-                `requestee`='".$user->id."' AND `requestor`='".$_POST['user']."'" ) ;
+                `requestee`='".$_POST['user']."' AND `requestor`='".$user->id."'" ) ;
             
             if( $result == false ){
                 $post->json_reply( 'FAIL' ) ;
@@ -161,5 +160,4 @@
             
             header( 'Location: /profile/block_list' );
             die() ;
-        
     }

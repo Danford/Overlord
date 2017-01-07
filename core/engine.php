@@ -21,9 +21,9 @@
 	$user =& $_SESSION['user'] ;
 	 
 	// POST PROCESSING
-	
+
 	if( isset( $_POST['oe_api'] )  )
-	{ 
+	{
 	    // form submissions
 
 	    if( strpos( $_SERVER['HTTP_REFERER'], siteurl ) != false ){
@@ -45,18 +45,16 @@
 	    }
 
         $apiCall = $_POST["oe_call"] ;
-	    
+        
 	    if( isset( $oe_modules[ $postmodule ] ) and file_exists( $oe_modules[ $postmodule ]."api.php" ) ) {
-	        
+	    	
 	        include( $oe_modules[ $postmodule ].'api.php') ;
 	        die('3');
 	    }
-        
-	    if( isset( $oe_plugins[ $postmodule ] ) and file_exists( $oe_plugins[ $postmodule ]."api.php" ) ) {
 	    
-	        
+	    if( isset( $oe_plugins[ $postmodule ] ) and file_exists( $oe_plugins[ $postmodule ]."api.php" ) ) {
 	        // verify oe_module and oe_module_id
-	        
+
 	        if( ! isset( $_POST['oe_module'] ) or ! isset( $_POST['oe_module_id'] ) ){
 	        
 	            $post->json_reply("FAIL3") ;
@@ -69,7 +67,7 @@
                 $lastplug = $_POST["oe_plug"] ;
                 $lastplugID = $_POST["oe_plug_id"] ;
 	        } 
-	        
+
             // now to set some environment variables:
 
                 $basemodule = $_POST["oe_module"] ; 
@@ -90,7 +88,7 @@
 	        } else {
 	            $post->json_reply("FAIL" ) ;
 	        }
-	         
+
 	        if( isset( $lastplug ) ){
 	            
 	            // we also need to load the configuration file of the last plug
@@ -106,10 +104,10 @@
     	        }
     	            
 	        }
-	        
+
 	        // still not quite ready.  now we load the configuration for the plugin.
 	        // it shouldn't override any previous settings but might provide defaults
-	        	         
+
 	        if( file_exists( $oe_plugins[$postmodule]."conf/conf.php" ) ){
 	            include( $oe_plugins[$postmodule]."conf/conf.php" ) ;
 	        
@@ -119,7 +117,7 @@
 	        } 
 	        
 	        // and now finally to load the plugin's api        
-	        
+			
 	        include( $oe_plugins[ $postmodule ].'api.php') ;
 	        die();
 	    }
@@ -128,7 +126,9 @@
         /*
          * If we got to this spot,  api call is not valid.
          */
-        
+
+	    ?><pre><?php print_r($_POST); ?></pre><?php
+	    
 	    $post->json_reply("FAIL") ;
         die( '<b>Error OE1:</b> Please report this to the webmaster.' ) ;
 	}
