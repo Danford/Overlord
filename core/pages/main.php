@@ -54,10 +54,13 @@ if( $user->is_logged_in() ) {
 		$isotope->AddTile($tileContent)->SetStampLeft();
 	}
 	
-	$groupRequest = $user->get_group_request();
+	$groupInvites = $user->get_group_request();
 	 
-	foreach ($groupRequest as $group) {
-		$tileContent = new InviteTileGroup($group);
+	foreach ($groupInvites as $groupInvite) {
+		$profile = $groupInvite['invitor'];
+		$group = $groupInvite['group'];
+		
+		$tileContent = new InviteTileGroup($group, $profile);
 		
 		$isotope->AddTile($tileContent)->SetStampLeft();
 	}

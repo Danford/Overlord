@@ -29,7 +29,7 @@ class InviteTileProfile extends GridTile {
 
 class InviteTileGroup extends GridTile {
 
-	function __construct ($group) {
+	function __construct ($group, $invitor) {
 		parent::__construct(NULL, GridOption::StampLeft);
 
 		$this->AddTag("div", array("id" => "name"))->AddTag("h3")->AddContent($group->name);
@@ -39,7 +39,19 @@ class InviteTileGroup extends GridTile {
 		} else {
 			$this->AddContent("<img class='loading' onload='ImageLoaded(this)' src='/profile/". $profile->id ."/photo/". $profile->avatar .".png'>");
 		}
-
+		
+		global $basemoduleID;
+		global $oepc;
+		global $oe_modules;
+		global $oe_plugins;
+		$basemoduleID = $group->id;
+		
+		include($oe_modules['group']."conf/plugin.conf.php");
+		
+		include($oe_plugins['invitations']."conf/plugin.conf.php");
+		include($oe_plugins['invitations']."conf/conf.php");
+		
+		
 		$this->AddTag("div", array("id" => "short"))->AddContent($group->short);
 		$this->AddTag("p")->AddContent("New Group Invite.");
 		$this->OpenBuffer();

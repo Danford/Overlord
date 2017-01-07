@@ -519,15 +519,15 @@ class user_minion {
     function get_group_request() {
     	global $db;
     	 
-    	$query = "SELECT * FROM `invitations` WHERE `invitee` = ". $this->id ." AND `level` = 0";
+    	$query = "SELECT `module_item_id`, `invitor` FROM `invitations` WHERE `invitee` = ". $this->id ." AND `level` = 0";
     	$db->query($query) ;
     	 
-    	$requestGroups = array() ;
+    	$groupInvites = array() ;
     	 
     	while( ( $f = $db->assoc() ) != false ){
-    		$requestGroups[] = new group_minion($f['invitor'], true);
+    		$groupInvites[] = array("group" => new group_minion($f['module_item_id'], true), "invitor" => new profile_minion($f['invitor']));
     	}
     	 
-    	return $requestGroups;
+    	return $groupInvites;
     }
 }

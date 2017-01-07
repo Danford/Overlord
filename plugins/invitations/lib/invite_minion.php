@@ -222,19 +222,24 @@ class invite_minion {
         return $count ;
     }
 
-    function acceptInvite($group) {
-    	global $db ;
-    	$query = "SELECT * FROM `".$this->table."`
-                            WHERE ".build_api_where_string()." AND `level` = 0 AND `module_item_id` = ". $group->id;
+    function acceptInvite($groupId) {
+    	global $db;
+    	global $user;
     	
-    	die("not finished");
-    	die($query);
+    	$query = "SELECT * FROM `".$this->table."`
+                            WHERE ".build_api_where_string()." AND `level` = 0 AND `module_item_id` = ". $groupId;
+    	
+    	
     	$db->query($query) ;
+		
+		$query = "INSERT INTO `group_membership` (`group`, `user`, `access`, `timestamp`) 
+									VALUES ('". $groupId ."', '". $user->id ."', '1', NOW())";
+		
+		$db->insert($query);
+		$query = "DELETE FROM `".$this->table."` WHERE ".build_api_where_string()." AND `invitee`='".$user->id."'";
 
-    	if ($db->count("DEFAULT") == 1)
-    	{
-    		die("yay!");
-    	}
+		$db->update($query);
+		$user->load_group_membership();
     }
     
     function declineInvite($group) {
