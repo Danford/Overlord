@@ -16,6 +16,11 @@ if( ! isset( $thread ) ){
     $oepc[$tier]['id'] = $thread['id'] ;
 }
 
-$oepc[$tier]['plugins'] = [] ; // comments doesn't need to be declared here
+$oepc[$tier]['plugins'] = [ 'like', 'comment' ] ; // not strictly necessary, as these are inline plugins.
 
-$oepc[$tier]['comment']['page'] = true ;
+$oepc[$tier]['comment']['page'] = false ;  // all photo comments appear on a single page
+$oepc[$tier]['comment']['table'] = 'comment' ;
+$oepc[$tier]['comment']['view'] = 'comment' ;
+
+$oepc[$tier]['like']['table'] = 'like' ;
+$oepc[$tier]['like']['view'] = 'like' ;

@@ -32,19 +32,19 @@ class InviteTileGroup extends GridTile {
 	function __construct ($group) {
 		parent::__construct(NULL, GridOption::StampLeft);
 
+		$this->AddTag("div", array("id" => "name"))->AddTag("h3")->AddContent($group->name);
+		
 		if ($group->avatar == 0) {
 			$this->AddContent("<img class='loading' onload='ImageLoaded(this)' src='/images/noavatar.png'>");
 		} else {
 			$this->AddContent("<img class='loading' onload='ImageLoaded(this)' src='/profile/". $profile->id ."/photo/". $profile->avatar .".png'>");
 		}
 
-				$this->AddTag("div", array("id" => "name"))->AddContent($group->name);
-
-				$this->AddTag("div", array("id" => "short"))->AddContent($group->short);
-				$this->AddTag("p")->AddContent("New Group Invite.");
-				$this->OpenBuffer();
-				PrintGroupInvitationActions($group);
-				$this->CloseBuffer();
+		$this->AddTag("div", array("id" => "short"))->AddContent($group->short);
+		$this->AddTag("p")->AddContent("New Group Invite.");
+		$this->OpenBuffer();
+		PrintGroupInvitationActions($group);
+		$this->CloseBuffer();
 	}
 }
 ?>

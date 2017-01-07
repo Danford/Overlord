@@ -36,6 +36,8 @@
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
 
+include($oe_modules['group']."conf/plugin.conf.php");
+
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
@@ -203,12 +205,6 @@ function ImageLoaded(img){
 		</div>
 		<?php endif; ?>
 		<?php endfor; ?>
-		<div class="grid-item--large grid-item tile">
-			
-			<pre><?php print_r($threads); ?></pre>
-			<p>Threads should be printed here but the array is empty!</p>
-			<a href="/group/<?php echo $group->id; ?>/thread/"><div class="button">View Threads</div></a>
-		</div>
 		<?php foreach ($threads as $thread) : ?>
 		<?php $date = new DateTime($thread['edited']); ?>
 		<a href="/group/<? echo $group->id; ?>/thread/<?php echo $thread['id']; ?>/">

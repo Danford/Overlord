@@ -8,8 +8,7 @@ function get_threads( $start = 0, $limit = 9999999 ){
     global $user ;
     
     $response = array();
-    
-    $db->query( "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `owner`, `edited`,
+    $query = "SELECT `id`,`title`,`detail`,`sticky`,`locked`, `owner`, `edited`,
                         ( SELECT COUNT(*) FROM `comment` 
                             WHERE `module`='".$oepc[$tier]['type']."' 
                               AND `module_item_id`='".$oepc[$tier]['id']."'
@@ -23,7 +22,10 @@ function get_threads( $start = 0, $limit = 9999999 ){
                     FROM `thread`
                     WHERE ".build_api_where_string()."
                     ORDER BY `sticky` DESC, `last_updated` DESC
-                    LIMIT ".$start.", ".$limit ) ;
+                    LIMIT ".$start.", ".$limit;
+    
+    
+    $db->query($query) ;
     
     while( ( $thread = $db->assoc() ) != false ){
         

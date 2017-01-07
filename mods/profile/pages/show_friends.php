@@ -66,7 +66,8 @@ foreach ($friends as $friend)
 					<?php echo $friend->screen_name; ?>
 				</div>
 				<img src="<?php echo $friend->profile_picture(); ?>"/>
-				<?php PrintFriendlistInteractions($friend); ?>
+				<?php $fi = new FriendInteractions($friend); ?>
+				<?php $fi->PrintUserInteractions($friend); ?>
 			</div>
 		</a>		
 		<?php endforeach; ?>
