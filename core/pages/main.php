@@ -22,28 +22,9 @@ $invintations = $invite->get_invited_as_objects();
 
 $page= new page_minion("Main Page");
 
-$page->js_minion->addFile(oe_js . "isotope.pkgd.min.js");
-$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
-$page->js_minion->addFile(oe_js . "isotope.js", true);
 $page->header();
-?>
-<script type="text/javascript">
-//
-//Executed by onload from html for images loaded in grid.
-//
 
-function ImageLoaded(img){
-	var $img = $(img);
-		$img.removeClass('loading');
-	$img.parent().find('.cssload-fond').toggleClass('hidden');
-
-	if (typeof $grid != 'undefined')
-		$grid.isotope('layout');
-};
-
-</script>
-<?php 
-$isotope = new Isotope($page->html_minion);
+$isotope = new Isotope($page);
 
 if( $user->is_logged_in() ) {
 	$requestProfiles = $user->get_friend_request();

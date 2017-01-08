@@ -6,9 +6,17 @@ var $selectedTile = null;
 
 var $filterButtons = $('.filters .button');
 
-
 function OnPhotoClick($photo) {
-	$photo.toggleClass('grid-item--large');
+	if (!$photo.hasClass('stamp')) {
+		$grid.isotope("stamp", $photo);
+	} else {
+		$grid.isotope("unstamp", $photo);
+	}
+	
+	$photo.toggleClass('grid-item');
+	$photo.toggleClass('stamp');
+	$photo.toggleClass('stamp--focus');
+
 }
 
 function OnWritingClick($writing) {
@@ -92,22 +100,15 @@ function FillTile(response) {
 $(function() {
 	$grid = $('.grid').isotope({
 		// options
+		layoutMode: 'packery',
 		itemSelector: '.grid-item',
 		stamp: '.stamp',
 		
 		percentPosition: true,
 		stager: 30,
-		getSortData: {
-			title: '#title',
-			date: '[data-date]',
-			category: '[data-category]'
-		},
-		
-		masonry: {
-			columnWidth: '.grid-sizer'
-		},
 	});
 
+	
 	// add css loading spinner after all tile images with the loading class
 	$('.tile > img.loading').after("<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>");
 	

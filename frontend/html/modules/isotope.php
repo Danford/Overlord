@@ -15,6 +15,7 @@ class GridOption {
 	const Large = 32;
 	const ExtraLarge = 64;
 	const GridSizer = 128;
+	const GridGutter = 256;
 }
 
 class GridTile extends ElementTag {
@@ -34,6 +35,16 @@ class GridTile extends ElementTag {
 	
 	function GetTileClass() {
 		$class = "";
+
+		if ($this->gridOptions & GridOption::GridSizer) {
+			$class = "grid-sizer";
+			return $class;
+		}
+		
+		if ($this->gridOptions & GridOption::GridGutter) {
+			$class = "grid-gutter";
+			return $class;
+		}
 		
 		if ($this->gridOptions & GridOption::Stamp) {
 			$class .= "stamp ";
@@ -50,12 +61,7 @@ class GridTile extends ElementTag {
 		} else if ($this->gridOptions & GridOption::ExtraLarge) {
 			$class .= "grid-item grid-item--x-large ";
 		}
-		
-		if ($this->gridOptions & GridOption::GridSizer) {
-			$class = "grid-sizer";
-			return $class;
-		}
-		
+				
 		if ($class == "")
 			$class .= "grid-item ";
 		
@@ -106,21 +112,38 @@ class GridTile extends ElementTag {
 	function GetDataCategory() {
 		return $this->dataCategory;
 	}
+	
+	function PrintImgHtml($userId, $imgId) {
+		if ($imgId == 0)
+			echo "<img class='loading' onload='ImageLoaded(this)' src='/images/noavatar.png'>";
+		else
+			echo "<img class='loading' onload='ImageLoaded(this)' src='/profile/". $userId ."/photo/". $imgId .".png'>";
+	}
+	
+	function get_words($sentence, $count = 10) {
+		return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
+	}
 }
 
 class Isotope extends ElementTag {
     
     var $gridCategories;
-    var $html;
+    var $page;
     var $grid;
 
-    function __construct(html_minion $html)
+    function __construct(page_minion $page)
     {
         parent::__construct("div");
- 		$this->html = $html;
+ 		$this->page = $page;
+
+ 		$page->js_minion->addFile("//npmcdn.com/isotope-layout@3/dist/isotope.pkgd.js");
+ 		$page->js_minion->addFile("//npmcdn.com/isotope-packery@2/packery-mode.pkgd.js");
+ 		$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
+ 		$page->js_minion->addFile(oe_js . "isotope.js", true);
  		
- 		$this->html->header->AddContent($this->GetHeadScript());
+ 		$this->page->html_minion->header->AddContent($this->GetHeadScript());
  		
+
         $this->grid = new ElementTag("div", array("class" => "grid"));
         $this->AddElement($this->grid);
 
@@ -129,10 +152,12 @@ class Isotope extends ElementTag {
         $this->gridCategories = array();
     }
     
+    
     function AddGridSizer() {
     	$tile = new GridTile(NULL, GridOption::GridSizer);
     	$tile->AddContent(" ");
     	$this->grid->AddElement($tile);
+    	
     }
     
     function AddTile(Element $element, $category = NULL, $options = GridOption::None) {

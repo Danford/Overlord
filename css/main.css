@@ -339,6 +339,8 @@ input#Submit:active, input#x:active {
 	overflow: hidden;
 }
 
+.gutter-sizer { width: 1%; }
+
 .grid-sizer--full, .grid-item--full {
 	width: 98%;
 }
@@ -361,8 +363,8 @@ input#Submit:active, input#x:active {
 
 .stamp {
 	position: absolute;
-	margin: 1%;
-	overflow: hidden;	
+	background-color: #AAA;
+	border: 2px dotted black;	
 }
 
 .stamp--left {
@@ -396,6 +398,12 @@ input#Submit:active, input#x:active {
 
 .tile div#full-copy {
 	display: none;
+}
+
+.stamp--focus {
+	position: absolute;
+	left: 25%!important;
+	width: 48%;
 }
 
 @media only screen and (max-width: 650px) {

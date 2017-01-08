@@ -158,7 +158,7 @@ class ElementTag extends Element
     	ob_start();
     }
     
-    public function CloseBuffer()
+    public function CloseBuffer(ElementTag $addToElement = NULL)
     {
     	if ($this->isBufferOpen == false)
     	{
@@ -168,8 +168,13 @@ class ElementTag extends Element
     	
     	$content = ob_get_contents();
     		 
-		if (isset($content))
-			$this->AddContent($content);
+		if (isset($content)) {
+			if (isset ($addToElement)) {
+				$addToElement->AddContent($content);
+			} else {
+				$this->AddContent($content);
+			}
+		}
 		
 		$this->isBufferOpen = false;
 			
