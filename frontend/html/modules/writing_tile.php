@@ -11,7 +11,7 @@ class WritingTile extends GridTile {
 		<?php //<div class="grid-item tile writing" data-category="writing" data-date="<?php echo $date->getTimestamp(); ?/>">?>
 			<div id="title"><h3><?php echo $writing['title']; ?></h2></div>
 			<div id="subtitle"><h4><?php echo $writing['subtitle']; ?></h3></div>
-			<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
+			<div id="main-img"><img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" /></div>
 			<div id="excerpt"><?php echo $this->get_words($writing['copy'], 55); ?></div>
 			<div id="full" class="hidden"><?php echo $writing['copy']; ?></div>
 		<?php //</div> ?>

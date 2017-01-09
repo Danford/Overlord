@@ -176,7 +176,9 @@ nav li li {
 }
 
 .friend {
-	width: 50%;
+    width: 47.5%;
+    margin: 0.5%!important;
+    display: inline-block;
 }
 
 .button {
@@ -318,13 +320,18 @@ input#Submit:active, input#x:active {
 	margin: 7px;
 }
 
-.tile > img.expand{
+.tile #main-img {
+	overflow: hidden;
+}
+
+.tile #main-img img{
 	transition: all .2s ease-in-out;
 }
-.tile:hover > img.expand {
+
+.tile:hover #main-img img {
 	transform: scale(1.1);
 }
-.tile > img {
+.tile img {
 	display: block;
 	width: initial;
 	max-width: 100%;

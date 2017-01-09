@@ -3,6 +3,8 @@
 include(oe_frontend."page_minion.php");
 include(oe_frontend."html/modules/isotope.php");
 include(oe_frontend."html/modules/invite_tile.php");
+include(oe_frontend."html/modules/photo_tile.php");
+include(oe_frontend."html/modules/writing_tile.php");
 include(oe_frontend."html/modules/utility_tile.php");
 
 include($oe_plugins['photo']."conf/conf.php");
@@ -51,25 +53,11 @@ if( $user->is_logged_in() ) {
 	}
 	
 	foreach ($wall_photos as $photo) {
-		$date = new DateTime($photo['timestamp']);
-		$phototile = new GridTile("photo", GridOption::None, array("data-date" => $date->getTimestamp()));
-		$phototile->AddTag("div", array("id" => "title"))->AddTag("h3")->AddContent($photo['title']);
-		$phototile->AddElement(new Img("/profile/". $photo['owner'] ."/photo/". $photo['id'] .".png", "loading", NULL, NULL, array("onload" => "ImageLoaded(this)")));
-		$phototile->AddTag("p")->AddContent($photo['description']);
-		$isotope->AddTile($phototile, "photo");
+		$isotope->AddTile(new PhotoTile($photo), "photo");
 	}
 	
 	foreach ($wall_writings as $writing) {
-		$date = new DateTime($photo['timestamp']);
-		$writingtile = new GridTile("writing", GridOption::None, array("data-date" => $date->getTimestamp()));
-		$writingtile->AddTag("div", array("id" => "title"))->AddTag("h3")->AddContent($writing['title']);
-		$writingtile->AddTag("div", array("id" => "subtitle"))->AddTag("h4")->AddContent($writing['subtitle']);
-		$writingtile->AddElement(new Img("/images/noavatar.png", "loading", NULL, NULL, array("onload" => "ImageLoaded(this)")));
-	
-		$excerpt = get_words($writing['copy'], 55);
-		$writingtile->AddTag("div", array("id" => "excerpt"))->AddContent($excerpt);
-		$writingtile->AddTag("div", array("id" => "full", "class" => "hidden"))->AddContent($writing['copy']);
-		$isotope->AddTile($writingtile, "writing");
+		$isotope->AddTile(new WritingTile($writing), "writing");
 	}
 
 	//$tile->SetStampLeft();

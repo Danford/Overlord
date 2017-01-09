@@ -9,7 +9,7 @@ class PhotoTile extends GridTile {
 ?>
 		<?php //<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?/>"> ?>
 			<div id="title"><h3><?php echo $photo['title']; ?></h2></div>
-			<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
+			<div id="main-img"><img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" /></div>
 			<div id="description"><p><?php echo $photo['description']; ?></p></div>
 		<?php //</div> ?>
 <?php
