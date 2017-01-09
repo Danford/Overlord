@@ -41,17 +41,17 @@ $default['avatarID'] = 'id' ;
 
 // maximum dimensions of uploaded images in pixels
 
-$default[ 'maxImageWidth'] = 1000 ;
-$default[ 'maxImageHeight'] = 800 ;
+$default[ 'maxImageWidth'] = 1024 ;
+$default[ 'maxImageHeight'] = 1024 ;
 
-$default[ 'thumbnailSize'] = 200 ;
-$default[ 'thumbnailHeight'] = 340 ;
+$default[ 'thumbnailWidth'] = 225 ;
+$default[ 'thumbnailHeight'] = 400 ;
 
-$default[ 'profileImageSize'] = 300 ;
-$default[ 'profileImageHeight'] = 450 ;
+$default[ 'profileImageWidth'] = 225;
+$default[ 'profileImageHeight'] = 400;
 
-$default[ 'profileThumbSize'] = 125 ;
-$default[ 'profileThumbHeight'] = 200 ;
+$default[ 'profileThumbWidth'] = 100;
+$default[ 'profileThumbHeight'] = 133;
 
 // insert into settings if not already defined.
 

@@ -90,11 +90,11 @@ class profile_minion {
     }
     
     function profile_picture(){
-            return siteurl."profile/".$this->id."/photo/profile/".$this->avatar.".png" ;
+            return siteurl."profile/".$this->id."/photo/".$this->avatar.".profile.png" ;
     }
     
     function profile_thumbnail(){
-            return siteurl."profile/".$this->id."/photo/profileThumb/".$this->avatar.".png" ;
+            return siteurl."profile/".$this->id."/photo/".$this->avatar.".profileThumb.png" ;
     }
 
     function get_friends_as_array( $offset = 0, $limit = 99999999, $order='screen_name' ){

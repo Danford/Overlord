@@ -82,15 +82,22 @@ function resize_png( $original, $destination, $max_width = 0, $max_height = 0 ) 
         $new_height = $height ;
     }
 
-
+    $new_width = round($new_width, 0);
+    $new_height = round($new_height, 0);
+    
     $new_image = imagecreatetruecolor($new_width, $new_height);
 
     // Resize
     imagecopyresized($new_image, $source, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
 
+    // Delete existing file
+	if (file_exists($destination)) {
+    	unlink($destination);
+    }
+    
+    echo $destination. "<br>";
     // Output
-    imagepng( $new_image, $destination );
-
+    imagepng( $new_image, $destination, 9 );
 }
 function create_square_thumb($original, $destination, $dimension ){
 
@@ -157,7 +164,7 @@ function store_uploaded_photo( $filename ){
     
     $newFilename = $oepc[$tier]['photo']['path'].$oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$filekey  ;
     
-    if( $imageFileType == "png" or $imageFileType == "PNG" ) {
+    if( strcasecmp($imageFileType, "png") == 0) {
     
         resize_png( $filename, $newFilename.".png" ) ;
     
@@ -169,7 +176,7 @@ function store_uploaded_photo( $filename ){
     
     // create thumbnail
     
-    create_square_thumb( $newFilename.".png" , $newFilename.".thumb.png", $oepc[$tier]['photo']['profileThumbSize'] );
+    resize_png( $newFilename.".png" , $newFilename.".thumb.png", $oepc[$tier]['photo']['thumbnailWidth'], $oepc[$tier]['photo']['thumbnailHeight'] );
     
     // delete the original
     
@@ -273,4 +280,43 @@ function get_photo_info( $photo_id ) {
             return false ;
         }
     }
+}
+
+function regeneratePhotos() {
+
+	global $db ;
+	global $tier ;
+	global $oepc ;
+	global $accesslevel ;
+	global $user ;
+
+	$q = "SELECT `id`, `module`, `owner`, `privacy`, `album`, `title`, `description`, `file_key`, `timestamp` FROM `photo` WHERE TRUE";
+	
+	$db->query($q);
+	
+	while (($photo = $db->assoc()) != false) {
+		$imgPath = oe_images . $photo['module'] .".". $photo['owner'] .".". $photo['file_key'];
+		
+		if (!file_exists($imgPath .".png")) {
+			echo "Error: ". $imgPath ." didn't exist.<br>\r\n";
+			continue;
+		}
+		
+		unlink($imgPath .".thumb.png");
+		resize_png($imgPath .".png", $imgPath .".thumb.png", $oepc[$tier]['photo']['thumbnailWidth'], $oepc[$tier]['photo']['thumbnailHeight']);
+		echo "Resized thumb ". $oepc[$tier]['photo']['thumbnailWidth'] ."<br>\r\n";
+		
+		if (file_exists($imgPath .".profile.png")) {
+			unlink($imgPath .".profile.png");
+			resize_png($imgPath .".png", $imgPath .".profile.png", $oepc[$tier]['photo']['profileImageWidth'], $oepc[$tier]['photo']['profileImageHeight']);
+			echo "Resized ". $imgPath ." profile<br>\r\n";
+		}
+		
+		if (file_exists($imgPath .".profileThumb.png")) {
+			unlink($imgPath .".profileThumb.png");
+			resize_png($imgPath .".png", $imgPath .".profileThumb.png", $oepc[$tier]['photo']['profileThumbWidth'], $oepc[$tier]['photo']['profileThumbHeight']);
+			echo "Resized ". $imgPath ." profileThumb<br>\r\n";
+		}
+	}
+	
 }

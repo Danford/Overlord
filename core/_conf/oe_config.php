@@ -16,7 +16,8 @@ define( 'oe_config', oe_core.'_conf/' ) ;
 define( 'oe_includes', oe_core.'includes/' ) ;
 define( 'oe_css', httproot.'css/' ) ;
 define( 'oe_js', httproot.'js/' ) ;
-define( 'oe_log', oe_root."oe_logs/") ;
+define( 'oe_log', oe_root."oe_logs/") ; 
+define( "oe_images", oe_root."oe_images/");
 
 define( 'oe_frontend', oe_root.'frontend/' ) ;
 
@@ -36,17 +37,7 @@ define( 'oe_frontend', oe_root.'frontend/' ) ;
 // the duration of "keep me logged in" tokens, in days
 
     define( 'persistent_login_duration', 14 ) ;
-    
-// maximum dimensions of uploaded images in pixels
 
-    define( 'max_image_width', 1000 ) ;
-    define( 'max_image_height', 800 ) ;
-    
-    define( 'thumbnail_size', 125 ) ;
-
-    define( 'profile_image_size', 300) ;
-    define( 'profile_thumb_size', 75 ) ;
-    
     define( 'sql_error_log', oe_log."/sqlerrors.log" ) ;
     define( 'debug_log', oe_log."/debug.log" ) ;
     define( 'security_log', oe_log."/security.log" ) ;

@@ -95,11 +95,11 @@ if( $oepc[0]['admin'] == true ){
             // create the smaller image for the profile page
             
             resize_png( $filebase.".png", $filebase.".profile.png", 
-                             $oepc[$tier]['photo'][ 'profileImageSize'], $oepc[$tier]['photo'][ 'profileImageSize'] ) ;
+                             $oepc[$tier]['photo'][ 'profileImageWidth'], $oepc[$tier]['photo'][ 'profileImageHeight'] ) ;
             
             
-            create_square_thumb( $filebase.".png", $filebase.".profileThumb.png", 
-                             $oepc[$tier]['photo'][ 'profileThumbSize'] ) ;
+            resize_png( $filebase.".png", $filebase.".profileThumb.png", 
+                             $oepc[$tier]['photo'][ 'profileThumbWidth'], $oepc[$tier]['photo'][ 'profileThumbHeight'] ) ;
             
             
             

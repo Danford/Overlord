@@ -17,7 +17,7 @@ class FriendsTile extends GridTile {
 							<div class="name">
 								<?php echo $friend->screen_name; ?>
 							</div>
-							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
+							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_thumbnail(); ?>"/>
 							<?php $friendInteractions = new FriendInteractions($friend); ?>
 							<?php $friendInteractions->PrintFriendlistInteractions($friend); ?>
 						</div>

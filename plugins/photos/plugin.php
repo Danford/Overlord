@@ -105,18 +105,22 @@
     
     
     // are they trying to load the actual image file??
+    $imagetype = "";
     
-
-    if( in_array($uri[$pos], ['thumb','profile','profileThumb'] )){
-        $imagetype = ".".$uri[$pos] ;
-        $pos++ ;
-    } else {
-        $imagetype = "" ;
+    if(strpos($uri[$pos], 'thumb') !== false) {
+    	$imagetype = '.thumb';
     }
     
-
+    if (strpos($uri[$pos], 'profile') !== false) {
+    	$imagetype = '.profile';
+    }
+    
+    if (strpos($uri[$pos], 'profileThumb') !== false){
+    	$imagetype = '.profileThumb';
+    }
+    
     if( strpos($uri[$pos], '.png') != false ){
-                    
+        
             
         $split = explode('.', $uri[$pos]) ;
         
@@ -133,9 +137,9 @@
         if( $photo != false and ! $photo['privacy'] <= $accesslevel ){
 
             $filename = $oepc[$tier]['type'].".".$oepc[$tier]['id'].".".$photo['file_key'].$imagetype.".png" ;
-        
+        	
             if( file_exists( $oepc[$tier]['photo']['path'].$filename ) ){
-                
+
                 header("Content-Type: image/png");
                 header("Content-Length: " . filesize($oepc[$tier]['photo']['path'].$filename));
                 $file = @fopen( $oepc[$tier]['photo']['path'].$filename, "rb" ) ;

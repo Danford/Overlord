@@ -62,7 +62,7 @@ if( $user->is_logged_in() ) {
 
 	//$tile->SetStampLeft();
 
-	print( 'Hello '.$user->name.'!  <a href="/logout">Log Out</a>' ) ;
+	//print( 'Hello '.$user->name.'!  <a href="/logout">Log Out</a>' ) ;
 }
 else {
 	// add welcome register / login tile.

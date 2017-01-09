@@ -37,6 +37,7 @@ include($oe_plugins['photo']."lib/photo.lib.php");
 
 include($oe_plugins['writing']."conf/conf.php");
 include($oe_plugins['writing']."lib/writing.lib.php");
+
 function get_words($sentence, $count = 150) {
 	return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
 }
@@ -68,6 +69,8 @@ foreach ($friends as $friend)
 	if ($user->is_friend($friend->id))
 		$mutualFriends[] = $friend;
 }
+
+
 
 $photos = get_photos(0, 15);
 $photosLen = count($photos);
