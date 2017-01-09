@@ -463,6 +463,7 @@ class user_minion {
     	$photos = array();
     	
     	while( ( $f = $db->assoc() ) != false ){
+    		$f['owner'] = new profile_minion($f['owner'], true);
     		$photos[] = $f;
     	}
     	

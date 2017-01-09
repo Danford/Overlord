@@ -100,7 +100,6 @@
     	            include( $oe_plugins[$lastplug]."conf/plugin.conf.php" ) ;
     	        } else {
     	            $post->json_reply("FAIL" ) ;
-    	            printVarible($lastplug);
     	            die('7');
     	        }
     	            
