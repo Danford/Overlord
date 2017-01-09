@@ -16,9 +16,19 @@
      *      $profile->get_friends_count()     
      * 
      */
-
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
+
+include(oe_frontend."html/modules/isotope.php");
+include(oe_frontend."html/modules/head_tile.php");
+include(oe_frontend."html/modules/details_tile.php");
+include(oe_frontend."html/modules/about_me_tile.php");
+include(oe_frontend."html/modules/writing_tile.php");
+include(oe_frontend."html/modules/photo_tile.php");
+include(oe_frontend."html/modules/group_tile.php");
+include(oe_frontend."html/modules/friends_tile.php");
+include(oe_frontend."html/modules/mututal_friends_tile.php");
+
 include($oe_modules['profile']."lib/friends_api.php");
 include($oe_modules['profile']."conf/plugin.conf.php");
 
@@ -42,25 +52,10 @@ function print_words($sentence, $count = 150) {
 	return false;
 }
 
-function LoadImage($profileId, $id)
-{
-	if ($id != "")
-	{
-		echo '<img class="loading" onload="ImageLoaded(this)" src="/profile/'. $profileId .'/photo/'. $id .'.png"/>';
-	}
-	else
-	{
-		echo '<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />';
-	}
-}
-
 $page = new page_minion("Profile");
 
 $page->header();
 
-$page->addjs(oe_js . "isotope.pkgd.min.js");
-$page->addjs(oe_js . "imagesloaded.pkgd.js");
-$page->addjs(oe_js . "isotope.js", true);
 $page->addjs(oe_js . "tinymce/tinymce.min.js");
 $page->addjs(oe_js . "invoketinymce.js");
 
@@ -87,160 +82,34 @@ $loopLength = $photosLen;
 if ($loopLength < $writingsLen)
 	$loopLength = $writingsLen;
 
-?>
-<script type="text/javascript">
-//
-//Executed by onload from html for images loaded in grid.
-//
+$isotope = new Isotope($page);
 
-function ImageLoaded(img){
-	var $img = $(img);
-		$img.removeClass('loading');
-	$img.parent().find('.cssload-fond').toggleClass('hidden');
+$isotope->AddTile(new HeadProfileTile($profile));
+$isotope->AddTile(new DetailsProfileTile($profile));
 
-	if (typeof $grid != 'undefined')
-		$grid.isotope('layout');
-};
-</script>
-<article id="profile">
-	<div class="grid">
-		<div class="grid-sizer"></div>
+if ($user->id != $profile->id) {
+	$isotope->AddTile(new MututalFriendsTile($profile, $mututalFriends));
+}
+
+$isotope->AddTile(new FriendsTile($profile, $friends));
+$isotope->AddTile(new AboutMeProfileTile($profile));
+
+for ($i = 0; $i < $loopLength; $i++) {
+	if ($i < $photosLen) {
+		$isotope->AddTile(new PhotoTile($photos[$i]));
+	}
 	
-		<div class="stamp stamp--left tile">
-			<p id="name"><?php echo $profile->screen_name; ?></p>
-			<?php LoadImage($profile->id, $profile->avatar); ?>
-			<?php $friendInteractions = new FriendInteractions($profile); ?>
-			<?php $friendInteractions->PrintUserInteractions(); ?>
-		</div>
-		<div class="stamp stamp--left tile">
-			<div id="details">
-				<p id="age">Age: <?php echo $profile->age; ?></p>
-				<?php if ($profile->city_name() == "") : ?>
-				<p id="location">City: Not Listed</p>
-				<?php else : ?>
-				<p id="location">City: <?php echo $profile->city_name() ; ?></p>
-				<?php endif; ?>
-				<?php if ($gender[$profile->gender]['label'] == "") : ?>
-				<p id="gender">Gender: Not Listed</p>
-				<?php else : ?>
-				<p id="gender">Gender: <?php echo $gender[$profile->gender]['label'] ; ?></p>
-				<?php endif; ?>
-			</div>
-		</div>
-		<?php if ($user->id != $profile->id) : ?>
-		<div class="stamp stamp--left tile">
-			<div id="mutual-friends">
-				<a href="/profile/<?php echo $profile->id; ?>/friends/"><div id="head">Mutual Friends - <?php echo count($mutualFriends); ?></div></a>
-				<div id="body">
-					<?php foreach ($mutualFriends as $friend) : ?>
-					<a href="/profile/<?php echo $friend->id; ?>/">
-						<div class="friend tile">
-							<div class="name">
-								<?php echo $friend->screen_name; ?>
-							</div>
-							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
-							<?php PrintFriendlistInteractions($friend); ?>
-						</div>
-					</a>		
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div>
-		<?php endif; ?>
-		<div class="stamp stamp--left tile">
-			<div id="friends">
-				<a href="/profile/<?php echo $profile->id; ?>/friends/"><div id="head">Friends - <?php echo $profile->get_friends_count(); ?></div></a>
-				<div id="body">
-					<?php foreach ($friends as $friend) : ?>
-					<a href="/profile/<?php echo $friend->id; ?>/">
-						<div class="friend tile">
-							<div class="name">
-								<?php echo $friend->screen_name; ?>
-							</div>
-							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
-							<?php $friendInteractions = new FriendInteractions($friend); ?>
-							<?php $friendInteractions->PrintFriendlistInteractions($friend); ?>
-						</div>
-					</a>		
-					<?php endforeach; ?>
-				</div>
-			</div>
-		</div>
-		<div id="about-me" class="grid-item grid-item--large tile about-me">
-			<?php if ($profile->detail == "" && $profile->id == $user->id) : ?>
-			<p>This profile doesn't yet have an "About Me" section. Add it by editing your profile.<p>
-			<a href="/profile/"><div class="button">EditProfile</div></a>
-			<?php elseif ($profile->detail == "") : ?>
-			<p>This user has not yet provided anything for the "About Me" section of thier profile.</p>
-			<?php else : ?>
-			<div id="excerpt">
-				<?php if (print_words($profile->detail, 200)) : ?>
-				<p>Click to read more.</p>
-				<?php endif; ?>
-			</div>
-			<div id="full" class="hidden"><?php echo $profile->detail; ?></div>
-			<?php endif; ?>
-		</div>
-		<div class="stamp stamp--top tile">
-			<div class="ui-group filters">
-				<div class="button-group js-radio-button-group" data-filter-group="category">
-					<button class="button is-checked" data-filter="">All</button>
-					<button class="button" data-filter=".photo">Photos <span class="filter-count"></span></button>
-					<button class="button" data-filter=".writing">Writings <span class="filter-count"></span></button>
-					<button class="button" data-filter=".group">Groups <span class="filter-count"></span></button>
-				</div>
-			</div>
-			<div class="ui-group sortings">
-				<div class="button-group sort-by-button-group">
-					<button class="button is-checked" data-sort-by="">None</button>
-					<button class="button" data-sort-by="date">Date</button>
-					<button class="button" data-sort-by="title">Title</button>
-					<button class="button" data-sort-by="category">Photo / Writing</button>
-					<button class="button" data-sort-by="likes">Likes *</button>
-					<button class="button" data-sort-by="views">Views *</button>
-					<button class="button" data-sort-by="shares">Shares *</button>
-					<button class="button" data-sort-by="comments">Comments *</button>
-				</div>
-				<p>* Not yet implemented</p>
-			</div>
-			<?php if ($user->id == $profile->id) : ?>
-			<div>
-				<button class="button" onclick='AddTile("Upload Photo", "/profile/<?php echo $profile->id ?>/photo/upload/");'>Upload Photo</button>
-				<button class="button" onclick='AddTile("Create Writing", "/profile/<?php echo $profile->id ?>/writing/write/");'>Create Writing</button>
-				<button class="button" onclick='AddTile("Create Group", "/group/create");'>Create Group</button>
-			</div>
-			<?php endif; ?>
-		</div>
-		<?php for ($i = 0; $i < $loopLength; $i++) : ?>
-		<?php if ($i < $photosLen) : ?>
-		<?php $date = new DateTime($photos[$i]['timestamp']); ?>
+	if ($i < $writingsLen) {
+		$isotope->AddTile(new WritingTile($writings[$i]));
+	}
+	
+	if ($i < $groupsLen) {
+		$isotope->AddTile(new GroupTile($groups[$i]));
+	}
+}
+
+$page->html_minion->content->AddElement($isotope);
 		
-		<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?>">
-			<div id="title"><h3><?php echo $photos[$i]['title']; ?></h2></div>
-			<img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photos[$i]['owner']->id; ?>/photo/<?php echo $photos[$i]['id']; ?>.png" />
-			<div id="description"><p><?php echo $photos[$i]['description']; ?></p></div>
-		</div>
-		<?php endif; ?>
-		<?php if ($i < $writingsLen) : ?>
-		<?php $date = new DateTime($writings[$i]['last_updated']); ?>
-		<div class="grid-item tile writing" data-category="writing" data-date="<?php echo $date->getTimestamp(); ?>">
-			<div id="title"><h3><?php echo $writings[$i]['title']; ?></h2></div>
-			<div id="subtitle"><h4><?php echo $writings[$i]['subtitle']; ?></h3></div>
-			<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
-			<div id="excerpt"><?php echo get_words($writings[$i]['copy'], 55); ?></div>
-			<div id="full" class="hidden"><?php echo $writings[$i]['copy']; ?></div>
-		</div>
-		<?php endif; ?>
-		<?php if ($i < $groupsLen) : ?>
-		<a href="/group/<?php echo $groups[$i]->id; ?>/">
-			<div class="grid-item tile group" data-category="group">
-				<div id="title"><h3><?php echo $groups[$i]->name; ?></h2></div>
-				<img class="loading" onload="ImageLoaded(this)" src="/images/noavatar.png" />
-				<div id="excerpt"><?php echo get_words($groups[$i]->detail, 55); ?></div>
-			</div>
-		</a>
-		<?php endif; ?>
-		<?php endfor; ?>
-	</div>
-</article>
-<?php $page->footer(); ?>
+$page->footer();
+
+?>

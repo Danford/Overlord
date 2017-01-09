@@ -202,38 +202,7 @@ class Isotope extends ElementTag {
     		$element->AddTag("p", array("id" => "tile-content"))->AddContent($content);
     	}
     	return $this->AddTile($element, $category, $options);
-    }
-
-	function GetSortingButtonsElement($categories) {
-
-		global $user;
-		
-		$html = '<div class="ui-group filters">
-				<div class="button-group js-radio-button-group" data-filter-group="category">
-					<button class="button is-checked" data-filter="">All</button>';
-		
-		foreach ($this->gridCategories as $category) {
-			$html .= '<button class="button" data-filter=".'. $category .'">'. ucfirst($category) .'<span class="filter-count"></span></button>';
-		}
-		
-		$html .= '	
-				</div>
-			</div>
-			<div class="ui-group sortings">
-				<div class="button-group sort-by-button-group">
-					<button class="button is-checked" data-sort-by="">None</button>
-					<button class="button" data-sort-by="date">Date</button>
-					<button class="button" data-sort-by="title">Title</button>
-				</div>
-			</div>
-			<div>
-				<button class="button" onclick=\'AddTile("Upload Photo", "/profile/'. $user->id .'/photo/upload/");\'>Upload Photo</button>
-				<button class="button" onclick=\'AddTile("Create Writing", "/profile/'. $user->id .'/writing/write/");\'>Create Writing</button>
-				<button class="button" onclick=\'AddTile("Create Group", "/group/create");\'>Create Group</button>
-			</div>';
-		
-		return $html;
-	}
+    }	
 	
 	function GetHeadScript() {
 		$headscript = '<script type="text/javascript">

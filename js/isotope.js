@@ -7,23 +7,12 @@ var $selectedTile = null;
 var $filterButtons = $('.filters .button');
 
 function OnPhotoClick($photo) {
-	if (!$photo.hasClass('stamp')) {
-		$grid.isotope("stamp", $photo);
-	} else {
-		$grid.isotope("unstamp", $photo);
-	}
-	
-	$photo.toggleClass('grid-item');
-	$photo.toggleClass('stamp');
-	$photo.toggleClass('stamp--focus');
 
 }
 
 function OnWritingClick($writing) {
-	$writing.toggleClass('grid-item--large');
 	$writing.children('#excerpt').toggleClass('hidden');
 	$writing.children('#full').toggleClass('hidden');
-	$grid.isotope('layout');
 }
 
 function OnGroupClick($group) {
@@ -31,11 +20,8 @@ function OnGroupClick($group) {
 }
 
 function OnAboutMeClick($aboutme) {
-	$aboutme.toggleClass('grid-item--large');
-	$aboutme.toggleClass('grid-item--x-large');
 	$aboutme.children('#excerpt').toggleClass('hidden');
 	$aboutme.children('#full').toggleClass('hidden');
-	$grid.isotope('layout');
 }
 
 // flatten object by concatting values
@@ -151,39 +137,53 @@ $(function() {
 	  });
 	});
 	
+	function TileToggle($tile) {
+		$tile.toggleClass("selected");
+		$tile.toggleClass('grid-item');
+		$tile.toggleClass('stamp');
+		$tile.toggleClass('stamp--focus');
+		
+
+		if (!$tile.hasClass("selected")) {
+			$tile.removeClass('stamp--full-screen');
+		}
+		
+		if ($tile.hasClass('stamp')) {
+			$grid.isotope("stamp", $tile);
+		} else {
+			$grid.isotope("unstamp", $tile);
+		}
+		
+		if ($tile.hasClass('photo')) {
+			OnPhotoClick($tile);
+		} else if ($tile.hasClass('writing')) {
+			OnWritingClick($tile);
+		} else if ($tile.hasClass('group')) {
+			OnGroupClick($tile);
+		} else if ($tile.hasClass('about-me')) {
+			OnAboutMeClick($tile);
+		}
+	}
+	
 	$('.tile').click(function () {
-		if ($selectedTile != null && $selectedTile != $(this)) {
-	
-			if ($selectedTile.hasClass('destructable'))
-				$selectedTile.remove();
-			else
-			{		
-				if ($selectedTile.hasClass('photo')) {
-					OnPhotoClick($selectedTile);
-				} else if ($selectedTile.hasClass('writing')) {
-					OnWritingClick($selectedTile);
-				} else if ($selectedTile.hasClass('group')) {
-					OnGroupClick($selectedTile);
-				} else if ($selectedTile.hasClass('about-me')) {
-					OnAboutMeClick($selectedTile);
-				}
-			}
-		}
-	
-		if ($selectedTile != $(this)) {
-			if ($(this).hasClass('photo')) {
-				OnPhotoClick($(this));
-			} else if ($(this).hasClass('writing')) {
-				OnWritingClick($(this));
-			} else if ($(this).hasClass('group')) {
-				OnGroupClick($(this));
-			} else if ($(this).hasClass('about-me')) {
-				OnAboutMeClick($(this));
-			}
-			
-	
+		
+		if ($(this).hasClass('selected')) {
+			$(this).toggleClass('stamp--full-screen');
 			$grid.isotope('layout');
+			return;
 		}
+		
+		if ($selectedTile != null) {
+			if ($selectedTile.hasClass('destructable')) {
+				$selectedTile.remove();
+			} else {		
+				TileToggle($selectedTile);
+			}
+		}
+	
+		TileToggle($(this));	
+	
+		$grid.isotope('layout');
 	
 		$selectedTile = $(this);
 	});

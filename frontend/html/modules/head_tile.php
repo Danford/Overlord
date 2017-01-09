@@ -33,7 +33,7 @@ class HeadProfileTile extends GridTile {
 ?>
 		<?php //<div class="stamp stamp--left tile"> ?>
 			<p id="name"><?php echo $profile->screen_name; ?></p>
-			<?php $this->LoadImage($profile->id, $profile->avatar); ?>
+			<?php $this->PrintImgHtml($profile->id, $profile->avatar); ?>
 			<?php $friendInteractions = new FriendInteractions($profile); ?>
 			<?php $friendInteractions->PrintUserInteractions(); ?>
 		<?php //</div> ?>
