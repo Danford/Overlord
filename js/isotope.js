@@ -96,8 +96,11 @@ $(function() {
 
 	
 	// add css loading spinner after all tile images with the loading class
-	$('.tile img.loading').after("<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>");
-	
+	function getImgLoadingHtml() {
+		return "<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>";
+	}
+	$('.tile img.loading').append(getImgLoadingHtml());
+
 	updateFilterCounts();
 	
 	// store filter for each group
@@ -143,15 +146,42 @@ $(function() {
 		$tile.toggleClass('stamp');
 		$tile.toggleClass('stamp--focus');
 		
-
 		if (!$tile.hasClass("selected")) {
 			$tile.removeClass('stamp--full-screen');
 		}
 		
 		if ($tile.hasClass('stamp')) {
 			$grid.isotope("stamp", $tile);
+
+			$img = $tile.find('#main-img img');
+			if ($img.parent().children("#full-img").length <= 0) {
+				$newimg = $img.clone(true);
+				
+				$newimg.attr("id", "full-img");
+				
+				$img.addClass("hidden");
+	
+				$imgSrc = $img.attr("src"); 
+				
+				$newimg.attr("src", function (i, orgValue) {
+					orgValue = orgValue.replace(".thumb", "");
+					orgValue = orgValue.replace(".profileThumb", "");
+					return orgValue;
+				});
+				
+				$newimg.addClass("loading");
+				$newimg = $img.before($newimg);
+				$newimg.before(getImgLoadingHtml());
+			} else {
+				$tile.find('#main-img img').addClass("hidden");
+				$tile.find('#full-img').removeClass("hidden");
+			}
+				
 		} else {
 			$grid.isotope("unstamp", $tile);
+			
+			$tile.find('#main-img img').removeClass("hidden");
+			$tile.find('#full-img').addClass("hidden");
 		}
 		
 		if ($tile.hasClass('photo')) {
