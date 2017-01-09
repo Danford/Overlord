@@ -5,7 +5,6 @@ include(oe_frontend."html/modules/isotope.php");
 include(oe_frontend."html/modules/invite_tile.php");
 include(oe_frontend."html/modules/photo_tile.php");
 include(oe_frontend."html/modules/writing_tile.php");
-include(oe_frontend."html/modules/utility_tile.php");
 
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
@@ -30,8 +29,6 @@ $page->header();
 $isotope = new Isotope($page);
 
 if( $user->is_logged_in() ) {
-	
-	$isotope->AddTile(new UtilityTile($isotope->gridCategories));
 	
 	$requestProfiles = $user->get_friend_request();
 	
@@ -72,7 +69,6 @@ else {
 	$welcome->AddTag("div", array("class" => "button", "style" => "width:50%"))->AddTag("p")->AddContent("Sign In");
 	$tile = $isotope->AddTile($welcome, "welcome")->SetLarge();
 }
-
 
 $page->html_minion->content->AddElement($isotope);
 

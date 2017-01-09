@@ -108,8 +108,6 @@ for ($i = 0; $i < $loopLength; $i++) {
 }
 
 
-$isotope->AddTile(new UtilityTile($isotope->gridCategories));
-
 $page->html_minion->content->AddElement($isotope);
 //$article->AddElement($isotope);
 

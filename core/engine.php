@@ -51,7 +51,7 @@
 	        include( $oe_modules[ $postmodule ].'api.php') ;
 	        die('3');
 	    }
-	    
+
 	    if( isset( $oe_plugins[ $postmodule ] ) and file_exists( $oe_plugins[ $postmodule ]."api.php" ) ) {
 	        // verify oe_module and oe_module_id
 
@@ -127,8 +127,6 @@
          * If we got to this spot,  api call is not valid.
          */
 
-	    ?><pre><?php print_r($_POST); ?></pre><?php
-	    
 	    $post->json_reply("FAIL") ;
         die( '<b>Error OE1:</b> Please report this to the webmaster.' ) ;
 	}
@@ -175,7 +173,7 @@
 		    $uri[$pos] = './main' ;
 		}
 	}
-	
+
 	/*
 	 * This takes care of the few circumstances in which the URL does not tell us 
 	 * explicitly what we want to show the user.  Now, if the URL is valid, it's going to be either 
@@ -229,7 +227,7 @@
 		 * has been forced.
 		 * 
 		 */ 
-		
+
 		$pos++ ;
 		
 		include( $oe_pages[ $uri[ $pos - 1 ] ] ) ;

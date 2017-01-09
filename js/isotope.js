@@ -101,10 +101,10 @@ $(function() {
 	}
 	$('.tile img.loading').append(getImgLoadingHtml());
 
-	updateFilterCounts();
-	
 	// store filter for each group
 	var filters = {};
+
+	updateFilterCounts();
 	
 	//recalculate grid layout on image load
 	$grid.imagesLoaded().progress( function () {
@@ -141,6 +141,9 @@ $(function() {
 	});
 	
 	function TileToggle($tile) {
+		if ($tile.hasClass('ignore-click'))
+			return;
+		
 		$tile.toggleClass("selected");
 		$tile.toggleClass('grid-item');
 		$tile.toggleClass('stamp');

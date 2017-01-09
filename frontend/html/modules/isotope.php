@@ -5,6 +5,8 @@ require_once(oe_frontend.'html/element_file.php');
 require_once(oe_frontend.'html/tags/content.php');
 require_once(oe_frontend.'html/tags/img.php');
 
+require_once(oe_frontend.'html/modules/utility_tile.php');
+
 class GridOption {	
 	const None = 0;
 	const Stamp = 2;
@@ -16,6 +18,7 @@ class GridOption {
 	const ExtraLarge = 64;
 	const GridSizer = 128;
 	const GridGutter = 256;
+	const IgnoreClick = 512;
 }
 
 class GridTile extends ElementTag {
@@ -44,6 +47,10 @@ class GridTile extends ElementTag {
 		if ($this->gridOptions & GridOption::GridGutter) {
 			$class = "grid-gutter";
 			return $class;
+		}
+		
+		if ($this->gridOptions & GridOption::IgnoreClick) {
+			$class .= "ignore-click ";
 		}
 		
 		if ($this->gridOptions & GridOption::Stamp) {
@@ -161,11 +168,13 @@ class Isotope extends ElementTag {
     }
     
     function AddTile(Element $element, $category = NULL, $options = GridOption::None) {
-    	
     	if (isset($category) && !in_array($category, $this->gridCategories))
     		$this->gridCategories[] = $category;
     	
     	if ($element instanceof GridTile) {
+    		if ($element->GetDataCategory() !== NULL && !in_array($element->GetDataCategory(), $this->gridCategories))
+    			$this->gridCategories[] = $element->GetDataCategory();
+    			
     		$this->grid->AddElement($element);
     		return $element;
     	}
@@ -187,23 +196,6 @@ class Isotope extends ElementTag {
     	return $tile;
     }
     
-    function AddTileWithTitle($title, $category = NULL, $options = GridOption::None) {
-    	$element = new Element();
-    	$element->AddTag("t1", array("id" => "tile-title"))->AddContent($title);
-    	return $this->AddTitle($element, $category, $options);
-    }
-    
-    function AddTileWithTitleAndImage($title, $img_url, $content = NULL, $category = NULL, $options = GridOption::None) {
-    	$element = new Element();
-    	$element->AddTag("t1", array("id" => "tile-title"))->AddContent($title);
-    	$element->AddElement(new Img($img_url, "tile-img"));
-    	
-    	if (isset($content)) {
-    		$element->AddTag("p", array("id" => "tile-content"))->AddContent($content);
-    	}
-    	return $this->AddTile($element, $category, $options);
-    }	
-	
 	function GetHeadScript() {
 		$headscript = '<script type="text/javascript">
 		//
@@ -222,6 +214,11 @@ class Isotope extends ElementTag {
 		</script>';
 		
 		return $headscript;
+	}
+	
+	function Serve() {
+		$this->AddTile(new UtilityTile($this->gridCategories));
+		parent::Serve();
 	}
 }
 ?>

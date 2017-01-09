@@ -2,15 +2,16 @@
 
 class UtilityTile extends GridTile {
 	function __construct ($categories) {
-		parent::__construct(NULL, GridOption::StampTop);
+		global $user;
+		
+		parent::__construct(NULL, GridOption::StampTop | GridOption::IgnoreClick);
 		$this->OpenBuffer();
 ?>
 		<div class="ui-group filters">
 		<div class="button-group js-radio-button-group" data-filter-group="category">
 			<button class="button is-checked" data-filter="">All</button>
-			
 			<?php foreach ($categories as $category) : ?>
-			<button class="button" data-filter="<?php echo $category; ?>"><?php echo ucfirst($category); ?><span class="filter-count"></span></button>
+			<button class="button" data-filter=".<?php echo $category; ?>"><?php echo ucfirst($category); ?><span class="filter-count"></span></button>
 			<?php endforeach; ?>
 		</div>
 	</div>
