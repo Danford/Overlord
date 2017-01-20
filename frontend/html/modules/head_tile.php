@@ -3,7 +3,7 @@
 class HeadGroupTile extends GridTile {
 
 	function __construct ($group) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 		
 		global $user;
 		

@@ -212,9 +212,9 @@ class user_minion {
     
         }
     
-    
+
         $this->blocked = array() ;
-    
+        
         $db->query( "SELECT `blocker`, `blockee` from `profile_block`
                         WHERE `blocker` ='".$this->id."'
                            OR `blockee` ='".$this->id."'" ) ;
@@ -294,8 +294,8 @@ class user_minion {
         return ( isset( $this->friends[$user_id] )) ;
     }
     
-    function is_blocked( $user_id ) {    
-        return ( in_array($user_id, $this->blocked) ) ;
+    function is_blocked( $user_id ) {
+        return ( isset($this->blocked) && in_array($user_id, $this->blocked) ) ;
     }
     
     function load_profile(){

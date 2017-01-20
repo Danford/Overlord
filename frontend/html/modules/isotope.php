@@ -19,6 +19,7 @@ class GridOption {
 	const GridSizer = 128;
 	const GridGutter = 256;
 	const IgnoreClick = 512;
+	const Destructable = 1024;
 }
 
 class GridTile extends ElementTag {
@@ -217,7 +218,9 @@ class Isotope extends ElementTag {
 	}
 	
 	function Serve() {
-		$this->AddTile(new UtilityTile($this->gridCategories));
+		if (count($this->gridCategories) > 0)
+			$this->AddTile(new UtilityTile($this->gridCategories));
+		
 		parent::Serve();
 	}
 }

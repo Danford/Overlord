@@ -6,6 +6,9 @@ class PhotoTile extends GridTile {
 		$date = new DateTime($photo['timestamp']);
 		$this->AddField("data-date", $date->getTimestamp());
 		$this->OpenBuffer();
+		
+		global $oepc;
+		
 ?>
 		<?php //<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?/>"> ?>
 			<div id="title"><h3><?php echo $photo['title']; ?></h2></div>

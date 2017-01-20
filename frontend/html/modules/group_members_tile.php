@@ -3,7 +3,7 @@
 class GroupMembersTile extends GridTile {
 
 	function __construct ($group, $memberGroups) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 		$this->OpenBuffer();
 		?>
 		<?php //<div class="stamp stamp--left tile"> ?>

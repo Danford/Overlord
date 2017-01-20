@@ -1,82 +1,34 @@
 <?php
-
+	   
 include(oe_frontend."page_minion.php");
-include(oe_lib."form_minion.php");
+include(oe_frontend."html/modules/isotope.php");
+include(oe_frontend."html/modules/upload_photo_tile.php");
 
-if( $uri[$pos] == 'edit' ){
-    
-    $pagetitle = 'Edit Photo' ;
-    $form = new form_minion( 'editPhoto', 'photo');
-    $form->fill_with_values( $photo ) ;
-    
-} else {
-    
-    $pagetitle = 'Upload Photo' ;
-    $form = new form_minion( 'uploadPhoto', 'photo');
-}
+include($oe_plugins['photo']."conf/conf.php");
+include($oe_plugins['photo']."lib/photo.lib.php");
 
-if (!isset($_GET['ajax']))
-{
-	$page = new page_minion($pagetitle);
+$isEdit = $uri[$pos] == 'edit';
+
+if (!isset($_GET['ajax'])) {
+	if ($isEdit) {
+		$page = new page_minion("Edit Photo");
+	} else {
+		$page = new page_minion("Upload Photo");
+	}
+	
 	$page->header();
+	
+	$isotope = new Isotope($page);
+	
+	$isotope->AddTile(new UploadPhotoTile());
+	
+	$page->html_minion->content->AddElement($isotope);
 }
 
-$form->has_file();
-$form->if_error('photo', 'photoerror') ;
-$form->if_error('title', 'titleerror') ;
-$form->if_error('description', 'descriptionerrror') ;
-global $privacyoptions;
-?>
-
-<div id="upload-photo-form">
-	<?php $form->header();
-	
-    	if( $uri[$pos] == 'edit' ){
-    	    $form->hidden( 'photo_id', $photo['id'] );
-    	} else {
-    	   ?><p>Uploaded Image: <?php $form->file_input("photo") ; ?></p><?php 
-    	}
-	?>
-	<p>Privacy:	<?php $form->select("privacy", $privacyoptions ); ?></p>
-	<p>Title: <?php $form->text_field("title" ); ?></p>
-	<p>Description: <?php $form->text_field("description" ); ?></p>
-	<p>Make Avatar <?php $form->checkbox("parentavatar") ; ?></p>
-	<?php $form->submit_button(); ?>		
-	<?php /*
-	<div class="button" onclick="UploadImage()">Upload</div>
-	
-	<p>Album: 
-		<select name="album">
-			<option value="None">None</option>
-			<option value="New">New</option>
-			<?php foreach ($albums as $album): ?>
-			<option value="<?php echo $album['id']; ?>"><?php echo $album['name']; ?></option>
-			<?php endforeach; ?>
-		</select>
-	</p>
-	<p>Album Title: <input name="new_album_title" type="text"/></p>
-	<p>Album Description: <input name="new_album_description" type="text"/></p>
-	<input name="albumavatar" title="Album Avatar" type="checkbox"/>
-	*/
-	?>
-	
-</div>
-<script>
-function UploadImage() {
-	jsonRequest(OE_API.photo.name, OE_API.photo.func.upload, {oe_module: 'profile', oe_module_id: '<?php echo $user->id; ?>', photo: $('input#photo').val(), privacy: $('select#privacy').val(), title: $('input#title').val(), description: $('input#description').val(), parentavatar: $('input#parentavatar').prop('checked')}, SetLocation);
-}
-
-function SetLocation(response) {
-	$('#upload-photo-form').append(response);
-}
-
-</script>
-<?php 
-
-$form->footer(); // it's not just cosmetic, it does session cleanup.
+$tile = new UploadPhotoTile();
+$tile->Serve();
 
 if (!isset($_GET['ajax']))
-{
-    $page->footer();
-}
+	$page->footer(); 
+
 ?>

@@ -23,9 +23,9 @@ class UtilityTile extends GridTile {
 		</div>
 	</div>
 	<div>
-		<button class="button" onclick='AddTile("Upload Photo", "/profile/<?php echo $user->id; ?>/photo/upload/");'>Upload Photo</button>
-		<button class="button" onclick='AddTile("Create Writing", "/profile/<?php echo $user->id; ?>/writing/write/");'>Create Writing</button>
-		<button class="button" onclick='AddTile("Create Group", "/group/create");'>Create Group</button>
+		<button class="button" onclick='AddTile("/profile/<?php echo $user->id; ?>/photo/upload/");'>Upload Photo</button>
+		<button class="button" onclick='AddTile("/profile/<?php echo $user->id; ?>/writing/write/");'>Create Writing</button>
+		<button class="button" onclick='AddTile("/group/create");'>Create Group</button>
 	</div>
 <?php
 		$this->CloseBuffer();

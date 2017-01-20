@@ -95,7 +95,6 @@ function resize_png( $original, $destination, $max_width = 0, $max_height = 0 ) 
     	unlink($destination);
     }
     
-    echo $destination. "<br>";
     // Output
     imagepng( $new_image, $destination, 9 );
 }

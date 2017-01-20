@@ -3,7 +3,7 @@
 class MututalFriendsTile extends GridTile {
 
 	function __construct ($profile, $mututalFriends) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 		
 		$this->OpenBuffer();
 ?>

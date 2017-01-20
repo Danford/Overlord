@@ -10,9 +10,10 @@
  *      privacy - int
  * 
  */
-
 include(oe_frontend."page_minion.php");
-include(oe_lib."form_minion.php");
+include(oe_frontend."html/modules/isotope.php");
+include(oe_frontend."html/modules/add_writing_tile.php");
+
 
 if (!isset($_GET['ajax']))
 {
@@ -22,41 +23,18 @@ if (!isset($_GET['ajax']))
 	$page->addjs( '/js/invoketinymce.js') ;
 	
 	$page->header();
+	
+	$isotope = new Isotope($page);
+	
+	$isotope->AddTile(new UploadWritingTile());
+	
+	//$page->html_minion->content->AddElement($isotope);
 }
 
-$form = new form_minion("write", "writing");
 
-global $privacyoptions;
-?>
+$tile = new UploadWritingTile();
+$tile->Serve();
 
-<div id="upload-photo-form">
-	<?php $form->header(); ?>
-	<p>Privacy:	<?php $form->select("privacy", $privacyoptions); ?></p>
-	<p>Title: <?php $form->text_field("title"); ?></p>
-	<p>Subtitle: <?php $form->text_field("subtitle"); ?></p>
-	<p>Copy:</p>
-	<p><?php $form->textarea_field("copy"); ?></p>
-	
-	<?php $form->submit_button("Submit Writing"); ?>
-</div>
-
-<?php 
-	$form->footer(); // it's not just cosmetic, it does session cleanup.
 if (!isset($_GET['ajax']))
-{
     $page->footer();
-}
-else
-{
-?>
-<script>
-$(function() {
-	tinymce.remove();
-	tinymce.init({selector:'textarea'});
-	
-	$('.grid').isotope('layout');
-});
-</script>
-<?php
-}
 ?>

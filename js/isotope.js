@@ -50,23 +50,23 @@ function updateFilterCounts()  {
 }
 
 var requestProcessing = false;
-function AddTile(name, url) {
+function AddTile(url) {
 
 	// do not allow multiple request to process at the same time.
 	if (requestProcessing == true)
 		return;
 
 	requestProcessing = true;
-	$newTile = $('<div id="'+ name +'" class="grid-item grid-item--large tile destructable"><h2>'+ name +'</h2><div align="center" class="cssload-fond"><div class="cssload-container-general"><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_1"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_2"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_3"></div></div><div class="cssload-internal"><div class="cssload-ballcolor cssload-ball_4"></div></div></div></div></div>');
-	$('.grid').prepend($newTile).isotope('reloadItems').isotope({ sortBy: 'original-order' });
-
-	$newTile.trigger('click');
+	
+	$newTile = $('.grid');
 	
 	var jqxhr = $.get(url + "?ajax", function() {
 		
 	})
 	.done(function(data) {
-		$newTile.append(data);
+		$newTile = $newTile.prepend(data);
+		$newTile.isotope('reloadItems').isotope({ sortBy: 'original-order' });
+		$newTile.trigger('click');
 	})
 	.fail(function() {
 		$newTile.append("Error ajax failed...")

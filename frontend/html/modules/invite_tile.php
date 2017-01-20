@@ -6,7 +6,7 @@ include($oe_modules['group']."lib/group.lib.php");
 class InviteTileProfile extends GridTile {
 
 	function __construct ($profile) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 
 		if ($profile->avatar == 0)
 			$this->AddContent("<img class='loading' onload='ImageLoaded(this)' src='/img/nophoto.php'>");

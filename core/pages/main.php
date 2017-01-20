@@ -65,8 +65,8 @@ else {
 	// add welcome register / login tile.
 	$welcome = new ElementTag("div");
 	$welcome->AddTag("t1", array("class" => ""))->AddContent("Welcome to Overlord. You've found the right website. Just keep looking.");
-	$welcome->AddTag("div", array("class" => "button", "style" => "width:50%;"))->AddTag("p")->AddContent("Get started!");
-	$welcome->AddTag("div", array("class" => "button", "style" => "width:50%"))->AddTag("p")->AddContent("Sign In");
+	$welcome->AddTag("a", array("href" => "/register"))->AddTag("div", array("class" => "button", "style" => "width:50%;"))->AddTag("p")->AddContent("Get started!");
+	$welcome->AddTag("a", array("href" => "/login"))->AddTag("div", array("class" => "button", "style" => "width:50%"))->AddTag("p")->AddContent("Sign In");
 	$tile = $isotope->AddTile($welcome, "welcome")->SetLarge();
 }
 

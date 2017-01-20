@@ -3,7 +3,7 @@
 class FriendsTile extends GridTile {
 
 	function __construct ($profile, $friends) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 		
 		$this->OpenBuffer();
 		?>

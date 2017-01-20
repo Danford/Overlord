@@ -3,7 +3,7 @@
 class GroupTile extends GridTile {
 
 	function __construct ($group) {
-		parent::__construct("group", GridOption::StampLeft);
+		parent::__construct("group", GridOption::StampLeft | GridOption::IgnoreClick);
 		
 		$this->OpenBuffer();
 ?>
