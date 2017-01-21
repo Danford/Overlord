@@ -1,9 +1,8 @@
 <?php
-	   
+
 include(oe_frontend."page_minion.php");
 include(oe_frontend."html/modules/isotope.php");
 include(oe_frontend."html/modules/upload_photo_tile.php");
-
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
@@ -17,12 +16,6 @@ if (!isset($_GET['ajax'])) {
 	}
 	
 	$page->header();
-	
-	$isotope = new Isotope($page);
-	
-	$isotope->AddTile(new UploadPhotoTile());
-	
-	$page->html_minion->content->AddElement($isotope);
 }
 
 $tile = new UploadPhotoTile();

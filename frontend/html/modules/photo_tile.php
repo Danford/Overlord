@@ -8,13 +8,10 @@ class PhotoTile extends GridTile {
 		$this->OpenBuffer();
 		
 		global $oepc;
-		
 ?>
-		<?php //<div class="grid-item tile photo" data-category="photo" data-date="<?php echo $date->getTimestamp(); ?/>"> ?>
-			<div id="title"><h3><?php echo $photo['title']; ?></h2></div>
-			<div id="main-img"><img class="loading" onload="ImageLoaded(this)" src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.thumb.png" /></div>
-			<div id="description"><p><?php echo $photo['description']; ?></p></div>
-		<?php //</div> ?>
+		<div id="title"><h3><?php echo $photo['title']; ?></h2></div>
+		<div id="main-img"><img class="loading" onload="ImageLoaded(this)" src="/<?php echo $oepc[0]['type']; ?>/<?php echo $oepc[0]['id']; ?>/photo/<?php echo $photo['id']; ?>.thumb.png" /></div>
+		<div id="description"><p><?php echo $photo['description']; ?></p></div>
 <?php
 		$this->CloseBuffer();
 	}

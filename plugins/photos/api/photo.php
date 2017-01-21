@@ -156,6 +156,5 @@ if( $apiCall == "uploadPhoto" ){
     $return = str_replace( '/edit', '', $_SERVER['HTTP_REFERER'] );
     $post->json_reply( 'SUCCESS' ) ;
 }
-
 header( 'Location: '.$return ) ;
 die();

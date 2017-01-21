@@ -41,6 +41,7 @@ include(oe_frontend."html/modules/details_tile.php");
 include(oe_frontend."html/modules/group_members_tile.php");
 include(oe_frontend."html/modules/about_me_tile.php");
 include(oe_frontend."html/modules/thread_tile.php");
+include(oe_frontend."html/modules/photo_tile.php");
 
 include($oe_modules['group']."conf/plugin.conf.php");
 
@@ -75,11 +76,10 @@ $threads = get_threads(0, 15);
 $threadsLen = count($threads);
 
 $loopLength = $photosLen;
-
 if ($loopLength < $writingsLen)
 	$loopLength = $writingsLen;
 
-if ($loopLength < $threads)
+if ($loopLength < $threadsLen)
 	$loopLength = $threadsLen;
 
 //$article = $content->AddTag("article", array("id" => "group-profile"));

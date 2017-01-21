@@ -3,6 +3,7 @@
 class UtilityTile extends GridTile {
 	function __construct ($categories) {
 		global $user;
+		global $oepc;
 		
 		parent::__construct(NULL, GridOption::StampTop | GridOption::IgnoreClick);
 		$this->OpenBuffer();
@@ -23,8 +24,8 @@ class UtilityTile extends GridTile {
 		</div>
 	</div>
 	<div>
-		<button class="button" onclick='AddTile("/profile/<?php echo $user->id; ?>/photo/upload/");'>Upload Photo</button>
-		<button class="button" onclick='AddTile("/profile/<?php echo $user->id; ?>/writing/write/");'>Create Writing</button>
+		<button class="button" onclick='AddTile("/<?php echo $oepc[0]['type']; ?>/<?php echo $oepc[0]['id']; ?>/photo/upload/");'>Upload Photo</button>
+		<button class="button" onclick='AddTile("/<?php echo $oepc[0]['type']; ?>/<?php echo $oepc[0]['id']; ?>/writing/write/");'>Create Writing</button>
 		<button class="button" onclick='AddTile("/group/create");'>Create Group</button>
 	</div>
 <?php

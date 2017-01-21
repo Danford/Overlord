@@ -231,14 +231,29 @@ function get_photos( $start = 0, $end = 9999, $album = 'all' ) {
     $db->query( $q." ORDER BY `timestamp` DESC LIMIT ".$start.", ".$end ) ;
     
     while( ( $photo = $db->assoc() ) != false ){
-        
-        if( $photo['privacy'] <= $accesslevel and ! $user->is_blocked( $photo['owner'] ) )
-        {
-            $photo["owner"] = new profile_minion($photo["owner"], true );
-            $response[] = $photo ;
-        }
+
+    	// bad hackky I'll revisit this with Cat.
+    	$hasPerms = false;
+    	if ($oepc[0]['type'] == 'group')
+    	{
+    		global $group;
+    		if ($photo['privacy'] <= $user->groupPermmisions[$group->id]) {
+    			$hasPerms = true;
+    		}
+    	}
+    	else if ($oepc[0]['type'] == 'profile')
+    	{
+    		if( $photo['privacy'] <= $accesslevel and ! $user->is_blocked( $photo['owner'] ) ) {
+    			$hasPerms = true;
+    		}
+    	}
+    	
+    	if ($hasPerms) {
+    		$photo["owner"] = new profile_minion($photo["owner"], true );
+    		$response[] = $photo ;
+    	}    	
     }
-    
+
     return $response ;
     
 }

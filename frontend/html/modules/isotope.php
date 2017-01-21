@@ -122,10 +122,12 @@ class GridTile extends ElementTag {
 	}
 	
 	function PrintImgHtml($userId, $imgId) {
+		global $oepc;
+		
 		if ($imgId == 0)
 			echo "<img class='loading' onload='ImageLoaded(this)' src='/images/noavatar.png'>";
 		else
-			echo "<img class='loading' onload='ImageLoaded(this)' src='/profile/". $userId ."/photo/". $imgId .".png'>";
+			echo "<img class='loading' onload='ImageLoaded(this)' src='/". $oepc[0]['type'] ."/". $oepc[0]['id'] ."/photo/". $imgId .".png'>";
 	}
 	
 	function get_words($sentence, $count = 10) {
