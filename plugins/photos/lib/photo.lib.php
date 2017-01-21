@@ -215,7 +215,7 @@ function get_photos( $start = 0, $end = 9999, $album = 'all' ) {
     }
     
     
-    $q = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`
+    $q = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id`
                     FROM ".$oepc[$tier]['photo']['view']."
                     WHERE ".build_api_where_string() ;
     
@@ -273,7 +273,7 @@ function get_photo_info( $photo_id ) {
     } else {
 
         
-        $q = "SELECT `id`,`owner`, `privacy`, `album`, `title`, `description`, `timestamp`
+        $q = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id`
                         FROM ".$oepc[$tier]['photo']['view']."
                         WHERE `module`='".$oepc[0]['type']."'
                           AND `module_id`='".$oepc[0]['id']."'" ;

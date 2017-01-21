@@ -444,20 +444,29 @@ class user_minion {
     function get_wall_content_photos() {	
     	global $db;
     	 
-    	$query = "SELECT * FROM `photo` WHERE `privacy` = 1 ";
+    	$query = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id` FROM `photo` WHERE `privacy` <= '1' ";
     	
     	if (count($this->friends) > 0) {
     		$query .= "OR (";
 
     		foreach ($this->friends as $id => $friend) {
-    			$query .= "(owner = ". $id ." AND privacy < 2) OR";
+    			$query .= "(`owner` = ". $id ." AND `privacy` <= '2') OR ";
     		}
-
     		$query = substr($query, 0, strlen($query) - 3);
-    		$query .= ")";
+    		$query .= ") ";
+    	}
+    	
+    	if (count($this->groups) > 0) {
+    		$query .= "OR (";
+    		
+    		foreach ($this->groups as $id => $group) {
+    			$query .= "(`module` = 'group' AND `module_item_id` = ". $id ." AND `privacy` <= '". $this->groupPermmisions[$id] ."') OR ";
+    		}
+    		$query = substr($query, 0, strlen($query) - 4);
+    		$query .= ") ";
     	}
     		
-    	$query .= " ORDER BY `timestamp` DESC";
+    	$query .= "ORDER BY `timestamp` DESC";
     	$db->query($query) ;
 
     	$photos = array();

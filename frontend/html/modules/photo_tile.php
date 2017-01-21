@@ -6,11 +6,10 @@ class PhotoTile extends GridTile {
 		$date = new DateTime($photo['timestamp']);
 		$this->AddField("data-date", $date->getTimestamp());
 		$this->OpenBuffer();
-		
-		global $oepc;
+				
 ?>
 		<div id="title"><h3><?php echo $photo['title']; ?></h2></div>
-		<div id="main-img"><img class="loading" onload="ImageLoaded(this)" src="/<?php echo $oepc[0]['type']; ?>/<?php echo $oepc[0]['id']; ?>/photo/<?php echo $photo['id']; ?>.thumb.png" /></div>
+		<div id="main-img"><img class="loading" onload="ImageLoaded(this)" src="/<?php echo $photo['module']; ?>/<?php echo $photo['module_item_id']; ?>/photo/<?php echo $photo['id']; ?>.thumb.png" /></div>
 		<div id="description"><p><?php echo $photo['description']; ?></p></div>
 <?php
 		$this->CloseBuffer();
