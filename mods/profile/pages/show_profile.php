@@ -19,15 +19,15 @@
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
 
-include(oe_frontend."html/modules/isotope.php");
-include(oe_frontend."html/modules/head_tile.php");
-include(oe_frontend."html/modules/details_tile.php");
-include(oe_frontend."html/modules/about_me_tile.php");
-include(oe_frontend."html/modules/writing_tile.php");
-include(oe_frontend."html/modules/photo_tile.php");
-include(oe_frontend."html/modules/group_tile.php");
-include(oe_frontend."html/modules/friends_tile.php");
-include(oe_frontend."html/modules/mututal_friends_tile.php");
+include(oe_isotope."isotope.php");
+include(oe_isotope."head_tile.php");
+include(oe_isotope."details_tile.php");
+include(oe_isotope."about_me_tile.php");
+include(oe_isotope."writing_tile.php");
+include(oe_isotope."photo_tile.php");
+include(oe_isotope."group_tile.php");
+include(oe_isotope."friends_tile.php");
+include(oe_isotope."mututal_friends_tile.php");
 
 include($oe_modules['profile']."lib/friends_api.php");
 include($oe_modules['profile']."conf/plugin.conf.php");
@@ -82,8 +82,12 @@ $groups = $profile->get_groups();
 $groupsLen = count($groups);
 
 $loopLength = $photosLen;
+
 if ($loopLength < $writingsLen)
 	$loopLength = $writingsLen;
+
+if ($loopLength < $groupsLen)
+	$loopLength = $groupsLen;
 
 $isotope = new Isotope($page);
 

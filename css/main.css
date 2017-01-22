@@ -311,6 +311,46 @@ input#Submit:active, input#x:active {
 /*																	*/
 /* 								Isotope Styles 						*/
 
+.tile, .tile img {
+	-webkit-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    -moz-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    -o-transition:width 300ms ease-in-out, height 300ms ease-in-out;
+    transition:width 300ms ease-in-out, height 300ms ease-in-out;
+}
+
+#config-button {
+	display: none;
+}
+
+#members .member {
+    width: 47.5%;
+    margin: 0.5%!important;
+    display: inline-block;
+}
+
+.tile.photo.stamp--focus #config-button, .tile.photo.stamp--focus #expand-button, .tile.photo.stamp--focus #close-button {
+	display: block;
+    width: 35px;
+    height: 35px;
+    float: right;
+    margin: 8px;
+}
+
+.tile.photo.stamp--focus #config-button
+{
+	background-image: url(/images/config-button.png);
+}
+
+.tile.photo.stamp--focus #expand-button
+{
+	background-image: url(/images/expand-button.png);
+}
+
+.tile.photo.stamp--focus #close-button
+{
+	background-image: url(/images/close-button.png);
+}
+
 .tile {
 	border: #ddd solid 1px;
     border-radius: 7px;
@@ -353,6 +393,10 @@ input#Submit:active, input#x:active {
 
 .grid-sizer--full, .grid-item--full {
 	width: 98%;
+}
+
+.grid-item--medium {
+	width: 28%;
 }
 
 .grid-item--large {
@@ -487,7 +531,7 @@ input#Submit:active, input#x:active {
 
 .tile form {
 	display: inline-block;
-	width: 50%;
+	width: 100%;
 }
 
 .tile #Submit {

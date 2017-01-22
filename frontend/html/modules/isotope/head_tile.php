@@ -11,7 +11,7 @@ class HeadGroupTile extends GridTile {
 ?>
 		<?php //<div class="stamp stamp--left tile"> ?>
 			<p id="name"><?php echo $group->name; ?></p>
-			<?php $this->PrintImgHtml($group->id, $group->avatar); ?>
+			<?php $this->PrintPhoto($group->avatar, "group", $group->id); ?>
 			<?php if ($group->check_membership($user->id) <= 1): ?>
 			<a href="edit"><div class="button">Edit Group</div></a>
 			<?php endif; ?>
@@ -33,7 +33,7 @@ class HeadProfileTile extends GridTile {
 ?>
 		<?php //<div class="stamp stamp--left tile"> ?>
 			<p id="name"><?php echo $profile->screen_name; ?></p>
-			<?php $this->PrintImgHtml($profile->id, $profile->avatar); ?>
+			<?php $this->PrintPhoto($profile->avatar, "profile", $profile->id); ?>
 			<?php $friendInteractions = new FriendInteractions($profile); ?>
 			<?php $friendInteractions->PrintUserInteractions(); ?>
 		<?php //</div> ?>

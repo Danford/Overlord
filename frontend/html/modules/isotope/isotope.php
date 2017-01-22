@@ -5,7 +5,7 @@ require_once(oe_frontend.'html/element_file.php');
 require_once(oe_frontend.'html/tags/content.php');
 require_once(oe_frontend.'html/tags/img.php');
 
-require_once(oe_frontend.'html/modules/utility_tile.php');
+require_once(oe_isotope.'utility_tile.php');
 
 class GridOption {	
 	const None = 0;
@@ -121,15 +121,14 @@ class GridTile extends ElementTag {
 		return $this->dataCategory;
 	}
 	
-	function PrintImgHtml($userId, $imgId) {
+	function PrintPhoto($photoId = 0, $module, $moduleId) {
 		global $oepc;
 		
-		if ($imgId == 0)
+		if ($photoId == 0)
 			echo "<img class='loading' onload='ImageLoaded(this)' src='/images/noavatar.png'>";
 		else
-			echo "<img class='loading' onload='ImageLoaded(this)' src='/". $oepc[0]['type'] ."/". $oepc[0]['id'] ."/photo/". $imgId .".png'>";
+			echo "<img class='loading' onload='ImageLoaded(this)' src='/". $module ."/". $moduleId ."/photo/". $photoId .".png'>";
 	}
-	
 	function get_words($sentence, $count = 10) {
 		return implode(' ', array_slice(explode(' ', $sentence), 0, $count));
 	}
@@ -151,7 +150,7 @@ class Isotope extends ElementTag {
  		$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
  		$page->js_minion->addFile(oe_js . "isotope.js", true);
  		
- 		$this->page->html_minion->header->AddContent($this->GetHeadScript());
+ 		$this->page->html_minion->head->AddContent($this->GetHeadScript());
  		
 
         $this->grid = new ElementTag("div", array("class" => "grid"));
@@ -210,8 +209,14 @@ class Isotope extends ElementTag {
 				$img.removeClass("loading");
 			$img.parent().find(".cssload-fond").css("display", "none");
 		
+			if ($img.width() / $img.height() > 1.6) {
+				if ($img.parent().parent().hasClass("grid-item")) {
+					$img.parent().parent().addClass("grid-item--medium");
+				}
+			}
+			
 			if (typeof $grid != "undefined")
-				$grid.isotope("layout");
+				$grid.delay(310).isotope("layout");
 		};
 		
 		</script>';

@@ -1,8 +1,10 @@
 <?php
 
 include(oe_frontend."page_minion.php");
-include(oe_frontend."html/modules/isotope.php");
-include(oe_frontend."html/modules/upload_photo_tile.php");
+
+include(oe_isotope."isotope.php");
+include(oe_isotope."upload_photo_tile.php");
+
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");
 
@@ -18,7 +20,11 @@ if (!isset($_GET['ajax'])) {
 	$page->header();
 }
 
-$tile = new UploadPhotoTile();
+if ($isEdit)
+	$tile = new UploadPhotoTile($photo);
+else 
+	$tile = new UploadPhotoTile();
+
 $tile->Serve();
 
 if (!isset($_GET['ajax']))

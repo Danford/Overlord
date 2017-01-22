@@ -130,15 +130,14 @@ class group_minion {
         
         $q = "SELECT `user`,`access` FROM `group_membership` WHERE `group`='".$this->id."'" ;
         
-        $output['owner'] = array( $this->owner ) ;
-        $output['admins'] = array() ;
-        $output['members'] = array() ;
+        $output = array();
+        
+        $output[$this->owner->id]['profile'] = $this->owner;
+        $output[$this->owner->id]['access'] = 3;
         
         if( $this->membership > 0 ){
         
-            if( $this->membership == 2 ){
-                $output['banned'] = array() ;
-            } else {
+            if( $this->membership < 2 ){
                 $q .= " AND `access` != 0" ;
             }
             
@@ -148,9 +147,10 @@ class group_minion {
                 
                 if( $person['access'] == 0 ){
                     
-                    $output['banned'][] = $db->get_assoc( "SELECT `user_id`,`screen_name` as `name` 
-                                                            FROM `user_profile` 
-                                                            WHERE `user_id`='".$person['user']."'" ) ;
+                	// this isn't needed for getting a list of members but we should make a function for getting banned users.
+                    //$output['banned'][] = $db->get_assoc( "SELECT `user_id`,`screen_name` as `name` 
+                    //                                        FROM `user_profile` 
+                    //                                        WHERE `user_id`='".$person['user']."'" ) ;
                     
                     
                 } else {
@@ -158,12 +158,8 @@ class group_minion {
                     $p = new profile_minion($person['user'], true ) ;
                     
                     if( $p->name != false ){
-                        
-                        if( $person['access'] == 1 ){
-                            $output['members'][] = $p ;
-                        } else {
-                            $output['admins'][] = $p ;
-                        }
+                        $output[$person['user']]['profile'] = $p ;
+                        $output[$person['user']]['access'] = $person['access'] ;
                     }
                 }
             }

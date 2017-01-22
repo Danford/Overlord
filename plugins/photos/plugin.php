@@ -45,7 +45,7 @@
     if( verify_number($uri[$pos] ) ){
 
 
-        $q = "SELECT `id`, `owner`,`privacy`, `title`, `description`, `timestamp` FROM `".$oepc[$tier]['photo']['view']."`
+        $q = "SELECT `id`, `owner`,`privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id` FROM `".$oepc[$tier]['photo']['view']."`
             WHERE `id`='".$uri[$pos]."' AND ".build_api_where_string() ;
                
         $photo = $db->get_assoc($q) ;

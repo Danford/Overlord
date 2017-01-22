@@ -49,8 +49,39 @@ function updateFilterCounts()  {
   });
 }
 
+// add css loading spinner after all tile images with the loading class
+function getImgLoadingHtml() {
+	return "<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>";
+}
+
+function CloseTile($tile) {
+	AddTile($tile.attr("data-url"), $tile);
+	
+	$newTile = $($tile.find('#orginal').html());
+	
+	$(this).parent().html($newTile);
+	
+	setTimeout(function(){
+		$('.grid').isotope('layout');
+	}, 310);
+}
+
+function EditPhoto($tile) {
+	if ($tile.parent().children("#edit").length <= 0) {
+		AddTile($tile.attr('data-url'), $tile.parent());
+	} else {
+		$tile.parent().addClass("edit");
+		$tile.parent().children("#edit").toggleClass("hidden");
+		$tile.parent().children("#orginal").toggleClass("hidden");
+	}
+
+	setTimeout(function(){
+		$('.grid').isotope('layout');
+	}, 310);
+}
+
 var requestProcessing = false;
-function AddTile(url) {
+function AddTile(url, $replaceTile) {
 
 	// do not allow multiple request to process at the same time.
 	if (requestProcessing == true)
@@ -58,18 +89,44 @@ function AddTile(url) {
 
 	requestProcessing = true;
 	
-	$newTile = $('.grid');
+	$grid = $('.grid');
 	
 	var jqxhr = $.get(url + "?ajax", function() {
 		
 	})
 	.done(function(data) {
-		$newTile = $newTile.prepend(data);
-		$newTile.isotope('reloadItems').isotope({ sortBy: 'original-order' });
+		if ($replaceTile != undefined) {
+			$tile = $($($.parseHTML(data)).html());
+			$replaceTile.html($tile);
+			
+			$('.tile #config-button').click(function () {
+				EditPhoto($(this));
+			});
+			
+			$('.tile #close-button').click(function () {
+				CloseTile($(this).parent());
+			});
+			
+			$tile.parent().attr("data-url", url.replace("/edit/", ""));
+
+			$(this).find('.loading').parent().append(getImgLoadingHtml());
+			
+			$newTile = $replaceTile;
+			
+		} else {
+			$newTile = $grid.prepend(data);
+		}
+
+		$grid.isotope('layout');
 		$newTile.trigger('click');
 	})
 	.fail(function() {
-		$newTile.append("Error ajax failed...")
+		var tileFail = "<p>Error ajax failed...</p>";
+		if ($replaceTile != undefined) {
+			$newTile = $replaceTile.html(tileFail)
+		} else {
+			$newTile = $grid.prepend(tileFail);
+		}
 	})
 	.always(function() {
 		$newTile.find('.cssload-fond').toggleClass('hidden');
@@ -83,6 +140,8 @@ function FillTile(response) {
 	$newTile.append(response);
 }
 
+function ReplaceTileWith() {}
+
 $(function() {
 	$grid = $('.grid').isotope({
 		// options
@@ -95,11 +154,7 @@ $(function() {
 	});
 
 	
-	// add css loading spinner after all tile images with the loading class
-	function getImgLoadingHtml() {
-		return "<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>";
-	}
-	$('.tile img.loading').append(getImgLoadingHtml());
+	$('img.loading').parent().append(getImgLoadingHtml());
 
 	// store filter for each group
 	var filters = {};
@@ -107,7 +162,8 @@ $(function() {
 	updateFilterCounts();
 	
 	//recalculate grid layout on image load
-	$grid.imagesLoaded().progress( function () {
+	$grid.imagesLoaded().progress( function ($img) {
+		
 		$grid.isotope('layout');
 	});
 	
@@ -141,6 +197,7 @@ $(function() {
 	});
 	
 	function TileToggle($tile) {
+		
 		if ($tile.hasClass('ignore-click'))
 			return;
 		
@@ -148,10 +205,6 @@ $(function() {
 		$tile.toggleClass('grid-item');
 		$tile.toggleClass('stamp');
 		$tile.toggleClass('stamp--focus');
-		
-		if (!$tile.hasClass("selected")) {
-			$tile.removeClass('stamp--full-screen');
-		}
 		
 		if ($tile.hasClass('stamp')) {
 			$grid.isotope("stamp", $tile);
@@ -199,13 +252,6 @@ $(function() {
 	}
 	
 	$('.tile').click(function () {
-		
-		if ($(this).hasClass('selected')) {
-			$(this).toggleClass('stamp--full-screen');
-			$grid.isotope('layout');
-			return;
-		}
-		
 		if ($selectedTile != null) {
 			if ($selectedTile.hasClass('destructable')) {
 				$selectedTile.remove();
@@ -213,11 +259,32 @@ $(function() {
 				TileToggle($selectedTile);
 			}
 		}
-	
+		
 		TileToggle($(this));	
 	
-		$grid.isotope('layout');
-	
+		setTimeout(function(){
+			$grid.isotope('layout');
+		}, 310);
+		
 		$selectedTile = $(this);
+	});
+	
+	
+	
+	$('.tile #expand-button').click(function () {
+		if ($(this).parent().hasClass('selected')) {
+			$(this).parent().toggleClass('stamp--full-screen');
+			setTimeout(function(){
+				$grid.isotope('layout');
+			}, 310);
+			return;
+		}
+	});
+	
+	$('.tile #config-button').click(function () {
+		EditPhoto($(this));
+	});
+	$('.tile #close-button').click(function () {
+		CloseTile($(this).parent());
 	});
 });

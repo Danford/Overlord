@@ -1,10 +1,10 @@
 <?php
 	   
 include(oe_frontend."page_minion.php");
-include(oe_frontend."html/modules/isotope.php");
-include(oe_frontend."html/modules/invite_tile.php");
-include(oe_frontend."html/modules/photo_tile.php");
-include(oe_frontend."html/modules/writing_tile.php");
+include(oe_isotope."isotope.php");
+include(oe_isotope."invite_tile.php");
+include(oe_isotope."photo_tile.php");
+include(oe_isotope."writing_tile.php");
 
 include($oe_plugins['photo']."conf/conf.php");
 include($oe_plugins['photo']."lib/photo.lib.php");

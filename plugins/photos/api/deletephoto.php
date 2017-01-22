@@ -4,8 +4,8 @@
     
 $itemAvatar = $db->get_assoc( "SELECT `owner`,`avatar`, `file_key`
                                 FROM `".$oepc[$tier]['photo']['avatarView']."` , `".$oepc[$tier]['photo']['view']."`
-                                WHERE `".$oepc[$tier]['photo']['avatarView']."`.`id`='".$oepc[$tier]['id']."'
-                                AND `".$oepc[$tier]['photo']['avatarView']."`.`id` = ".$oepc[$tier]['photo']['view']."`.`id`" ) ;
+                                WHERE `".$oepc[$tier]['photo']['avatarView']."`.`user_id`='".$oepc[$tier]['id']."'
+                                AND `".$oepc[$tier]['photo']['avatarView']."`.`avatar` = `".$oepc[$tier]['photo']['view']."`.`id`" ) ;
 
 if( $itemAvatar == false or ( ! $oepc[$tier]['admin'] and $itemAvatar['owner'] != $user->id()) ){
     $post->json_reply("FAIL") ;
@@ -42,15 +42,14 @@ if( ! isset( $filekey ) ){
 
 
 
-
 $db->update( "DELETE FROM `".$oepc[$tier]['photo']['table']."` WHERE `id`='".$_POST['photo_id']."'" );
 
-unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$filekey.".png"  );
-unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$filekey.".thumb.png"  );
+@unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$filekey.".png"  );
+@unlink( $oepc[$tier]['path'].$oepc[$tier]['type'].".".$oepc[$tier]['type'].".".$filekey.".thumb.png"  );
 
-$post->reply( "SUCCESS" );
+//$post->reply( "SUCCESS" );
 
-header( "Location:  ".preg_replace( $_POST['photo_id'].".png", "", $_SERVER['HTTP_REFERER'])) ;
+header( "Location: ".$_SERVER['HTTP_REFERER']) ;
 
 
 

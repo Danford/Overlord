@@ -11,8 +11,8 @@
  * 
  */
 include(oe_frontend."page_minion.php");
-include(oe_frontend."html/modules/isotope.php");
-include(oe_frontend."html/modules/add_writing_tile.php");
+include(oe_isotope."isotope.php");
+include(oe_isotope."add_writing_tile.php");
 
 
 if (!isset($_GET['ajax']))
@@ -23,12 +23,6 @@ if (!isset($_GET['ajax']))
 	$page->addjs( '/js/invoketinymce.js') ;
 	
 	$page->header();
-	
-	$isotope = new Isotope($page);
-	
-	$isotope->AddTile(new UploadWritingTile());
-	
-	//$page->html_minion->content->AddElement($isotope);
 }
 
 

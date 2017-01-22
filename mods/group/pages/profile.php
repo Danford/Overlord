@@ -35,13 +35,13 @@
 
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
-include(oe_frontend."html/modules/isotope.php");
-include(oe_frontend."html/modules/head_tile.php");
-include(oe_frontend."html/modules/details_tile.php");
-include(oe_frontend."html/modules/group_members_tile.php");
-include(oe_frontend."html/modules/about_me_tile.php");
-include(oe_frontend."html/modules/thread_tile.php");
-include(oe_frontend."html/modules/photo_tile.php");
+include(oe_isotope."isotope.php");
+include(oe_isotope."head_tile.php");
+include(oe_isotope."details_tile.php");
+include(oe_isotope."group_members_tile.php");
+include(oe_isotope."about_me_tile.php");
+include(oe_isotope."thread_tile.php");
+include(oe_isotope."photo_tile.php");
 
 include($oe_modules['group']."conf/plugin.conf.php");
 
@@ -64,7 +64,7 @@ $page->addjs(oe_js . "isotope.js", true);
 $page->addjs(oe_js . "tinymce/tinymce.min.js");
 $page->addjs(oe_js . "invoketinymce.js");
 
-$memberGroups = $group->get_members(0, 8);
+$memeberAccess = $group->get_members(0, 8);
 
 $photos = get_photos(0, 15);
 $photosLen = count($photos);
@@ -84,13 +84,12 @@ if ($loopLength < $threadsLen)
 
 //$article = $content->AddTag("article", array("id" => "group-profile"));
 $isotope = new Isotope($page);
-
 $isotope->AddTile(new HeadGroupTile($group));
 $isotope->AddTile(new DetailsGroupTile($group));
 
-$isotope->AddTile(new GroupMembersTile($group, $memberGroups));
+$isotope->AddTile(new GroupMembersTile($group, $memeberAccess));
 
-$isotope->AddTile(new AboutMeGroupTile($group, $members['owner'][0]->id == $user->id));
+$isotope->AddTile(new AboutMeGroupTile($group, $memeberAccess[$user->id]['access'] == 3));
 
 for ($i = 0; $i < $loopLength; $i++) {
 	if ($i < $photosLen) {

@@ -90,17 +90,23 @@ class profile_minion {
     }
     
     function profile_picture(){
-            return siteurl."profile/".$this->id."/photo/".$this->avatar.".profile.png" ;
+    	if ($this->avatar != NULL)
+           	return siteurl."profile/".$this->id."/photo/".$this->avatar.".profile.png" ;
+    	else 
+    		return siteurl."/images/noavatar.png";
     }
     
     function profile_thumbnail(){
-            return siteurl."profile/".$this->id."/photo/".$this->avatar.".profileThumb.png" ;
+    	if ($this->avatar != NULL)
+           	return siteurl."profile/".$this->id."/photo/".$this->avatar.".profileThumb.png" ;
+    	else 
+    		return siteurl."/images/noavatar.png";
     }
 
     function get_friends_as_array( $offset = 0, $limit = 99999999, $order='screen_name' ){
         
-            // minimal info, just sn, avatar, age, contact pref, city, and state
-            // for userboxes and the friends page
+        // minimal info, just sn, avatar, age, contact pref, city, and state
+        // for userboxes and the friends page
         
         global $user ;
         global $db ;

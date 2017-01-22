@@ -36,16 +36,20 @@
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
 
-$page = new page_minion("Upload Photo");
+include(oe_isotope."isotope.php");
+include(oe_isotope."photo_tile.php");
 
-$page->header();
+if (!isset($_GET['ajax']))
+	$page = new page_minion("Upload Photo");
+
+if (!isset($_GET['ajax']))
+	$page->header();
+
+$photoTile = new PhotoTile($photo);
+$photoTile->Serve();
+
+if (!isset($_GET['ajax']))
+	$page->footer();
+
 
 ?>
-<article id="photo">
-	<div id="title"><h2><?php echo $photo['title']; ?></h2></div>
-	<div id="photo">
-		<img src="/profile/<?php echo $photo['owner']->id; ?>/photo/<?php echo $photo['id']; ?>.png" />
-	</div>
-	<div id="description"><?php echo $photo['description']; ?></div>
-</article>
-<?php $page->footer(); ?>

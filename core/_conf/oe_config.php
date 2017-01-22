@@ -16,10 +16,11 @@ define( 'oe_config', oe_core.'_conf/' ) ;
 define( 'oe_includes', oe_core.'includes/' ) ;
 define( 'oe_css', httproot.'css/' ) ;
 define( 'oe_js', httproot.'js/' ) ;
-define( 'oe_log', oe_root."oe_logs/") ; 
-define( "oe_images", oe_root."oe_images/");
+define( 'oe_log', oe_root."oe_logs/" ) ;
+define( "oe_images", oe_root."oe_images/" ) ;
 
 define( 'oe_frontend', oe_root.'frontend/' ) ;
+define( 'oe_isotope', oe_frontend."html/modules/isotope/" ) ;
 
 
 // the number of login failures before an account is locked.
