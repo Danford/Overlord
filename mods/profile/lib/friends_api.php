@@ -86,15 +86,15 @@ class FriendInteractions {
 		if (!isset($friend))
 			$friend = $this->profile;
 	
-			if ($user->id != $friend->id) {
-				if (!$user->is_friend($friend->id)) {
-					if ($this->profile->friend_request_status() == "outgoing") {
-						$this->CancelRequest();
-					} else {
-						$this->AddFriend();
-					}
+		if ($user->id != $friend->id) {
+			if (!$user->is_friend($friend->id)) {
+				if ($this->profile->friend_request_status() == "outgoing") {
+					$this->CancelRequest();
+				} else {
+					$this->AddFriend();
 				}
 			}
+		}
 	}
 }
 

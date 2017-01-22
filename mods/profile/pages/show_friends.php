@@ -20,6 +20,10 @@
 
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
+
+include(oe_isotope."isotope.php");
+include(oe_isotope."friends_tile.php");
+
 include($oe_modules['profile']."lib/friends_api.php");
 include($oe_modules['profile']."conf/plugin.conf.php");
 
@@ -41,37 +45,12 @@ foreach ($friends as $friend)
 		$mutualFriends[] = $friend;
 }
 
-?>
+$friendsTile = new FriendsTile($profile, $friends);
+$friendsTile->RemoveStamp();
+$friendsTile->SetXLarge();
+$friendsTile->Serve();
 
-<article id="friends">
-	<div class="grid">
-		<div class="grid-sizer"></div>
-		<?php if ($user->id != $profile->id) : ?>
-		<?php foreach ($mutualFriends as $friend) : ?>
-		<a href="/profile/<?php echo $friend->id; ?>/">
-			<div class="grid-item mutual-friend tile">
-				<div class="name">
-					<?php echo $friend->screen_name; ?>
-				</div>
-				<img src="<?php echo $friend->profile_picture(); ?>"/>
-				<?php PrintFriendlistInteractions($friend); ?>
-			</div>
-		</a>		
-		<?php endforeach; ?>
-		<?php endif; ?>
-		<?php foreach ($friends as $friend) : ?>
-		<a href="/profile/<?php echo $friend->id; ?>/">
-			<div class="grid-item friend tile">
-				<div class="name">
-					<?php echo $friend->screen_name; ?>
-				</div>
-				<img src="<?php echo $friend->profile_picture(); ?>"/>
-				<?php $fi = new FriendInteractions($friend); ?>
-				<?php $fi->PrintUserInteractions($friend); ?>
-			</div>
-		</a>		
-		<?php endforeach; ?>
-	</div>
-</article>
-<?php $page->addjs("/js/isotope.js", true); ?>
-<?php $page->footer(); ?>
+$page->addjs("/js/overlord.js", true);
+$page->footer();
+
+?>

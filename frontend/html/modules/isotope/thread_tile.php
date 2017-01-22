@@ -2,20 +2,23 @@
 
 class ThreadTile extends GridTile {
 
-	function __construct ($group, $thread) {
+	function __construct ($thread) {
 		parent::__construct("thread", GridOption::Large);
 		$date = new DateTime($thread['edited']);
 		$this->AddField("data-date", $date->getTimestamp());
 		$this->OpenBuffer();
-		
 ?>
-		<a href="/group/<? echo $group->id; ?>/thread/<?php echo $thread['id']; ?>/">
-			<?php //<div class="grid-item--large grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?/>"> ?>
-				<div id="title"><h2><?php echo $thread['title']; ?></h2></div>
-				<div id="date-updated"><?php echo $thread['edited']; ?></div>
-				<div id="excerpt"><?php echo $thread['detail']; ?></div>
-			<?php //</div> ?>
-		</a>
+		<div id="comment-owner" style="float: left;">
+			<h2><?php echo $thread['title']; ?></h2>
+			<p><?php echo $thread['owner']->name; ?></p>
+			<img src="<?php echo $thread['owner']->profile_thumbnail(); ?>"/>
+			<p>City: <?php echo $thread['owner']->city_name(); ?></p>
+			<?php if ($thread['owner']->show_age == 1) : ?>
+			<p>Age: <?php echo $thread['owner']->age; ?>
+			<?php endif; ?>
+		</div>
+		<div id="date-updated"><?php echo $thread['edited']; ?></div>
+		<div id="comment"><?php echo $thread['detail']; ?></div>
 <?php
 		$this->CloseBuffer();
 	}

@@ -5,7 +5,7 @@ switch( $apiCall ){
     
     case "write":
     case "edit":
-                
+
         if( $apiCall == "write" and $oepc[0]['contributor'] != true ){
             $post->json_reply("FAIL") ;
             die('1') ;

@@ -61,6 +61,10 @@
 include(oe_lib."form_minion.php");
 include(oe_frontend."page_minion.php");
 
+include(oe_isotope."isotope.php");
+include(oe_isotope."thread_tile.php");
+include(oe_isotope."comment_tile.php");
+
 // without this oepc is wrong and comments show the same for every thread.
 // I thought this should be getting automatically called but I have no idea.
 // where that code is located.
@@ -81,51 +85,18 @@ $page->addjs('/js/tinymce/tinymce.min.js');
 $page->addjs('/js/invoketinymce.js');
 
 $comments = get_comments();
-?>
-<article id="thread">
-	<div class="grid">
-		<div class="grid-sizer--full grid-sizer"></div>
-		
-		<?php $date = new DateTime($thread['edited']); ?>
-		<div class="grid-item--full grid-item tile" data-updated="<?php echo $date->getTimestamp(); ?>">	
-			<div id="comment-owner" style="float: left;">
-				<p><?php echo $thread['owner']->name; ?></p>
-				<img src="/profile/<?php echo $thread['owner']->id; ?>/photo/thumb/<?php echo $thread['owner']->avatar; ?>.png"/>
-				<p>City: <?php echo $thread['owner']->city_name(); ?></p>
-				<?php if ($thread['owner']->show_age == 1) : ?>
-				<p>Age: <?php echo $thread['owner']->age; ?>
-				<?php endif; ?>
-			</div>
-			<div id="date-updated"><?php echo $thread['edited']; ?></div>
-			<div id="comment"><?php echo $thread['detail']; ?></div>
-		</div>
-		
-		<?php foreach ($comments as $comment) : ?>
-		<?php $date = new DateTime($comment['edited']); ?>
-		<div class="grid-item grid-item--full tile" data-updated="<?php echo $date->getTimestamp(); ?>">
-			<div id="comment-owner" style="float: left;">
-				<p><?php echo $comment['owner']->name; ?></p>
-				<img src="/profile/<?php echo $comment['owner']->id; ?>/photo/thumb/<?php echo $comment['owner']->avatar; ?>.png"/>
-				<p>City: <?php echo $thread['owner']->city_name(); ?></p>
-				<?php if ($thread['owner']->show_age == 1) : ?>
-				<p>Age: <?php echo $thread['owner']->age; ?>
-				<?php endif; ?>
-			</div>
-			<div id="date-updated"><?php echo $comment['edited']; ?></div>
-			<div id="comment"><?php echo $comment['comment']; ?></div>
-		</div>
-		<?php endforeach; ?>
-		
-		<div class="grid-item--full grid-item tile" style="height: 250px;">
-			<?php $form = new form_minion("addComment", "comment"); ?>
-			<?php $form->header(); ?>
-			<?php $form->textarea_field("comment"); ?>
-			<?php $form->submit_button("Submit Comment"); ?>
-			<?php $form->footer(); ?>
 
-		</div>
-	</div>
-</article>
+$isotope = new Isotope($page);
+
+$isotope->AddTile(new ThreadTile($thread));
+
+foreach ($comments as $comment)
+	$isotope->AddTile(new CommentTile($comment));
+
+$page->footer();
+
+?>
+
 <script>
 tinymce.init({
     setup : function(ed) {
@@ -135,4 +106,3 @@ tinymce.init({
     }
 });
 </script>
-<?php $page->footer(); ?>

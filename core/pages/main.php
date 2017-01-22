@@ -70,7 +70,5 @@ else {
 	$tile = $isotope->AddTile($welcome, "welcome")->SetLarge();
 }
 
-$page->html_minion->content->AddElement($isotope);
-
 $page->footer(); 
 ?>

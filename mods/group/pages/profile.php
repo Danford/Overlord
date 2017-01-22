@@ -101,12 +101,8 @@ for ($i = 0; $i < $loopLength; $i++) {
 	}
 	
 	if ($i < $threadsLen) {
-		$isotope->AddTile(new ThreadTile($group, $threads[$i]));
+		$isotope->AddTile(new ThreadTile($threads[$i]));
 	}
 }
-
-
-$page->html_minion->content->AddElement($isotope);
-//$article->AddElement($isotope);
 
 $page->footer();

@@ -56,24 +56,34 @@ function getImgLoadingHtml() {
 
 function CloseTile($tile) {
 	AddTile($tile.attr("data-url"), $tile);
-	
-	$newTile = $($tile.find('#orginal').html());
-	
-	$(this).parent().html($newTile);
-	
-	setTimeout(function(){
-		$('.grid').isotope('layout');
-	}, 310);
 }
 
 function EditPhoto($tile) {
-	if ($tile.parent().children("#edit").length <= 0) {
-		AddTile($tile.attr('data-url'), $tile.parent());
+	if ($tile.children("#edit").length <= 0) {
+		AddTile($tile.find("#config-button").attr('data-url'), $tile);
 	} else {
-		$tile.parent().addClass("edit");
-		$tile.parent().children("#edit").toggleClass("hidden");
-		$tile.parent().children("#orginal").toggleClass("hidden");
+		$tile.addClass("edit");
+		$tile.children("#edit").toggleClass("hidden");
+		$tile.children("#orginal").toggleClass("hidden");
 	}
+}
+
+function EditWriting($tile) {
+	if ($tile.children("#edit").length <= 0) {
+		AddTile($tile.find('#config-button').attr('data-url'), $tile);
+	} else {
+		$tile.addClass("edit");
+		$tile.children("#edit").toggleClass("hidden");
+		$tile.children("#orginal").toggleClass("hidden");
+	}
+}
+
+function ClickConfigButton($button) {
+	$tile = $button.parent();
+	if ($tile.hasClass('photo'))
+		EditPhoto($tile);
+	else if ($tile.hasClass('writing'))
+		EditWriting($tile);
 
 	setTimeout(function(){
 		$('.grid').isotope('layout');
@@ -100,39 +110,45 @@ function AddTile(url, $replaceTile) {
 			$replaceTile.html($tile);
 			
 			$('.tile #config-button').click(function () {
-				EditPhoto($(this));
+				ClickConfigButton($(this));
 			});
 			
 			$('.tile #close-button').click(function () {
 				CloseTile($(this).parent());
 			});
 			
-			$tile.parent().attr("data-url", url.replace("/edit/", ""));
+			$replaceTile.attr("data-url", url.replace("/edit/", ""));
 
 			$(this).find('.loading').parent().append(getImgLoadingHtml());
 			
 			$newTile = $replaceTile;
 			
 		} else {
-			$newTile = $grid.prepend(data);
+			$newTile = $(data);
+			$grid.prepend($newTile);
 		}
 
-		$grid.isotope('layout');
 		$newTile.trigger('click');
 	})
 	.fail(function() {
-		var tileFail = "<p>Error ajax failed...</p>";
+		var tileFail = "<p>Error ajax failed... Url: " + url + "</p>";
+		
 		if ($replaceTile != undefined) {
-			$newTile = $replaceTile.html(tileFail)
+			$replaceTile.prepend(tileFail);
 		} else {
-			$newTile = $grid.prepend(tileFail);
+			$newTile = $("<div class='grid-item tile error'>" + tileFail + "</div>");
+			$grid.prepend($newTile);
 		}
 	})
 	.always(function() {
 		$newTile.find('.cssload-fond').toggleClass('hidden');
+		$grid.isotope('reloadItems').isotope({ sortBy: 'original-order' });
 		$grid.isotope('layout');
 		$selectedTile = $newTile;
 		requestProcessing = false;
+				
+		tinymce.remove();
+    	tinymce.init({selector:'textarea'});
 	});
 }
 
@@ -235,7 +251,7 @@ $(function() {
 				
 		} else {
 			$grid.isotope("unstamp", $tile);
-			
+
 			$tile.find('#main-img img').removeClass("hidden");
 			$tile.find('#full-img').addClass("hidden");
 		}
@@ -282,9 +298,25 @@ $(function() {
 	});
 	
 	$('.tile #config-button').click(function () {
-		EditPhoto($(this));
+		ClickConfigButton($(this));
 	});
+	
 	$('.tile #close-button').click(function () {
 		CloseTile($(this).parent());
+	});
+	
+	$('.tile .profile').mouseenter(function () {
+		var pos = $(this).offset();
+		
+		$newFriendDetailTile = $(this).find('#details').clone(true);
+		$newFriendDetailTile.css("left", pos.left);
+		$newFriendDetailTile.css("top", pos.top);
+		$newFriendDetailTile.toggleClass("hidden");
+		
+		$newFriendDetailTile.mouseleave(function () {
+			$(this).remove();
+		});
+		
+		$(document).find('content').prepend($newFriendDetailTile);
 	});
 });

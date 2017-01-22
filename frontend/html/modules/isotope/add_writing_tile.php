@@ -31,32 +31,24 @@ class UploadWritingTile extends GridTile {
 		$this->OpenBuffer();
 		?>
 		
-		<div id="writing-form">
-			<?php $form->header(); ?>
-			<p>Privacy:	<?php $form->select("privacy", $privacyoptions); ?></p>
-			<p>Title: <?php $form->text_field("title"); ?></p>
-			<p>Subtitle: <?php $form->text_field("subtitle"); ?></p>
-			<p>Copy:</p>
-			<p><?php $form->textarea_field("copy"); ?></p>
-			
-			<?php $form->submit_button("Submit Writing"); ?>
-		</div>
-
-		<?php 
-					
-		$form->footer(); // it's not just cosmetic, it does session cleanup.
+		<?php if (isset($writing)) : ?>
+		<div id="close-button"></div>
+		<div id="expand-button"></div>
+		<?php endif; ?>
+		<h2><?php echo $pagetitle; ?></h2>
+		<?php $form->header(); ?>
+		<p>Privacy:	<?php $form->select("privacy", $privacyoptions); ?></p>
+		<p>Title: <?php $form->text_field("title"); ?></p>
+		<p>Subtitle: <?php $form->text_field("subtitle"); ?></p>
+		<p>Copy:</p>
+		<p><?php $form->textarea_field("copy"); ?></p>
 		
+		<?php $form->submit_button("Submit Writing"); ?>
+	    <?php $form->footer(); ?>
+		<?php 		
 		$this->CloseBuffer();
 		
 		
-		//$this->AddContent($this->GetFootScript());
-	}
-		
-	function GetFootScript() {
-		
-		$script = "";
-		
-		return $script;
 	}
 }
 ?>

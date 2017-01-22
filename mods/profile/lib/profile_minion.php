@@ -100,7 +100,14 @@ class profile_minion {
     	if ($this->avatar != NULL)
            	return siteurl."profile/".$this->id."/photo/".$this->avatar.".profileThumb.png" ;
     	else 
-    		return siteurl."/images/noavatar.png";
+    		return siteurl."images/noavatar.png";
+    }
+    
+    function thumbnail(){
+    	if ($this->avatar != NULL)
+    		return siteurl."profile/".$this->id."/photo/".$this->avatar.".thumb.png" ;
+    		else
+    			return siteurl."images/noavatar.png";
     }
 
     function get_friends_as_array( $offset = 0, $limit = 99999999, $order='screen_name' ){

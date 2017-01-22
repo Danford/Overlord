@@ -7,6 +7,17 @@ class UtilityTile extends GridTile {
 		
 		parent::__construct(NULL, GridOption::StampTop | GridOption::IgnoreClick);
 		$this->OpenBuffer();
+		
+		if (isset($oepc[0]['type']))
+			$type = $oepc[0]['type'];
+		else
+			$type = "profile";
+		
+		if (isset($oepc[0]['id']))
+			$id = $oepc[0]['id'];
+		else
+			$id = $user->id;
+		
 ?>
 		<div class="ui-group filters">
 		<div class="button-group js-radio-button-group" data-filter-group="category">
@@ -24,9 +35,13 @@ class UtilityTile extends GridTile {
 		</div>
 	</div>
 	<div>
-		<button class="button" onclick='AddTile("/<?php echo $oepc[0]['type']; ?>/<?php echo $oepc[0]['id']; ?>/photo/upload/");'>Upload Photo</button>
-		<button class="button" onclick='AddTile("/<?php echo $oepc[0]['type']; ?>/<?php echo $oepc[0]['id']; ?>/writing/write/");'>Create Writing</button>
+		<button class="button" onclick='AddTile("/<?php echo $type; ?>/<?php echo $id; ?>/photo/upload/");'>Upload Photo</button>
+		<button class="button" onclick='AddTile("/<?php echo $type; ?>/<?php echo $id; ?>/writing/write/");'>Create Writing</button>
+		<?php if ($oepc[0]['type'] != "group") : ?>
 		<button class="button" onclick='AddTile("/group/create");'>Create Group</button>
+		<?php else :?>
+		<button class="button" onclick='AddTile("/group/<?php echo $id; ?>/thread/");'>Create Thread</button>
+		<?php endif; ?>
 	</div>
 <?php
 		$this->CloseBuffer();

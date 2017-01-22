@@ -20,17 +20,24 @@
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
 
-$page = new page_minion("Writing - ".$writing['title'].' - '.$writing['subtitle']);
+include(oe_isotope."isotope.php");
+include(oe_isotope."writing_tile.php");
 
-$page->header();
+if (!isset($_GET['ajax'])) {
+	$page = new page_minion("View Writing");
+	$page->header();
 
-?>
-<article id="writing">
-	<div id="title"><h2><?php echo $writing['title']; ?></h2></div>
-	<div id="subtitle"><h2><?php echo $writing['subtitle']; ?></h2></div>
-	<div id="body">
-		<?php echo $writing['copy']; ?>
-	</div>
-	<div id="writen-on">Writen On: <?php echo $writing['timestamp']; ?></div>
-</article>
-<?php $page->footer(); ?>
+	$isotope = new Isotope($page);
+}
+
+$writingTile = new WritingTile($writing);
+
+
+if (!isset($_GET['ajax'])) {
+	$writingTile->SetFullscreen();
+	$isotope->AddTile($writingTile, "photo");
+
+	$page->footer();
+}
+else
+	$writingTile->Serve();

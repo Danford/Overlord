@@ -39,17 +39,24 @@ include(oe_lib."form_minion.php");
 include(oe_isotope."isotope.php");
 include(oe_isotope."photo_tile.php");
 
-if (!isset($_GET['ajax']))
+if (!isset($_GET['ajax'])) {
 	$page = new page_minion("Upload Photo");
-
-if (!isset($_GET['ajax']))
 	$page->header();
 
-$photoTile = new PhotoTile($photo);
-$photoTile->Serve();
+	$isotope = new Isotope($page);
+}
 
-if (!isset($_GET['ajax']))
+$photoTile = new PhotoTile($photo, false);
+$photoTile->SetFullscreen();
+
+
+if (!isset($_GET['ajax'])) {
+	$isotope->AddTile($photoTile, "photo");
+	
 	$page->footer();
+}
+else
+	$photoTile->Serve();
 
 
 ?>

@@ -18,6 +18,9 @@
 include(oe_frontend."page_minion.php");
 include(oe_lib."form_minion.php");
 
+include(oe_isotope."isotope.php");
+include(oe_isotope."create_group_tile.php");
+
 if (!isset($_GET['ajax']))
 {
 	$page = new page_minion("Create Group");
@@ -31,22 +34,12 @@ if (!isset($_GET['ajax']))
 $form = new form_minion("create", "group");
 
 global $privacyoptions;
-?>
 
-<div id="create-group-form">
-	<?php $form->header(); ?>
-	<p>Name: <?php $form->text_field("name"); ?></p>
-	<p>Description: <?php $form->text_field("short"); ?></p>
-	<p>Detail:</p>
-	<p><?php $form->textarea_field("detail"); ?></p>
-	<p>Privacy:	<?php $form->select("privacy", $privacyoptions); ?></p>
-	
-	<p>City: Todo</p>
-	<?php $form->submit_button("Create Group"); ?>
-</div>
+$createGroupTile = new CreateGroupTile();
+$createGroupTile->Serve();
 
-<?php 
-	$form->footer(); // it's not just cosmetic, it does session cleanup.
+$form->footer();
+
 if (!isset($_GET['ajax']))
 {
     $page->footer();

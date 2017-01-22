@@ -4,18 +4,6 @@ class GroupTile extends GridTile {
 
 	function __construct ($group) {
 		parent::__construct("group", GridOption::StampLeft | GridOption::IgnoreClick);
-		
-		global $db;
-		global $oepc;
-		global $tier;
-		
-		$q = "SELECT `id`, `owner`,`privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id` FROM `".$oepc[$tier]['photo']['view']."`
-            WHERE `id`='".$group->avatar."'";
-		 
-		$photo = $db->get_assoc($q) ;
-		
-		if( $photo == false )
-			echo "Error no photo.";
 				
 		$this->OpenBuffer();
 ?>

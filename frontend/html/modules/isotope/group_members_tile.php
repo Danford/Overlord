@@ -12,7 +12,7 @@ class GroupMembersTile extends GridTile {
 				
 					<?php foreach ($members as $member) : ?>
 					<a href="/profile/<?php echo $member['profile']->id; ?>/">
-						<div class="member tile">
+						<div class="profile tile">
 							<div class="name">
 								<?php echo $member['profile']->screen_name; ?>
 							</div>

@@ -94,8 +94,8 @@ $isotope = new Isotope($page);
 $isotope->AddTile(new HeadProfileTile($profile));
 $isotope->AddTile(new DetailsProfileTile($profile));
 
-if ($user->id != $profile->id) {
-	$isotope->AddTile(new MututalFriendsTile($profile, $mututalFriends));
+if ($user->id != $profile->id && count($mutualFriends) > 0) {
+	$isotope->AddTile(new MutualFriendsTile($profile, $mutualFriends));
 }
 
 $isotope->AddTile(new FriendsTile($profile, $friends));
@@ -115,8 +115,6 @@ for ($i = 0; $i < $loopLength; $i++) {
 	}
 }
 
-$page->html_minion->content->AddElement($isotope);
-		
 $page->footer();
 
 ?>

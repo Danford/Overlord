@@ -14,10 +14,15 @@ include(oe_frontend."page_minion.php");
 include(oe_isotope."isotope.php");
 include(oe_isotope."add_writing_tile.php");
 
+$isEdit = $uri[$pos] == 'edit';
+
 
 if (!isset($_GET['ajax']))
 {
-	$page = new page_minion("New Writing");
+	if ($isEdit)
+		$page = new page_minion("Edit Writing");
+	else
+		$page = new page_minion("New Writing");
 	
 	$page->addjs( '/js/tinymce/tinymce.min.js' ) ;
 	$page->addjs( '/js/invoketinymce.js') ;
@@ -26,7 +31,11 @@ if (!isset($_GET['ajax']))
 }
 
 
-$tile = new UploadWritingTile();
+if ($isEdit)
+	$tile = new UploadWritingTile($writing);
+else
+	$tile = new UploadWritingTile();
+
 $tile->Serve();
 
 if (!isset($_GET['ajax']))

@@ -1,7 +1,7 @@
 <?php
 
-include($oe_modules['profile']."lib/friends_api.php");
-include($oe_modules['group']."lib/group.lib.php");
+include_once($oe_modules['profile']."lib/friends_api.php");
+include_once($oe_modules['group']."lib/group.lib.php");
 
 class InviteTileProfile extends GridTile {
 

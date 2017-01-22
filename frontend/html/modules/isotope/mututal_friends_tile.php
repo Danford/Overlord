@@ -1,9 +1,12 @@
 <?php
 
-class MututalFriendsTile extends GridTile {
+class MutualFriendsTile extends GridTile {
 
-	function __construct ($profile, $mututalFriends) {
+	function __construct ($profile, $mutualFriends) {
 		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
+		
+		global $oe_modules;
+		require_once($oe_modules['profile']."lib/friends_api.php");
 		
 		$this->OpenBuffer();
 ?>
@@ -17,7 +20,8 @@ class MututalFriendsTile extends GridTile {
 								<?php echo $friend->screen_name; ?>
 							</div>
 							<img class="loading" onload="ImageLoaded(this)" src="<?php echo $friend->profile_picture(); ?>"/>
-							<?php PrintFriendlistInteractions($friend); ?>
+							<?php $friendInteractions = new FriendInteractions($friend); ?>
+							<?php $friendInteractions->PrintFriendlistInteractions($friend); ?>
 						</div>
 					</a>		
 					<?php endforeach; ?>

@@ -20,6 +20,7 @@ class GridOption {
 	const GridGutter = 256;
 	const IgnoreClick = 512;
 	const Destructable = 1024;
+	const Fullscreen = 2048;
 }
 
 class GridTile extends ElementTag {
@@ -54,6 +55,10 @@ class GridTile extends ElementTag {
 			$class .= "ignore-click ";
 		}
 		
+		if ($this->gridOptions & GridOption::Destructable) {
+			$class .= "destructable ";
+		}
+		
 		if ($this->gridOptions & GridOption::Stamp) {
 			$class .= "stamp ";
 		} else if ($this->gridOptions & GridOption::StampLeft) {
@@ -62,6 +67,8 @@ class GridTile extends ElementTag {
 			$class .= "stamp stamp--top ";
 		} else if ($this->gridOptions & GridOption::StampTopSec) {
 			$class .= "stamp stamp--top-sec ";
+		} else if ($this->gridOptions & GridOption::Fullscreen) {
+			$class .= "stamp stamp--full-screen ";
 		}
 		
 		if ($this->gridOptions & GridOption::Large) {
@@ -105,6 +112,10 @@ class GridTile extends ElementTag {
 		return $this;
 	}
 	
+	function RemoveStamp() {
+		$this->gridOptions &= ~(GridOption::Stamp | GridOption::StampLeft | GridOption::StampTop | GridOption::StampTopSec);
+	}
+	
 	function SetLarge() {
 		$this->gridOptions |= GridOption::Large;
 		$this->AddField("class", $this->GetTileClass());
@@ -113,6 +124,12 @@ class GridTile extends ElementTag {
 	
 	function SetXLarge() {
 		$this->gridOptions |= GridOption::ExtraLarge;
+		$this->AddField("class", $this->GetTileClass());
+		return $this;
+	}
+	
+	function SetFullscreen() {
+		$this->gridOptions |= GridOption::Fullscreen;
 		$this->AddField("class", $this->GetTileClass());
 		return $this;
 	}
@@ -149,10 +166,15 @@ class Isotope extends ElementTag {
  		$page->js_minion->addFile("//npmcdn.com/isotope-packery@2/packery-mode.pkgd.js");
  		$page->js_minion->addFile(oe_js . "imagesloaded.pkgd.js");
  		$page->js_minion->addFile(oe_js . "isotope.js", true);
+		$page->js_minion->addFile(oe_js . "tinymce/tinymce.min.js");
+		$page->js_minion->addFile(oe_js . "invoketinymce.js");
+				
+				
  		
  		$this->page->html_minion->head->AddContent($this->GetHeadScript());
  		
-
+		$this->page->html_minion->content->AddElement($this);
+		
         $this->grid = new ElementTag("div", array("class" => "grid"));
         $this->AddElement($this->grid);
 
