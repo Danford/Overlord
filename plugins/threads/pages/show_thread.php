@@ -64,6 +64,7 @@ include(oe_frontend."page_minion.php");
 include(oe_isotope."isotope.php");
 include(oe_isotope."thread_tile.php");
 include(oe_isotope."comment_tile.php");
+include(oe_isotope."add_comment_tile.php");
 
 // without this oepc is wrong and comments show the same for every thread.
 // I thought this should be getting automatically called but I have no idea.
@@ -90,8 +91,12 @@ $isotope = new Isotope($page);
 
 $isotope->AddTile(new ThreadTile($thread));
 
-foreach ($comments as $comment)
-	$isotope->AddTile(new CommentTile($comment));
+if (count($comments) > 0) {
+	foreach ($comments as $comment)
+		$isotope->AddTile(new CommentTile($comment));
+}
+
+$isotope->AddTile(new AddCommentTile());
 
 $page->footer();
 

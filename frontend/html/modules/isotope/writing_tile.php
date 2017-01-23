@@ -1,5 +1,11 @@
 <?php
 
+include_once(oe_isotope. "add_comment_tile.php");
+include_once(oe_isotope. "comment_tile.php");
+
+include_once($oe_plugins['comment']."conf/conf.php");
+include_once($oe_plugins['comment']."lib/comment.lib.php");
+
 class WritingTile extends GridTile {
 
 	function __construct ($writing) {
@@ -18,6 +24,33 @@ class WritingTile extends GridTile {
 		<?php //</div> ?>
 <?php
 		$this->CloseBuffer();
+
+		global $user;
+		global $oepc;
+		global $tier;
+		
+		$tier++;
+		$oldOepc = $oepc;
+		
+		$oepc[$tier]['id'] = $writing['id'];
+		$oepc[$tier]['type'] = "writing";
+		
+		$comments = get_comments();
+		
+		if (count($comments) > 0) {
+			foreach ($comments as $comment) {
+				$commentTile = new CommentTile($comment);
+				$commentTile->SetNoGrid();
+				$this->AddTag("div")->AddElement($commentTile);
+			}
+		}
+			
+		$addCommentTile = new AddCommentTile("writing", $writing['id']);
+		$addCommentTile->SetNoGrid();
+		$this->AddTag("div")->AddElement($addCommentTile);
+		
+		$oepc = $oldOepc;
+		$tier--;
 	}
 }
 ?>

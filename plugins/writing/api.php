@@ -10,7 +10,6 @@ switch( $apiCall ){
             $post->json_reply("FAIL") ;
             die('1') ;
         } elseif ( $apiCall == "edit" ){
-        
                 if( ! isset( $_POST['writing_id']) or ! verify_number( $_POST['writing_id'])){
                     $post->json_reply("FAIL") ;
                     die('2') ;
@@ -18,8 +17,8 @@ switch( $apiCall ){
                 
                 $q = "SELECT `owner` FROM ".$oepc[$tier]['writing']['view']." WHERE ".build_api_where_string()." AND `id`='".$_POST['writing_id']."'" ;
                 
-                $owner = $db->get_field( $q." AND `id`='".$_POST['writing_id'] );
-    
+                $owner = $db->get_field( $q." AND `id`='".$_POST['writing_id'] ."'");
+
                 if( $owner == false or $owner != $user->id ){
                     $post->json_reply("FAIL") ;
                     die('invalid') ;

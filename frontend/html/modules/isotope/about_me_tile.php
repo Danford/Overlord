@@ -3,7 +3,7 @@
 class AboutMeGroupTile extends GridTile {
 
 	function __construct ($group, $is_mod) {
-		parent::__construct(NULL, GridOption::Large);
+		parent::__construct(NULL, GridOption::Large | GridOption::IgnoreClick);
 		$this->AddField("id", "about-me");
 		$date = new DateTime($group->edited);		
 		$this->OpenBuffer();
@@ -25,7 +25,7 @@ class AboutMeGroupTile extends GridTile {
 class AboutMeProfileTile extends GridTile {
 
 	function __construct ($profile) {
-		parent::__construct(NULL, GridOption::Large);
+		parent::__construct(NULL, GridOption::Large | GridOption::IgnoreClick);
 		$this->OpenBuffer();
 		
 		global $user;

@@ -37,6 +37,7 @@ class UploadWritingTile extends GridTile {
 		<?php endif; ?>
 		<h2><?php echo $pagetitle; ?></h2>
 		<?php $form->header(); ?>
+		<?php $form->hidden("writing_id", $writing['writing_id']); ?>
 		<p>Privacy:	<?php $form->select("privacy", $privacyoptions); ?></p>
 		<p>Title: <?php $form->text_field("title"); ?></p>
 		<p>Subtitle: <?php $form->text_field("subtitle"); ?></p>

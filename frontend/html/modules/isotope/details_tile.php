@@ -30,7 +30,7 @@ class DetailsProfileTile extends GridTile {
 class DetailsGroupTile extends GridTile {
 
 	function __construct ($group) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 
 		$this->OpenBuffer();
 		?>

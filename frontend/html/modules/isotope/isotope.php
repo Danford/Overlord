@@ -21,6 +21,8 @@ class GridOption {
 	const IgnoreClick = 512;
 	const Destructable = 1024;
 	const Fullscreen = 2048;
+	const Full = 4096;
+	const NoGrid = 8192;
 }
 
 class GridTile extends ElementTag {
@@ -59,26 +61,32 @@ class GridTile extends ElementTag {
 			$class .= "destructable ";
 		}
 		
-		if ($this->gridOptions & GridOption::Stamp) {
-			$class .= "stamp ";
-		} else if ($this->gridOptions & GridOption::StampLeft) {
-			$class .= "stamp stamp--left ";
-		} else if ($this->gridOptions & GridOption::StampTop) {
-			$class .= "stamp stamp--top ";
-		} else if ($this->gridOptions & GridOption::StampTopSec) {
-			$class .= "stamp stamp--top-sec ";
-		} else if ($this->gridOptions & GridOption::Fullscreen) {
-			$class .= "stamp stamp--full-screen ";
+		if ($this->gridOptions & GridOption::NoGrid) {
+			
+		} else {
+			if ($this->gridOptions & GridOption::Stamp) {
+				$class .= "stamp ";
+			} else if ($this->gridOptions & GridOption::StampLeft) {
+				$class .= "stamp stamp--left ";
+			} else if ($this->gridOptions & GridOption::StampTop) {
+				$class .= "stamp stamp--top ";
+			} else if ($this->gridOptions & GridOption::StampTopSec) {
+				$class .= "stamp stamp--top-sec ";
+			} else if ($this->gridOptions & GridOption::Fullscreen) {
+				$class .= "stamp stamp--full-screen ";
+			}
+			
+			if ($this->gridOptions & GridOption::Large) {
+				$class .= "grid-item grid-item--large ";
+			} else if ($this->gridOptions & GridOption::ExtraLarge) {
+				$class .= "grid-item grid-item--x-large ";
+			} else if ($this->gridOptions & GridOption::Full) {
+				$class .= "grid-item grid-item--full ";
+			}
+
+			if ($class == "")
+				$class .= "grid-item ";
 		}
-		
-		if ($this->gridOptions & GridOption::Large) {
-			$class .= "grid-item grid-item--large ";
-		} else if ($this->gridOptions & GridOption::ExtraLarge) {
-			$class .= "grid-item grid-item--x-large ";
-		}
-				
-		if ($class == "")
-			$class .= "grid-item ";
 		
 		$class .= "tile ";
 		
@@ -130,6 +138,18 @@ class GridTile extends ElementTag {
 	
 	function SetFullscreen() {
 		$this->gridOptions |= GridOption::Fullscreen;
+		$this->AddField("class", $this->GetTileClass());
+		return $this;
+	}
+	
+	function SetFull() {
+		$this->gridOptions |= GridOption::Full;
+		$this->AddField("class", $this->GetTileClass());
+		return $this;
+	}
+	
+	function SetNoGrid() {
+		$this->gridOptions |= GridOption::NoGrid;
 		$this->AddField("class", $this->GetTileClass());
 		return $this;
 	}
