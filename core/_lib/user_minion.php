@@ -444,7 +444,7 @@ class user_minion {
     function get_wall_content_photos() {	
     	global $db;
     	 
-    	$query = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id` FROM `photo` WHERE `privacy` <= '1' ";
+    	$query = "SELECT `id`,`owner`, `album`, `privacy`, `title`, `description`, `timestamp`, `module`, `module_item_id` FROM `photo` WHERE `privacy` = '0' ";
     	
     	if (count($this->friends) > 0) {
     		$query .= "OR (";
@@ -467,6 +467,7 @@ class user_minion {
     	}
     		
     	$query .= "ORDER BY `timestamp` DESC";
+    	
     	$db->query($query) ;
 
     	$photos = array();
@@ -482,13 +483,13 @@ class user_minion {
     function get_wall_content_writing() {
     	global $db;
     	
-    	$query = "SELECT * FROM `writing` WHERE `privacy` = 1 ";
+    	$query = "SELECT * FROM `writing` WHERE `privacy` = 0 ";
     	
     	if (count($this->friends) > 0) {
     		$query .= "OR (";
     	
     		foreach ($this->friends as $id => $friend) {
-    			$query .= "(owner = ". $id ." AND privacy < 2) OR";
+    			$query .= "(owner = ". $id ." AND privacy <= 2) OR";
     		}
     	
     		$query = substr($query, 0, strlen($query) - 3);

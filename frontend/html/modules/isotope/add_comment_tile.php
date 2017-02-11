@@ -21,19 +21,32 @@ class AddCommentTile extends GridTile {
 			$oepc[$tier]['id'] = $plug_id;
 			$oepc[$tier]['type'] = $plug_type;
 		}
-				
+		
 		$this->OpenBuffer();
 		
+
+		?>
+		<div id="expand-comment">
+			<input type="text" value="Write a comment...">
+		</div>
+				
+		<div id="add-comment" class="hidden">
+		<?php
+				
 		$form = new form_minion("addComment", "comment");
 		$form->header();
 		$form->textarea_field("comment");
 		$form->submit_button("Submit Comment");
 		$form->footer();
 		
-		$this->CloseBuffer();
-		
 		$tier--;
 		$oepc = $oldOepc;
+		?>
+		</div>
+		<?php
+
+		$this->CloseBuffer();
+		
 	}
 }
 ?>

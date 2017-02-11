@@ -3,12 +3,25 @@
 * { box-sizing: border-box; }
 
 body {
-	background-color: #000;
 	margin: 0;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 1150px;
+	
+	background: gray; /* For browsers that do not support gradients */
+	
+	/* For Safari 5.1 to 6.0 */
+	background: -webkit-linear-gradient(left,white,gray,black);
+	/* For Opera 11.1 to 12.0 */
+	background: -o-linear-gradient(left,white,gray,black,black);
+	/* For Fx 3.6 to 15 */
+	background: -moz-linear-gradient(left,white,gray,black);
+	/* Standard syntax */
+	background: linear-gradient(to right, white,gray,black); 
 }
 
 .header-container {
-	background-color: #FFF;
+	margin-top: 80px;
 }
 
 header {
@@ -23,7 +36,6 @@ footer {
 	width: 100%;
     overflow: auto;
     text-align: center;
-    background: #000;
     color: #fff;
 }
 
@@ -323,9 +335,8 @@ input#Submit:active, input#x:active {
 }
 
 .tile .profile {
-    width: 47.2%;
-    margin: 0.5%!important;
     display: inline-block;
+	float: left;
 }
 
 .tile#details {
@@ -343,19 +354,52 @@ input#Submit:active, input#x:active {
     margin: 8px;
 }
 
-.tile.stamp--focus #config-button
-{
+.tile.stamp--focus #config-button {
 	background-image: url(/images/config-button.png);
 }
 
-.tile.stamp--focus #expand-button
-{
+.tile.stamp--focus #expand-button {
 	background-image: url(/images/expand-button.png);
 }
 
-.tile.stamp--focus #close-button
-{
+.tile.stamp--focus #close-button {
 	background-image: url(/images/close-button.png);
+}
+
+.tile #like-button {
+	background-image: url(/images/like-button.png);
+	background-repeat: no-repeat;
+	display: block;
+    width: 60px;
+    height: 20px;
+    float: left;
+    margin: 2px;
+	padding-left: 22px;
+	cursor: pointer;
+}
+
+.tile #comment-button {
+	background-image: url(/images/comment-button.png);
+	background-repeat: no-repeat;
+	display: block;
+    width: 100px;
+    height: 20px;
+    float: left;
+    margin: 2px;
+	padding-left: 26px;
+	
+	
+}
+
+.tile #comment-owner img, .tile .profile img {
+	width: 75px;
+	height: 75px;
+	border-radius:20%;
+	object-fit: cover;
+}
+
+.tile #likes {
+	clear: both;
 }
 
 .tile {
@@ -364,11 +408,16 @@ input#Submit:active, input#x:active {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     overflow: hidden;
 	background-color: #eee;
-	margin: 7px;
+	margin: 1%;
+}
+
+.tile .tile {
+    margin: 0;
 }
 
 .tile #main-img {
 	overflow: hidden;
+	clear: both;
 }
 
 .tile #main-img img{
@@ -378,10 +427,16 @@ input#Submit:active, input#x:active {
 .tile:hover #main-img img {
 	transform: scale(1.1);
 }
+
+.tile #main-img img {
+	max-width:100%;
+	height:auto;
+}
+
 .tile img {
 	display: block;
-	width: initial;
 	max-width: 100%;
+	height: auto;
 	margin-left: auto;
 	margin-right: auto;
 }
@@ -447,9 +502,22 @@ input#Submit:active, input#x:active {
 	width: 78%;
 }
 
+.stamp--focus {
+	position: absolute;
+	left: 20%!important;
+	width: 58%;
+}
+
 .tile div#title {
     text-transform: capitalize;
     text-align: center;
+	float: right;
+	max-width: calc(100% - 85px);
+    min-width: calc(100% - 90px);
+}
+
+.tile.selected div#title {
+    min-width: calc(100% - 180px);
 }
 
 .tile p {
@@ -461,28 +529,23 @@ input#Submit:active, input#x:active {
 	display: none;
 }
 
-.stamp--focus {
-	position: absolute;
-	left: 19.5%!important;
-	width: 58%;
+.tile #expand-comment input[type="text"] {
+	width: 100%;
 }
 
-.stamp--full-screen {
-	-webkit-transition:all 300ms ease-in-out;
-    -moz-transition:all 300ms ease-in-out;
-    -o-transition:all 300ms ease-in-out;
-    transition:all 300ms ease-in-out;
-	
-	position: absolute;
-	left: 0%!important;
-	width: 98%!important;
-	height: auto!important;
-	z-index: 9999;
+.smooth-trans-top, .smooth-trans-bottom{
+	-webkit-transition:all 300ms linear;
+    -moz-transition:all 300ms linear;
+    -o-transition:all 300ms linear;
+    transition:all 300ms linear;
 }
 
-.stamp--full-screen > img {
-	margin-left: auto;
-	margin-right: auto;
+.smooth-trans-top {
+	z-index: 3;	
+}
+
+.smooth-trans-bottom {
+	z-index: 2;
 }
 
 .friend.tile img {
@@ -501,7 +564,17 @@ input#Submit:active, input#x:active {
 		width: 64%;
 	}
 	
+	.stamp--focus {
+		position: absolute;
+		left: 33%!important;
+		width: 64%;
+	}
+	
 	.grid-sizer, .grid-item {
+		width: 31%;
+	}
+	
+	.grid-item--medium {
 		width: 31%;
 	}
 	
@@ -514,9 +587,21 @@ input#Submit:active, input#x:active {
 	}	
 	.grid-sizer--full, .grid-item--full {
 		width: 98%;
-	}	
+	}
 }
 
+.stamp--full-screen {
+	position: absolute;
+	left: 0%!important;
+	width: 98%!important;
+	height: auto!important;
+	z-index: 9999;
+}
+
+.stamp--full-screen > img {
+	margin-left: auto;
+	margin-right: auto;
+}
 
 /*																	*/
 /* 								Isotope Styles 						*/
@@ -543,10 +628,6 @@ input#Submit:active, input#x:active {
     text-shadow: 5px 4px 12px black;
 }
 
-.grid-item.photo img {
-    width: 100%;
-}
-
 .tile form {
 	display: inline-block;
 	width: 100%;
@@ -554,6 +635,10 @@ input#Submit:active, input#x:active {
 
 .tile #Submit {
 	width: 100%;
+}
+
+.tile.selected {
+	z-index: 4;
 }
 
 form#addComment {
@@ -571,7 +656,19 @@ img.loading {
 .cssload-fond{
 	position:relative;
 	width: 100%;
-	margin: 10px 0;	
+	margin: auto;
+	padding: 12px;
+}
+
+.cssload-fond-cover{
+	position: absolute;
+    width: 100%;
+    height: 100%;
+    padding: 12px;
+    z-index: 2;
+    margin-top: auto;
+    margin-bottom: auto;
+    top: calc(40%);
 }
 
 .cssload-container-general
@@ -765,6 +862,7 @@ img.loading {
 
 #comment-owner {
 	padding-right: 20px;
+	max-width: 90px;
 }
 
 #comment-owner p {

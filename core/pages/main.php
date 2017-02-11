@@ -1,6 +1,7 @@
 <?php
-	   
+
 include(oe_frontend."page_minion.php");
+
 include(oe_isotope."isotope.php");
 include(oe_isotope."invite_tile.php");
 include(oe_isotope."photo_tile.php");
@@ -50,6 +51,7 @@ if( $user->is_logged_in() ) {
 	}
 	
 	foreach ($wall_photos as $photo) {
+		printVarible($photo);
 		$isotope->AddTile(new PhotoTile($photo), "photo");
 	}
 	

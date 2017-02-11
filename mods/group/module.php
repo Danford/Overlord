@@ -36,7 +36,7 @@ switch( $uri[$pos ]){
 if( verify_number( $uri[$pos] ) ){
         
     $group = new group_minion( $uri[$pos] ) ;
-    
+
     if( $group->id != false ){
         
         // they at least have permission to see the group profile
@@ -52,7 +52,9 @@ if( verify_number( $uri[$pos] ) ){
         
         // anything other than the group profile requires membership
         
-        if( $group->membership > 0 ){
+        // todo: cat
+        // Review this being commented out allowing users who are not members to see public post made by groups.
+        //if( $group->membership > 0 ){
             
             if( $uri[$pos] ==  'members' ){
                     
@@ -85,6 +87,6 @@ if( verify_number( $uri[$pos] ) ){
                     // does not die() to allow for bombing out to the main 404.
                 }
             }
-        }
+        //}
     }
 } 

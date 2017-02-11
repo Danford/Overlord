@@ -35,7 +35,7 @@ class WritingTile extends GridTile {
 		$oepc[$tier]['id'] = $writing['id'];
 		$oepc[$tier]['type'] = "writing";
 		
-		$comments = get_comments();
+		$comments = get_comments(0, 100, $writing['module'], $writing['module_item_id'], "writing", $writing['id']);
 		
 		if (count($comments) > 0) {
 			foreach ($comments as $comment) {

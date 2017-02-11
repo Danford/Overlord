@@ -25,7 +25,7 @@ if( ! isset( $profile ) ){
     if( $profile->name == false ){
         
         $post->json_reply("FAIL") ;
-        die() ;
+        die('11') ;
     }
     
 }
@@ -50,7 +50,8 @@ $oepc[0] = [ 'type' => 'profile', 'id' => $profile->id ] ;
 
      /* at tier 0, this gets referenced at every tier above. */
 
-
+// todo: cat
+// I'm having a problem here with making comments on Bobbi's page or her making comments on my page due to this not working properly.
 $oepc[0]['contributor'] = ( $profile->id == $user->id ) ;
 
     /*  This establishes who can add content via this module.   

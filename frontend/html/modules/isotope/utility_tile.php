@@ -4,10 +4,10 @@ class UtilityTile extends GridTile {
 	function __construct ($categories) {
 		global $user;
 		global $oepc;
-		
+
 		parent::__construct(NULL, GridOption::StampTop | GridOption::IgnoreClick);
 		$this->OpenBuffer();
-		
+
 		if (isset($oepc[0]['type']))
 			$type = $oepc[0]['type'];
 		else
@@ -17,7 +17,7 @@ class UtilityTile extends GridTile {
 			$id = $oepc[0]['id'];
 		else
 			$id = $user->id;
-		
+
 ?>
 		<div class="ui-group filters">
 		<div class="button-group js-radio-button-group" data-filter-group="category">

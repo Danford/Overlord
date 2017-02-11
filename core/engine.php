@@ -110,7 +110,7 @@
 
 	        if( file_exists( $oe_plugins[$postmodule]."conf/conf.php" ) ){
 	            include( $oe_plugins[$postmodule]."conf/conf.php" ) ;
-	        
+
 	               // we don't die out at this level, in case of a plugin that 
 	               // requires no configuration.  It is the responsibility of
 	               // the API to determine if it has been properly configured.

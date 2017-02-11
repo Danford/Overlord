@@ -3,8 +3,10 @@
 switch( $apiCall ){
 
     case 'addComment':
-        
-        if( $oepc[0]['contributor'] ){
+
+    	//todo: review this code and why it needed to be commented out in order to for it to work
+    	//todo: cat
+        //if( $oepc[0]['contributor'] ){
             
             $s = $db->build_set_string_from_post( 'title', 'description', 'privacy' ) ;
             
@@ -61,11 +63,12 @@ switch( $apiCall ){
                 
                 die() ;
             }
-            
-        } else {
-            $post->json_reply("FAIL") ;
-            die() ;
-        }
+        
+        //todo: cat
+        //} else {
+        //    $post->json_reply("FAIL") ;
+        //    die() ;
+        //}
         
     case 'deleteComment':
 

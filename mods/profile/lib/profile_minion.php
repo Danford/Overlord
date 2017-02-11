@@ -154,7 +154,7 @@ class profile_minion {
         
         global $db ;
         global $user ;
-        
+
         if ( $this->id == $user->id ) {
             return "self" ;
         } elseif( $user->is_friend($this->id ) ) {

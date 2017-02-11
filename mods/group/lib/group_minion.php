@@ -55,7 +55,6 @@ class group_minion {
                     $this->membership = 2 ; // admin
                     
                 } else {
-                    
                 	$this->membership = $user->get_group_membership($this->id);
                 }
                 

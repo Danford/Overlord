@@ -188,9 +188,7 @@ class Isotope extends ElementTag {
  		$page->js_minion->addFile(oe_js . "isotope.js", true);
 		$page->js_minion->addFile(oe_js . "tinymce/tinymce.min.js");
 		$page->js_minion->addFile(oe_js . "invoketinymce.js");
-				
-				
- 		
+
  		$this->page->html_minion->head->AddContent($this->GetHeadScript());
  		
 		$this->page->html_minion->content->AddElement($this);
@@ -267,8 +265,7 @@ class Isotope extends ElementTag {
 	}
 	
 	function Serve() {
-		if (count($this->gridCategories) > 0)
-			$this->AddTile(new UtilityTile($this->gridCategories));
+		$this->AddTile(new UtilityTile($this->gridCategories));
 		
 		parent::Serve();
 	}

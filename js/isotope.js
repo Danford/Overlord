@@ -6,8 +6,38 @@ var $selectedTile = null;
 
 var $filterButtons = $('.filters .button');
 
-function OnPhotoClick($photo) {
+var $openComments = null;
+var imgId = 0;
 
+function OnPhotoClick($photo) {
+	$img = $photo.find('#main-img img');
+	if ($img.parent().children("#full-img").length <= 0) {
+		$newimg = $img.clone(true);
+		
+		$newimg.attr("id", "full-img");
+		$newimg.attr("class", "full-img-" + imgId);
+		$newimg.attr("onload", "$('.main-img-"+ imgId +"').addClass('hidden'); $('.full-img-"+ imgId +"').removeClass('hidden'); ImageLoaded(this)");
+
+		$img.addClass("main-img-" + imgId);
+		
+		$imgSrc = $img.attr("src"); 
+
+		imgId++;
+		
+		
+		$newimg.attr("src", function (i, orgValue) {
+			orgValue = orgValue.replace(".thumb", "");
+			orgValue = orgValue.replace(".profileThumb", "");
+			return orgValue;
+		});
+		
+		$newimg.addClass("loading");
+		$newimg = $img.before($newimg);
+		$newimg.before(getImgLoadingCoverHtml());
+	} else {
+		$photo.find('#main-img img').addClass("hidden");
+		$photo.find('#full-img').removeClass("hidden");
+	}
 }
 
 function OnWritingClick($writing) {
@@ -22,6 +52,18 @@ function OnGroupClick($group) {
 function OnAboutMeClick($aboutme) {
 	$aboutme.children('#excerpt').toggleClass('hidden');
 	$aboutme.children('#full').toggleClass('hidden');
+}
+
+function OnExpandCommentClick($button) {
+	$button.toggleClass('hidden'); 
+	$button.parent().find('#add-comment').toggleClass('hidden');
+	
+	if ($openComments !== null) {
+		$openComments.find('#add-comment').toggleClass('hidden');
+		$openComments.find('#expand-comment').toggleClass('hidden');
+	}
+	
+	$openComments = $button.parent();
 }
 
 // flatten object by concatting values
@@ -52,6 +94,10 @@ function updateFilterCounts()  {
 // add css loading spinner after all tile images with the loading class
 function getImgLoadingHtml() {
 	return "<div align='center' class='cssload-fond'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>";
+}
+
+function getImgLoadingCoverHtml() {
+	return "<div align='center' class='cssload-fond cssload-fond-cover'><div class='cssload-container-general'><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_1'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_2'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_3'></div></div><div class='cssload-internal'><div class='cssload-ballcolor cssload-ball_4'></div></div></div></div>";
 }
 
 function CloseTile($tile) {
@@ -152,6 +198,31 @@ function AddTile(url, $replaceTile) {
 	});
 }
 
+function AjaxPostData(data, $replaceElement) {
+	// do not allow multiple request to process at the same time.
+	if (requestProcessing == true)
+		return;
+
+	requestProcessing = true;
+	
+	$grid = $('.grid');
+	
+	var jqxhr = $.post("/", data, function() {
+		
+	})
+	.done(function(data) {
+		if ($replaceElement != undefined) {
+			
+		}
+	})
+	.fail(function() {
+		
+	})
+	.always(function() {
+		
+	});
+}
+
 function FillTile(response) {
 	$newTile.append(response);
 }
@@ -223,32 +294,7 @@ $(function() {
 		$tile.toggleClass('stamp--focus');
 		
 		if ($tile.hasClass('stamp')) {
-			$grid.isotope("stamp", $tile);
-
-			$img = $tile.find('#main-img img');
-			if ($img.parent().children("#full-img").length <= 0) {
-				$newimg = $img.clone(true);
-				
-				$newimg.attr("id", "full-img");
-				
-				$img.addClass("hidden");
-	
-				$imgSrc = $img.attr("src"); 
-				
-				$newimg.attr("src", function (i, orgValue) {
-					orgValue = orgValue.replace(".thumb", "");
-					orgValue = orgValue.replace(".profileThumb", "");
-					return orgValue;
-				});
-				
-				$newimg.addClass("loading");
-				$newimg = $img.before($newimg);
-				$newimg.before(getImgLoadingHtml());
-			} else {
-				$tile.find('#main-img img').addClass("hidden");
-				$tile.find('#full-img').removeClass("hidden");
-			}
-				
+			$grid.isotope("stamp", $tile);	
 		} else {
 			$grid.isotope("unstamp", $tile);
 
@@ -272,15 +318,19 @@ $(function() {
 			if ($selectedTile.hasClass('destructable')) {
 				$selectedTile.remove();
 			} else {		
+				$selectedTile.addClass("smooth-trans-bottom");
 				TileToggle($selectedTile);
 			}
 		}
-		
-		TileToggle($(this));	
-	
-		setTimeout(function(){
+
+		$(this).addClass("smooth-trans-top");
+		TileToggle($(this));
+		$this = $(this);
+		setTimeout(function($this){
 			$grid.isotope('layout');
-		}, 310);
+			$('.smooth-trans-top').removeClass("smooth-trans-top");
+			$('.smooth-trans-bottom').removeClass("smooth-trans-bottom");
+		}, 320);
 		
 		$selectedTile = $(this);
 	});
@@ -318,5 +368,28 @@ $(function() {
 		});
 		
 		$(document).find('content').prepend($newFriendDetailTile);
+	});
+	
+	$('.tile #expand-comment').click(function () {
+		OnExpandCommentClick($(this));
+	});
+
+	$('.tile #like-button').click(function () {
+		  $form = $(this).find("form");
+		  
+		  var url = $form.attr("action");
+			 
+		  // Send the data using post
+		  var posting = $.post(url, $form.serialize() );
+		 
+		  // Put the results in a div
+		  posting.done(function( data ) {
+		    var content = $( data ).find( "#content" );
+		    $( "#result" ).empty().append( content );
+		  });
+	});
+	
+	$('.tile #is-liked-button').click(function () {
+		OnLikeClick($(this));
 	});
 });

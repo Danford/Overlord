@@ -27,7 +27,7 @@ class HeadGroupTile extends GridTile {
 class HeadProfileTile extends GridTile {
 
 	function __construct ($profile) {
-		parent::__construct(NULL, GridOption::StampLeft);
+		parent::__construct(NULL, GridOption::StampLeft | GridOption::IgnoreClick);
 
 		$this->OpenBuffer();
 ?>

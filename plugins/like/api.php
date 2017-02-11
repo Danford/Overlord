@@ -1,96 +1,64 @@
 <?php
 
-if( $apiCall != 'like' ){
-    
-    $where = "`module`='".$basemodule."' AND `module_id`='".$basemoduleID."'" ;
-        
-    if( $tier > 0 ){
-        $where .= "AND `plug` ='".$lastplug."'
-        AND `plug_id`='".$lastplugID."'" ;
-    }
-}
+require_once("lib/like.lib.php");
 
-switch( $apiCall ){
+switch ($apiCall) {
     
     case "like":
-        
-        if( $oepc[0]['contributor'] != true ){
-        
-            $post->json_reply("FAIL") ;
-            die() ;
-        
+        if (like()) {
+        	$post->json_reply("SUCCESS");
+        	$post->return_to_form();
+        } else {
+        	$post->json_reply("FAIL");
+        	die();
         }
-        
-        $o['module'] = $basemodule ;
-        $o['module_id'] = $basemoduleID ;
-        
-        if( $tier > 0 ){
-            $o['plug'] = $lastplug ;
-            $o['plug_id'] = $lastplugID ;
-        }
-        
-        $o['owner'] = $user->id ;
-        $o['ip'] = get_client_ip() ;
-        $o['timestamp'] = oe_time() ;
-        
-        $db->insert( "INSERT INTO `".$opec[$tier]['like']['table']."` 
-                        SET ".$db->build_set_string_from_array($o)) ;
 
-        $post->json_reply("SUCCESS") ;
-        $post->return_to_form() ;
+        break;
         
     case "unlike":
         
-        $x = $db->get_field( "SELECT `owner` FROM `".$opec[$tier]['like']['view']."` WHERE ".$where ) ;
+        $response = unlike();
         
-        if( $x == false or ( $user->id != x and $oepc[0]['admin'] != true )){
-            $post->json_reply("FAIL") ;
-            die() ;
+        if ($response == -1) {
+            $post->json_reply("FAIL");
+            die();
         }
         
-        $db->update( "DELETE ` FROM `".$opec[$tier]['like']['table']."` WHERE ".$where ) ;
-
-        $post->json_reply("SUCCESS") ;
-        $post->return_to_form() ;
+        $post->json_reply("SUCCESS");
+        $post->return_to_form();
         
+        break;
         
     case "countLikes":
-
-        $x = $db->get_field( "SELECT COUNT(*) FROM `".$opec[$tier]['like']['view']."` WHERE ".$where ) ;
-
-        $post->json_reply("SUCCESS", [ 'count' => $x ] );
+		$likesCount = countLikes();
+        
+        $post->json_reply("SUCCESS", ['count' => $likesCount]);
         die();
     
+        break;
+        
     case "getLikes":
         
-        $db->query( "SELECT `owner` as `id`, `screen_name` 
-                              FROM `".$opec[$tier]['like']['view']."` WHERE ".$where ) ;
+        $likes = getLikes();
         
-        $x = array() ;
-        
-        while( ($l = $db->assoc() ) != false ){
-            $x[] = $l ;
-        }
-        
-        $post->json_reply("SUCCESS", $x );
+        $post->json_reply("SUCCESS", $likes);
         die();
+        
+        break;
         
     case 'doIlike':
         
-
-        $x = $db->get_field( "SELECT COUNT(*) FROM `".$opec[$tier]['like']['view']."` WHERE ".$where." AND `owner`='".$user->id."'" ) ;
+		$isLiked = isLiked();
         
-        if( $x == false ){
-            $post->json_reply("FAIL") ;
-        } elseif( $x == 0 ) {
-            $post->json_reply("SUCCESS", [ 'iLike' => false]) ;            
-        } else {
-            $post->json_reply("SUCCESS", [ 'iLike' => true]) ;            
+        if ($isLiked == -1) {
+            $post->json_reply("FAIL");
+        } elseif ($isLiked == false) {
+            $post->json_reply("SUCCESS", ['isLiked' => false]);            
+        } elseif ($isLiked == true) {
+            $post->json_reply("SUCCESS", ['isLiked' => true]);            
         }
     
-        die() ;
-    
-    
-    
-    
+        die();
+
+    	break;
 }

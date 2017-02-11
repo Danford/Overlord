@@ -58,9 +58,11 @@ class FriendInteractions {
 	
 		if ($user->id != $friend->id) {
 			if (!$user->is_friend($friend->id)) {
-				if ($this->profile->friend_request_status() == "outgoing") {
+				$requestStatus = $this->profile->friend_request_status();
+				
+				if ($requestStatus == "outgoing") {
 					$this->CancelRequest();
-				} elseif ($this->profile->friend_request_status() == "incoming") {
+				} elseif ($requestStatus == "incoming") {
 					$this->ConfirmFriend();
 					$this->DenyFriend();
 				}
